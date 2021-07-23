@@ -1,0 +1,61 @@
+<ion-content class="logreps-workouts" style="--background: #e6ebf1">
+  <div class="list-label" style="margin-top: 20px;">Personal Workouts</div>
+
+  <ion-list lines="full">
+    <ion-item *ngFor="let workout of personalWorkouts"  detail (click)="selectWorkout(workout)">
+      <!-- <activity-icon style="width: 50px; height: 50px"
+          [name]="workout.icon">
+        </activity-icon> -->
+      {{ workout.name }}
+    </ion-item>
+  </ion-list>
+  <ion-list lines="full" *ngIf="personalWorkouts.length > 1">
+    <ion-item  detail (click)="selectAllWorkouts()">
+      All (show all exercises)
+    </ion-item>
+  </ion-list>
+
+  <!-- <ion-item-group lines="full">
+    <ion-item *ngIf="false" style="--background: #e8f3e8;" (click)="sendNewsLetter()">
+          <ion-label style="text-align: center;">
+            <span style="vertical-align: middle; color: #666;">Send NewsLetters</span>
+            <ion-icon name="notifications-outline" color="success" style="vertical-align: middle;     padding: 5px;
+            font-size: 30px;"></ion-icon>
+            </ion-label>
+        </ion-item>
+    <ion-item *ngIf="false" style="--background: #e8f3e8;" (click)="resetTutorial()">
+      <ion-label style="text-align: center;">
+        <span style="vertical-align: middle; color: #666;">Reset Tutorial</span>
+        <ion-icon name="notifications-outline" color="success" style="vertical-align: middle;     padding: 5px;
+            font-size: 30px;"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="false" style="--background: #e8f3e8;" (click)="report('csv')">
+      <ion-label style="text-align: center;">
+        <span style="vertical-align: middle; color: #666;">Dowload CSV</span>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="false" style="--background: #e8f3e8;" (click)="report('xls')">
+      <ion-label style="text-align: center;">
+        <span style="vertical-align: middle; color: #666;">Dowload XLS</span>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="false" style="--background: #e8f3e8;" (click)="mergeWorkouts()">
+      <ion-label style="text-align: center;">
+        <span style="vertical-align: middle; color: #666;">Merge Workouts</span>
+      </ion-label>
+    </ion-item>
+  </ion-item-group> -->
+
+
+  <div class="ion-padding">
+    <ion-button type="button" color="primary" expand="block" (click)="createWorkout()">Create New Workout</ion-button>
+  </div>
+
+
+  <div class="ion-padding" style="line-height: 24px;">
+    Workouts can be used to create different activity sets. For example, create an "Upper Body" workout, and an "Abs and
+    Legs" workout. If you have any questions or suggestions, please email us at <a
+      href="mailto:support@logreps.com">support@logreps.com</a>.
+  </div>
+</ion-content>

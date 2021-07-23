@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon style="font-size: 30px;" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      Health Settings
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveAndClose()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-setting" style="--background: #e6ebf1">
+  <div
+    style="text-align: center;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">Calorie calculations and fitness logging (Apple HealthKit and GoogleFit) are new features we're testing, and are based on your weight, activity, and duration.
+  </div>
+
+  <div class="list-label" style="margin-top: 20px;">Health Data</div>
+  <ion-item lines="full" *ngIf="globalService.isIOS">
+    <ion-label>Apple HealthKit</ion-label>
+    <ion-toggle [(ngModel)]="appleHealthKitEnabled" (ionChange)="toggleHealthKit()"></ion-toggle>
+  </ion-item>
+  <ion-item lines="full" *ngIf="globalService.isAndroid">
+    <ion-label>Google Fit</ion-label>
+    <ion-toggle [(ngModel)]="googleFitEnabled" (ionChange)="toggleGoogleFit()"></ion-toggle>
+  </ion-item>
+  <!-- <ion-item lines="full">
+    <ion-label>Test GetData</ion-label>
+    <ion-button (click)="getData()">Get Data</ion-button>
+  </ion-item> -->
+  <div
+    *ngIf="globalService.isIOS || globalService.isAndroid"
+    style="text-align: center;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">Enable to sync workouts and record calories</div>
+  <div
+    *ngIf="!globalService.isIOS && !globalService.isAndroid"
+    style="margin: 10px;
+    color: #777;
+    font-size: 12px;">Use LogReps on an Apple or Android device to sync health data</div>
+  <div class="list-label" style="margin-top: 40px;">For Calorie Calculations</div>
+  <ion-item lines="full">
+    <ion-label>Weight</ion-label>
+    <ion-input inputmode="decimal" style="text-align: right;" type="text" [(ngModel)]="user.health.weight"></ion-input>
+  </ion-item>
+  <ion-item lines="full">
+    <ion-label>Unit</ion-label>
+    <ion-select interface="popover"  [(ngModel)]="user.health.weightUnit">
+      <ion-select-option value="lbs">lbs</ion-select-option>
+      <ion-select-option value="kg">kg</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="list-label" style="margin-top: 40px;">Troubleshooting</div>
+  <div style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+    If you are having problems, contact <a href="support@logreps.com">support@logreps.com</a> and we will use these logs to help you troubleshoot
+  </div>
+  <div *ngIf="!showLogs && healthService && healthService.logs.length > 0">
+    <ion-item detail lines="full">
+      <ion-label (click)="showLogs = true;">Show Logs</ion-label>
+    </ion-item>
+  </div>
+
+  <div *ngIf="showLogs">
+    <ion-item *ngFor="let log of healthService.logs" lines="full">
+      <ion-label class="ion-text-wrap">{{ log }}</ion-label>
+    </ion-item>
+  </div>
+
+  <div class="list-label" style="margin-top: 40px;">Logged Activity Sync Status</div>
+  <div style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+    This is a list of your logged activities and the status of their sync status.  You can click to resync each item.
+  </div>
+  <div>
+    <ion-list>
+        <ion-item (click)="syncActivityLog(activityLog)" detail *ngFor="let activityLog of activityLogService.foundActivityLogs">
+            <ion-label>
+              <ion-row>
+                <ion-col>
+                  <div>{{ activityLog.count }} {{ activityLog.activityLogLabel }}</div>
+                  <div style="font-size: 10px; color: #777;">{{ activityLog.created | date:'MMM d, h:mm a' }}</div>
+                </ion-col>
+                <ion-col *ngIf="activityLog.health">
+                  <div *ngIf="activityLog.health.status === 'success'">{{ activityLog.health.status }} </div>
+                  <div *ngIf="activityLog.health.status !== 'success'" style="color: red;">{{ activityLog.health.status }} </div>
+                  <div style="font-size: 10px; color: #777;" *ngIf="activityLog.health.syncDate">Syncd on {{ activityLog.health.syncDate | date:'MMM d, h:mm a' }}</div>
+                </ion-col>
+                <ion-col *ngIf="!activityLog.health">
+                  -
+                </ion-col>
+              </ion-row>
+            </ion-label>
+            <ion-icon *ngIf="!activityLog.lookups.syncing" slot="end" style="cursor: pointer" name="refresh">
+            </ion-icon>
+            <ion-spinner *ngIf="activityLog.lookups.syncing" slot="end" style="cursor: pointer"  name="crescent"></ion-spinner>
+        </ion-item>
+        <ion-item button lines="full" *ngIf="activityLogService.foundActivityLogs.length >= 50" (click)="loadMore()" style="--padding-start: 0px; color: #387fff; text-align: center">
+        <ion-label>
+          Load More
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+<!-- <pre>
+    {{ user.health | json }}
+  </pre> -->
+</ion-content>

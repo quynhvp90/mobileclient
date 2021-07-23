@@ -1,0 +1,115 @@
+
+.content-wrapper {
+  width: 100%;
+  height: 100%;
+  background: #f12711;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #f5af19, #f12711);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+  .cool_btn1 {
+    width: 190px;
+    height: 190px;
+    margin: 15px 15px 15px 15px;
+    position: relative;
+    -webkit-border-radius: 200px;
+    -moz-border-radius: 200px;
+    -ms-border-radius: 200px;
+    -o-border-radius: 200px;
+    border-radius: 200px;
+    display: inline-block;
+    -webkit-transition-property: all;
+    -moz-transition-property: all;
+    -o-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5d5d5), color-stop(50%, #ffffff), color-stop(50%, #577fbd), color-stop(100%, #007090));
+    background-image: -webkit-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+    background-image: -moz-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+    background-image: -o-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+    background-image: linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+    -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 50px;
+    margin: 20px 0 0 0;
+    font-weight: normal;
+    line-height: 1;
+    color: #007090;
+  }
+
+  .shadow {
+    text-shadow: 0 1px 0 white, 0 -1px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .message {
+    font-size: 16px !important; 
+    margin-top: 0px !important;
+    display: block !important;
+  }
+  
+  .activity {
+    text-align: center;
+    margin-top: 15px; 
+    color:#fafafa;
+    font-size: 20px;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: helvetica, arial, sans-serif !important;  
+  }
+}
+
+
+.rays-holder	{ /* with animation properties */
+	position: fixed; 
+	top: 50%; 
+	left: 50%; 
+  transform: translate(-50%, -50%);
+  width: 490px;
+  height: 490px;
+}
+
+.rays {
+	animation-name: spin; 
+	animation-duration: 40000ms;
+	animation-iteration-count: infinite; 
+  animation-timing-function: linear;
+}
+
+@-ms-keyframes spin {
+  from { -ms-transform: rotate(0deg); }
+  to { -ms-transform: rotate(360deg); }
+}
+@-moz-keyframes spin {
+  from { -moz-transform: rotate(0deg); }
+  to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  from {
+      transform:rotate(0deg);
+  }
+  to {
+      transform:rotate(360deg);
+  }
+}
+
+

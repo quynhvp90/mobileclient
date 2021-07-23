@@ -1,0 +1,13 @@
+
+<ion-row class="challenge-activity-row">
+    <ion-col style="max-width: 100px;">
+      <div style="padding-right: 10px; width: 100px;">
+        <activity-icon [name]="activity.name" [primarycolor]="primarycolor" [secondarycolor]="secondarycolor"
+        [activityId]="activity._id" [subscribeToEvents]="false">
+      </activity-icon>
+      </div>
+    </ion-col>
+    <ion-col style="font-size: 15px; color: #000;">
+      {{display}}
+    </ion-col>
+</ion-row>

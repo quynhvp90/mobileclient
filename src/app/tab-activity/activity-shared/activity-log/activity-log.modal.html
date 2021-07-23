@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Log Exercise
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="foundActivity">
+    <activity-log [autoSetDate]="false" [foundActivity]="foundActivity" [isModal]="true" (logged)="activityLogged()"></activity-log>
+
+  <div style="padding: 10px; margin-top: 20px;" *ngIf="!showList">
+
+      <ion-button fill="solid" color="primary" expand="block" (click)="getActivityLogs()">
+        Load Activity Logs
+      </ion-button>
+
+      <div style="text-align: center;
+        margin-bottom: 10px;
+        color: #777;
+        font-size: 12px;">
+          Load your activity logs to view or delete your history
+      </div>
+  
+    </div>
+
+    <div *ngIf="showList" style="margin-top: 20px;">
+      <ion-list *ngFor="let item of listActivityLogs | groupBy:'lookups.created'">
+        <ion-item>
+          <span style="font-weight: bold">{{ item.key }}</span>
+        </ion-item>
+  
+        <ion-list>
+          <ion-item *ngFor="let activityLog of item.value">
+              <ion-label>
+                <ion-row>
+                  <ion-col>{{activityLog.count}} {{foundActivity.label}}</ion-col>
+                  <ion-col>{{ activityLog.created | timeAgo}}</ion-col>
+                </ion-row>
+              </ion-label>
+              <ion-icon slot="end" style="cursor: pointer" (click)="deleteActivityLog(activityLog)" name="close">
+              </ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-list>
+      <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+  </div>
+</ion-content>

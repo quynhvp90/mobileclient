@@ -1,0 +1,21 @@
+<ion-row class="notification-item" *ngIf="notificationLog">
+  <ion-col (click)="userStats.showStats($event)" *ngIf="notificationLog.lookups.fromUser && notificationLog.lookups.fromUser.avatar" style="padding: 5px; width: 100px; max-width: 100px;">
+    <user-avatar [imageName]="notificationLog.lookups.fromUser.avatar"></user-avatar>
+    <user-stats #userStats [displayName]="notificationLog.lookups.fromUser.publicName" [userStats]="notificationLog.lookups.fromUser.stats"></user-stats>
+  </ion-col>
+  <ion-col  *ngIf="!notificationLog.lookups.fromUser || !notificationLog.lookups.fromUser.avatar" style="padding: 5px; width: 100px; text-align: center; max-width: 100px;">
+    <ion-icon style="color: #fff;
+    font-size: 34px;
+    background: #54cc54;
+    border-radius: 50%;
+    padding: 5px;" name="trophy"></ion-icon>
+  </ion-col>
+  
+  <ion-col (click)="showDetail($event)" style="width: 100%">
+    <div *ngIf="notificationLog.message">
+      <div style="font-size: 16px;" [innerHTML]="title"></div>
+      <div style="font-size: 16px; margin-top: 5px; margin-bottom: 5px;" [innerHTML]="body"></div>  
+      <div style="display: inline-block; color: #777; font-size: 12px;">{{ createdTimeAgo }}</div>
+    </div>
+  </ion-col>
+</ion-row>

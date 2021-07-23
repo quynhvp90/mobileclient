@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon style="font-size: 30px;" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      Feature Suggestions
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="sendMessage()">
+        New
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="feature-suggestions" style="--background: #e6ebf1">
+  <ion-card style="background: #fff;">
+    <ion-card-header>
+      <ion-card-title>
+        Thank You
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding-top: 0px;">
+      <p>Almost everything in LogReps is based on your ideas! We love hearing from you!</p>
+      <br />
+      <p>Please add your own suggestions below, and/or click on a suggestion to vote on it, or add your own comments.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="list-label">Suggestions</div>
+
+  <message-list
+    [mode]="'features'"
+    [allowEngagement]="true"
+    [showInfiniteScroll]="false" [limit]="30" (newMessage)="sendMessage()"></message-list>
+
+</ion-content>

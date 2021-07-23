@@ -1,0 +1,278 @@
+<ion-header class="challenge-detail-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start">
+      <ion-button style="color: #fff;" (click)="backtoChallenges()">
+        Back
+      </ion-button>
+      <!-- <ion-back-button style="color: #fff;"></ion-back-button> -->
+    </ion-buttons>
+    <ion-title *ngIf="foundChallenge" style="width: 100%; text-align: center;">
+      CHALLENGE
+    </ion-title>
+    <ion-buttons slot="end" *ngIf="foundChallenge">
+      <ion-button style="color: #fff;" (click)="editChallenge()">
+        Edit
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1" class="challenge-detail-content" *ngIf="loadingChallenge">
+  <ion-progress-bar type="indeterminate"></ion-progress-bar>
+
+  <div class="ion-padding" style="text-align: center">
+    Loading Challenge
+  </div>
+</ion-content>
+
+
+<ion-content *ngIf="!loadingChallenge"  id="listChallengeScroll" style="--background: #e6ebf1" class="challenge-detail-content">
+  <div *ngIf="showError">
+    <ion-card style="--background: #fff;"  class="ion-padding">
+      <ion-card-title>
+        Sorry, we are unable to find that challenge 😥
+      </ion-card-title>
+      <ion-card-content>
+        <img src="https://logreps-public.s3.amazonaws.com/images/poses/white-male-treadmill.png">
+
+        <div style="margin-top: 20px; font-weight: bold;">
+          Help?
+        </div>
+        <div>
+          <ul>
+            <li>If you got here from a link, check the link address and try again</li>
+            <li>If you entered a code, check the code and try again</li>
+            <li>Contact <a href="mailto:support@logreps.com">support@logreps.com</a></li>
+          </ul>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div  *ngIf="foundChallenge">
+    <div *ngIf="foundChallenge.advanced && foundChallenge.advanced.bannerImage" style="background: #fff;">
+      <img src="{{ foundChallenge.advanced.bannerImage }}">
+    </div>
+    <div style="background: #ffffff; padding: 0px 10px 10px; font-size: 16px; margin-bottom: 20px;">
+      <div style="font-weight: bold; font-size: 22px;">{{ foundChallenge.name }}</div>
+      <div *ngIf="foundChallenge.description" [innerHtml]="foundChallenge.description">
+      </div>
+      <br />
+      <div style="display: block;">
+        Click <a target="_blank" href="{{ globalService.websiteUrl }}/challenges/{{ foundChallenge.accessCode }}">here</a> to view the public webpage for this challenge.  Share the link to this page to invite others to join.
+      </div>
+
+      <div style="margin-top: 20px">
+        <challenge-timer [mode]="'long'" [challenge]="foundChallenge"></challenge-timer>
+      </div>
+
+      <div style="margin-top: 20px; margin-bottom: 20px;">
+        <div *ngIf="foundChallenge.lookups.timeToStart > 0 && userStatus !== 'anonymous'">
+          <!-- not started -->
+          <div class="alert alert-danger">
+            You can start logging activities once this challenge has started
+          </div>
+        </div>
+        <div
+          *ngIf="foundChallenge.lookups.timeToStart < 0 && foundChallenge.lookups.timeToEnd > 0 && userStatus === 'accepted'">
+          <!-- in progress -->
+          <ion-button *ngIf="!showJoinTeam" expand="block" color="success" (click)="logActivity()">LOG ACTIVITY</ion-button>
+          <ion-button *ngIf="showJoinTeam" expand="block" color="success" (click)="joinTeam()">JOIN A TEAM</ion-button>
+        </div>
+        <div *ngIf="foundChallenge.lookups.timeToStart < 0 && foundChallenge.lookups.timeToEnd < 0">
+          <!-- finished -->
+          <ion-button expand="block" color="danger" (click)="archiveChallenge()">ARCHIVE CHALLENGE</ion-button>
+        </div>
+      </div>
+
+      <div *ngIf="userStatus === 'anonymous' || userStatus === 'sent'" style="margin-bottom: 20px;">
+
+
+        <div *ngIf="userStatus === 'anonymous'">
+          <div *ngIf="!foundChallenge.lookups.timeToStart">
+            <ion-button *ngIf="!showJoinTeam" expand="block" color="success" (click)="joinChallenge()">JOIN CHALLENGE</ion-button>
+            <ion-button *ngIf="showJoinTeam" expand="block" color="success" (click)="joinChallenge()">JOIN A TEAM</ion-button>
+          </div>
+
+          <!-- not started -->
+          <div *ngIf="foundChallenge.lookups.timeToStart > 0">
+            <ion-button *ngIf="!showJoinTeam" expand="block" color="success" (click)="joinChallenge()">JOIN CHALLENGE</ion-button>
+            <ion-button *ngIf="showJoinTeam" expand="block" color="success" (click)="joinChallenge()">JOIN A TEAM</ion-button>
+          </div>
+
+          <!-- in progress -->
+          <div *ngIf="foundChallenge.lookups.timeToStart < 0 && foundChallenge.lookups.timeToEnd > 0">
+            <ion-button *ngIf="!showJoinTeam" expand="block" color="success" (click)="joinChallenge()">JOIN CHALLENGE</ion-button>
+            <ion-button *ngIf="showJoinTeam" expand="block" color="success" (click)="joinChallenge()">JOIN A TEAM</ion-button>
+          </div>
+
+          <!-- finished -->
+        </div> <!-- end anonymous -->
+
+      </div>
+
+      <div *ngIf="foundChallenge.advanced && foundChallenge.advanced.donateUrl">
+        <ion-button expand="block" color="primary" (click)="donate()">DONATE</ion-button>
+      </div>
+
+      <div *ngIf="userStatus === 'sent'">
+        <div>
+          <ion-button *ngIf="!showJoinTeam" expand="block" color="success" (click)="acceptChallenge(foundChallenge)">ACCEPT INVITATION</ion-button>
+          <ion-button *ngIf="showJoinTeam" expand="block" color="success" (click)="joinTeam()">JOIN A TEAM</ion-button>
+        </div>
+        <div style="margin-top: 20px;">
+          <ion-button expand="block" color="danger" (click)="denyChallenge(foundChallenge)">REJECT INVITATION</ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div  *ngIf="userStatus === 'anonymous' || userStatus === 'sent'">
+      <div class="list-label">GOALS PER PARTICIPANT</div>
+      <ion-card style="margin-top: 10px;">
+        <ion-list *ngIf="challengeActivities && challengeActivities.length > 0" class="no-last-border">
+          <ion-item *ngFor="let challengeActivity of challengeActivities;">
+            <challenge-activity-row [activity]="challengeActivity" style="width: 100%;">
+            </challenge-activity-row>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+    </div>
+
+    <div *ngIf="foundChallenge.teams && foundChallenge.teams.enabled">
+      <div class="list-label">Teams</div>
+      <ion-card style="margin-top: 10px;">
+        <ion-list *ngIf="foundChallenge.teams.roster && foundChallenge.teams.roster.length > 0" class="no-last-border">
+          <ion-item style="--padding-start: 0px; " detail="true" *ngFor="let challengeTeam of foundChallenge.teams.roster;"
+            (click)="viewTeam(challengeTeam)">
+            <challenge-row *ngIf="challengeTeam && challengeTeam.lookups" [challengeHydrated]="foundChallenge" [challengeRowItem]="challengeTeam.lookups.challengeRowItem" style="width: 100%; margin-bottom: 5px;"></challenge-row>
+          </ion-item>
+          <ion-item *ngIf="userStatus === 'accepted' && foundChallenge.lookups.timeToEnd > 0 && foundChallenge.teams && foundChallenge.teams.allowTeamCreation" button (click)="createTeam()"
+            style="--padding-start: 0px; color: #387fff; text-align: center">
+            <ion-label>
+              Create new team
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="userStatus !== 'anonymous' && foundChallenge.lookups.timeToEnd > 0" button (click)="addFriend()"
+            style="--padding-start: 0px; color: #387fff; text-align: center">
+            <ion-label>
+              Invite friends to challenge
+            </ion-label>
+          </ion-item>
+          <!-- <ion-item *ngIf="userStatus !== 'anonymous' && foundChallenge.lookups.timeToEnd > 0" button
+            (click)="shareInvitationLink()" style="--padding-start: 0px; color: #387fff; text-align: center">
+            <ion-label>
+              Share invitation link
+            </ion-label>
+          </ion-item> -->
+        </ion-list>
+      </ion-card>
+    </div>
+
+    <div *ngIf="!foundChallenge.teams || !foundChallenge.teams.enabled">
+      <div class="list-label">Participants</div>
+      <ion-card style="margin-top: 10px;">
+        <ion-list *ngIf="challengeUsers && challengeUsers.length > 0" class="no-last-border">
+          <ion-item style="--padding-start: 0px; " detail="true" *ngFor="let challengeUser of challengeUsers;"
+            (click)="viewDetail(challengeUser)">
+            <challenge-row [challengeHydrated]="foundChallenge" [challengeRowItem]="challengeUser" style="width: 100%; margin-bottom: 5px;"></challenge-row>
+          </ion-item>
+          <ion-item style="--padding-start: 0px; " detail="true"
+            *ngIf="foundChallenge.users.length > 5" (click)="showAllParticipants()">
+            <ion-avatar style="padding-left: 16px; width: 70px;"></ion-avatar>
+            <ion-label>
+              <h3>
+                Show +{{ foundChallenge.users.length - foundChallenge.lookups.usersTop.length }} other
+                participant(s)
+              </h3>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="userStatus !== 'anonymous' && foundChallenge.lookups.timeToEnd > 0" button (click)="addFriend()"
+            style="--padding-start: 0px; color: #387fff; text-align: center">
+            <ion-label>
+              Invite friends to challenge
+            </ion-label>
+          </ion-item>
+          <!-- <ion-item *ngIf="userStatus !== 'anonymous' && foundChallenge.lookups.timeToEnd > 0" button
+            (click)="shareInvitationLink()" style="--padding-start: 0px; color: #387fff; text-align: center">
+            <ion-label>
+              Share invitation link
+            </ion-label>
+          </ion-item> -->
+        </ion-list>
+      </ion-card>
+    </div>
+
+    <div [hidden]="socialToggle !== 'messages'">
+      <div class="list-label">Messages</div>
+      <!-- <ion-card style="margin-top: 0px; background: #fff"> -->
+        <message-list *ngIf="socialUserIds.length > 0"
+          [allowEngagement]="userStatus !== 'anonymous'"
+          [showInfiniteScroll]="false" [limit]="30" (newMessage)="sendMessage()"></message-list>
+      <!-- </ion-card> -->
+    </div>
+
+    <div *ngIf="userStatus === 'accepted'">
+      <!-- <ion-item lines="none" style="--background: #e6ebf1;">
+        <ion-label>
+          <ion-segment style="--background: #fff;" slot="start" (ionChange)="messagesOrActivitiesToggle($event)" [(ngModel)]="socialToggle">
+            <ion-segment-button value="messages">
+              <ion-label>Messages</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="activities">
+              <ion-label>Activities</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-label>
+      </ion-item> -->
+
+
+
+      <!-- <div [hidden]="socialToggle !== 'activities'">
+        <ion-card style="margin-top: 0px; background: #fff">
+          <social-list *ngIf="socialUserIds.length > 0" [showInfiniteScroll]="false" [limit]="10"></social-list>
+        </ion-card>
+      </div> -->
+
+      <div class="ion-padding" style="margin-top: 50px;">
+        <!-- legacy -->
+        <div *ngIf="!foundChallenge.lookups.timeToStart">
+          <div *ngIf="userIsOwner" class="ion-padding" style="margin-top: -20px;">
+            <ion-button expand="block" color="light" (click)="deleteChallenge()">Delete Challenge</ion-button>
+          </div>
+
+          <div *ngIf="!userIsOwner" class="ion-padding" style="margin-top: -20px;">
+            <ion-button expand="block" color="light" (click)="leaveChallenge()">Quit Challenge</ion-button>
+          </div>
+        </div>
+
+        <!-- not started -->
+        <div *ngIf="foundChallenge.lookups.timeToStart > 0">
+          <div *ngIf="userIsOwner" class="ion-padding" style="margin-top: -20px;">
+            <ion-button expand="block" color="light" (click)="deleteChallenge()">Delete Challenge</ion-button>
+          </div>
+
+          <div *ngIf="!userIsOwner" class="ion-padding" style="margin-top: -20px;">
+            <ion-button expand="block" color="light" (click)="leaveChallenge()">Quit Challenge</ion-button>
+          </div>
+        </div>
+
+        <!-- in progress -->
+        <div *ngIf="foundChallenge.lookups.timeToStart < 0 && foundChallenge.lookups.timeToEnd > 0">
+          <div class="ion-padding" style="margin-top: -20px;">
+            <ion-button expand="block" color="light" (click)="leaveChallenge()">Quit Challenge</ion-button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <!-- <div class="ion-padding" style="margin-top: -20px;">
+      <ion-button expand="block" color="danger" (click)="deleteChallenge()">Delete Challenge</ion-button>
+    </div> -->
+  </div>
+</ion-content>
+
+

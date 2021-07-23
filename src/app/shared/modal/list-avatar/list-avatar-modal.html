@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+      Select Icon
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="mode === 'choose'">
+    <ion-list lines="full">
+      <ion-item detail (click)="selectMode('animals')">
+        <div slot="start" style="padding: 5px;">
+          <challenge-team-icon [width]="'45px'" [height]="'45px'" [icon]="'https://logreps-public.s3.amazonaws.com/images/animals/003.svg'"></challenge-team-icon>
+        </div>
+        <ion-label>View animals</ion-label>
+      </ion-item>
+      <ion-item detail (click)="selectMode('countries')">
+        <div slot="start" style="padding: 5px;">
+          <challenge-team-icon [width]="'45px'" [height]="'45px'" [icon]="'https://logreps-public.s3.amazonaws.com/images/flags/flags-circles-svg/united_nations.svg'"></challenge-team-icon>
+        </div>
+        <ion-label>View flags</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div *ngIf="mode !== 'choose'">
+    <ion-grid>
+      <ion-row>
+        <ion-col (click)="selectAvatar(avatar)" *ngFor="let avatar of avatarImagesScroll">
+          <ion-card style=" float: left;background: #fff; left: 10px; height: 90px; width: 100px; margin: 0px; padding: 0px">
+            <ion-card-content>
+              <user-avatar *ngIf="mode === 'avatars'" [width]="'55px'" [height]="'55px'" [imageName] = "avatar.image"></user-avatar>
+              <challenge-team-icon *ngIf="mode === 'animals'" [width]="'55px'" [height]="'55px'" [icon]="avatar.image"></challenge-team-icon>
+              <div *ngIf="mode === 'countries'" style="position: relative; top: -10px;">
+                <challenge-team-icon  [width]="'55px'" [height]="'55px'" [icon]="avatar.image"></challenge-team-icon>
+                <div style="text-align: center;
+                  overflow-y: hidden;
+                  height: 20px;
+                  line-height: 10px;
+                  font-size: 10px;">{{ avatar.label }}</div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col style="min-width: 120px;"></ion-col>
+        <ion-col style="min-width: 120px;"></ion-col>
+        <ion-col style="min-width: 120px;"></ion-col>
+        <ion-col style="min-width: 120px;"></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+
+</ion-content>

@@ -1,0 +1,49 @@
+<ion-header class="export-data-modal-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon style="font-size: 30px;" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Export Your Data
+    </ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div
+    style="text-align: center;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">You can export all your data in Excel or CSV format.
+  </div>
+
+
+  <!-- <div class="list-label" style="margin-top: 20px;">Step 1 - Select your format</div> -->
+
+  <ion-item lines="full">
+    <ion-label>Format</ion-label>
+    <ion-select [(ngModel)]="format" placeholder="Select One">
+      <ion-select-option value="csv">CSV</ion-select-option>
+      <ion-select-option value="xlsx">Excel</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- <div class="list-label" style="margin-top: 20px;">Step 2 - Download or Send a link</div> -->
+  <div  class="ion-padding">
+    <ion-button style="margin-top: 20px;" expand="block" color="success" fill="solid" (click)="share()">SEND LINK</ion-button>
+
+    <div
+      style="text-align: center;
+      margin: 20px 10px;
+      color: #777;
+      font-size: 12px;">Depending on your device, you may be able to download directly
+    </div>
+    <ion-button expand="block" color="success" (click)="open()">DOWNLOAD NOW</ion-button>
+  
+  </div>
+
+
+</ion-content>

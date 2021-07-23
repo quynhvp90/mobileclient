@@ -1,0 +1,11 @@
+<div class="emote-stats" (click)="showEmoteDetail($event);">
+  <!-- <img src="/assets/img/emotes/like-gray.svg" style="border: 1px solid white; border-radius: 50%;"> -->
+  <img *ngIf="showLike" src="/assets/img/emotes/like.svg">
+  <img *ngIf="showLove" src="/assets/img/emotes/love.svg">
+  <img *ngIf="showWow" src="/assets/img/emotes/wow.svg">
+  <img *ngIf="showHaha" src="/assets/img/emotes/haha.svg">
+  <span *ngIf="extraCount" style="color: #777;
+        font-size: 14px;
+        position: relative;
+        top: -4px; margin-left: 2px">{{ extraCount }}</span>
+</div>

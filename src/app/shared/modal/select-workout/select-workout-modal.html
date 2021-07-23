@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+      Select Workout
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+         Cancel
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <div
+  style="text-align: center;
+  margin: 10px;
+  color: #777;
+  font-size: 12px;">Select the workout you wish to move this exercise to
+</div>
+  <ion-list>
+    <ion-item detail *ngFor="let workout of foundWorkouts" (click)="selectWorkout(workout)">
+      <ion-label>{{ workout.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

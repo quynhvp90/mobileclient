@@ -1,0 +1,112 @@
+<ion-header class="activity-list-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button style="color: #fff;"></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="width: 100%; text-align: center;">
+      All Exercises
+    </ion-title>
+
+    <!-- <ion-buttons slot="primary">
+      <ion-button style="color: #fff;" (click)="editWorkout()">
+        Edit
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+
+  <ion-toolbar class="date-navigation">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="auto">
+          <ion-button fill="clear" (click)="changeHeaderDate(-1)">
+            <ion-icon name="arrow-dropleft"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <h2 class="title" style="color: #007090; font-size: 14px; text-align: center;">{{dashboardSubHeader}}</h2>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-button fill="clear" [ngClass]="{'buttonHeaderNavigationOff':dashboardSubHeader === 'Today'}"
+            (click)="changeHeaderDate(1)">
+            <ion-icon name="arrow-dropright"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content style="--background: #e6ebf1" class="activity-list-content">
+  <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+
+  <div>
+    <div style="text-align: left;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">This is a special view of all your exercises across all your workouts and challenges.</div>
+    <div *ngIf="activities" style="margin-top: 1px;">
+        <ion-list lines="full">
+          <ion-item-sliding #slidingActivities *ngFor="let activity of activities">
+            <ion-item (click)="viewDetail(slidingActivities, activity)">
+              <activity-row [showAdd]="true" [activity]="activity" [parent]="'list'" style="width: 100%;">
+
+              </activity-row>
+            </ion-item>
+            <ion-item-options side="start">
+              <ion-item-option style="background-color: #00b100; color: #fff"
+                (click)="editActivity(slidingActivities, activity)">
+                <div style="color: #fff;">Edit</div>
+              </ion-item-option>
+              <!-- <ion-item-option  style="background-color: transparent" (click)="deleteActivity(slidingActivities, activity)"><ion-icon style="font-size: 32px; color: red" name="ios-close-circle"></ion-icon></ion-item-option> -->
+            </ion-item-options>
+            <ion-item-options side="end">
+              <ion-item-option style="background-color: #00b100; color: #fff"
+                (click)="createActivityLog(slidingActivities, activity)">
+                <div style="color: #fff;" *ngIf="activity.unit">+{{activity.lastLogCount}} {{activity.unit}}</div>
+                <div style="color: #fff;" *ngIf="!activity.unit">+{{activity.lastLogCount}} reps</div>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+
+    </div>
+
+  </div>
+
+  <div style="margin-bottom: 40px;" *ngIf="activityService.totalCaloriesBurned > 0">
+    <div style="text-align: center; color: #777">Estimated calories burned:
+      <b>{{ activityService.totalCaloriesBurned }}</b></div>
+    <div (click)="openUserHealth()" style="text-align: center;
+      margin: 10px;
+      color: #777;
+      font-size: 12px;">
+      Click <a style="text-decoration: underline;">here</a> to change your
+      health settings.
+    </div>
+  </div>
+
+  <!-- <div style="margin-top: 20px; margin-bottom: 20px;">
+    <div class="list-label" style="text-align: center; margin: 0px 0px 10px 0px;">Share Your Progress</div>
+
+    <div class="share-buttons" (click)="shareProgress()">
+      <div style="background-color: #4267B2;">
+        <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg">
+      </div>
+      <div style="background-color: #55acee;">
+        <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg">
+      </div>
+      <div style="background-color: #CB2027;">
+        <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg">
+      </div>
+      <div style="background-color: #7d7d7d;">
+        <img alt="email sharing button" src="https://platform-cdn.sharethis.com/img/email.svg">
+      </div>
+      <div style="background-color: #95D03A;">
+        <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg">
+      </div>
+    </div>
+  </div> -->
+
+</ion-content>

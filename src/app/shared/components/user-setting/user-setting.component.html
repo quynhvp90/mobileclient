@@ -1,0 +1,24 @@
+
+<div class="user-setting">
+  <ion-list lines="full" style="margin-bottom: 5px;">
+    <ion-item>
+      <ion-label>Name </ion-label>
+      <ion-input style="text-align: right;" (ionBlur)="save()" type="text" [(ngModel)]="user.publicName"></ion-input>
+    </ion-item>
+    <ion-item detail (click)="changeAvatar()">
+      <ion-label>Avatar</ion-label>
+      <user-avatar [imageName] = "user.avatar"></user-avatar>
+    </ion-item>
+  </ion-list>
+
+  <div style="text-align: left;
+      margin: 2px 10px 10px 10px; 
+      color: #777;
+      font-size: 12px;">Your name and avatar are used in Social and Challenges</div>
+
+
+  <!-- <div class="ion-padding">
+    <ion-button (click)="fakeSave()" color="success" expand="block">Save</ion-button>
+  </div> -->
+  
+</div>

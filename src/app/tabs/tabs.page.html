@@ -1,0 +1,39 @@
+<ion-tabs (ionTabsWillChange)="tabChanged($event)">
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+    <!-- <ion-tab-button tab="activities">
+      <ion-icon name="flash"></ion-icon>
+      <ion-label>Activities</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="social">
+      <ion-icon name="people"></ion-icon>
+      <ion-label>Social</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="challenges">
+        <ion-badge *ngIf="challengeService.showBell" color="danger" style="width: 12px;
+        height: 12px;">&nbsp;</ion-badge>
+        <ion-icon name="trophy"></ion-icon>
+        <ion-label>Challenges</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="stats">
+      <ion-icon name="stats"></ion-icon>
+      <ion-label>Stats</ion-label>
+    </ion-tab-button> -->
+    <ion-tab-button tab="notifications">
+      <!-- <ion-badge *ngIf="notificationService.showBell" color="danger" style="width: 12px;
+        height: 12px;">&nbsp;</ion-badge> -->
+
+      <ion-icon name="notifications-outline"></ion-icon>
+      <ion-label>Notifications</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="settings">
+      <ion-icon name="cog"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

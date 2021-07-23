@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+   <ion-buttons slot="end">
+    <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+</ion-header>
+<ion-content (click)="dismiss()">
+  <div class="content-wrapper">
+    <div class="rays-holder">
+      <img class="rays" src="assets/img/yellow-rays.png">
+    </div>
+    <div id="wrapper">
+      <div class="cool_btn1 blue">
+        <h1 class="shadow">{{logCount}}</h1>
+        <h1 class="message">New personal record!</h1>
+        <div *ngIf="activity" class="activity">{{activity.label}}</div>
+        <div style="height: 60px;
+          margin-top: 5px;
+          width: 60px;
+          text-align: center;
+          margin-left: auto;
+          margin-right: auto" [innerHTML]="svg"></div>
+      </div>
+    </div>
+  </div>
+</ion-content>

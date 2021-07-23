@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Challenge Team
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="saving">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!saving">
+    <ion-item lines="full" style="margin-top: 20px;">
+      <ion-label placement="start">Team Name</ion-label>
+      <ion-input type="text" style="text-align: right" [(ngModel)]="foundChallengeTeam.name" placeholder="enter a unqiue team name">
+      </ion-input>
+    </ion-item>
+    <div style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+      A default team name has been created, but consider changing it to whatever you want.  Add an emoji too 🥴.
+    </div>
+
+    <ion-item lines="full" detail (click)="changeAvatar()">
+      <ion-label>Team Icon</ion-label>
+      <challenge-team-icon [icon]="foundChallengeTeam.icon"></challenge-team-icon>
+    </ion-item>
+    <div style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+      Choose from 40 different icons.
+    </div>
+  </div>
+</ion-content>

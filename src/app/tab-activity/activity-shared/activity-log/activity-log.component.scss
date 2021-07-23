@@ -1,0 +1,30 @@
+
+.activity-log {
+  ion-card {
+    background: #ffffff;
+  }
+  ion-grid {
+    margin-left: -10px;
+    margin-right: -10px
+  }
+
+  .count-col  {
+    font-weight: bold;
+    border: solid 1px #f9f8f8;
+    text-align: center;
+    line-height: 30px
+  }
+
+  .minus-col {
+    // background-color: #e08f99;
+    background-color:#33B0CB;
+  }
+  
+  
+  .plus-col {
+    background-color:#22839B;
+  }
+
+}
+
+

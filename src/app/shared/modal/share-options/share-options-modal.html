@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start" *ngIf="mode === 'step3'">
+      <ion-button (click)="mode = 'step1'" style="color: #fff;">
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Configure
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="mode === 'step1'">
+    <div style="    text-align: left;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">
+      Use the below settings to create a custom thumbnail.  Once generated you can share your progress.
+    </div>
+    <div class="list-label" style="margin-top: 20px;">Configure Thumbnail</div>
+    <ion-item lines="full">
+      <ion-label placement="start">Title</ion-label>
+      <ion-input type="text" style="text-align: right" [(ngModel)]="title" placeholder="enter a title">
+      </ion-input>
+    </ion-item>
+    <ion-item detail="true" lines="full">
+      <ion-label placement="start">Background</ion-label>
+      <img (click)="changeBanner()" style="height: 50px; max-width: 200px;" [src]="backgroundThumbnail">
+      <!-- <ion-input type="text" style="text-align: right" [(ngModel)]="advanced.bannerImage" placeholder="https://server.com/image.png">
+      </ion-input> -->
+    </ion-item>
+
+
+    <div class="ion-padding">
+      <ion-button color="success" expand="block" (click)="generateThumbnail()">
+        GENERATE THUMBNAIL
+      </ion-button>
+    </div>
+  </div>
+  <div *ngIf="mode === 'step2'">
+    <ion-card style="background: #fff;" >
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <img src="https://logreps-public.s3.amazonaws.com/images/misc/creative-artist-148506400_s.jpg">
+      <ion-card-content>
+        <div style="text-align: center;">Please wait a few seconds while we create your custom thumbnail</div>  
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="mode === 'step3'">
+    <ion-card style="background: #fff;" >
+      <img [src]="thumbnailGenerated">
+      <ion-card-content>
+        <div style="margin-bottom: 20px;">
+          Click the top left "Back" button to change the background or title
+        </div>
+        <ion-button expand="block" color="success" (click)="openShareLink()">SHARE</ion-button>  
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-padding">
+    </div>
+  </div>
+</ion-content>

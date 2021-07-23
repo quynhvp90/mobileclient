@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+      Select Image
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <div class="list-label" style="margin-top: 20px;">SELECT A BANNER IMAGE FOR YOUR CHALLENGE</div>
+  <ion-card style="background: #fff;" >
+    <ion-card-content>
+      <ion-list>
+        <ion-item detail="true" (click)="selectImage(image)" *ngFor="let image of images">
+          <img [src]="image">
+        </ion-item>
+      </ion-list>    
+    </ion-card-content>
+  </ion-card>
+</ion-content>

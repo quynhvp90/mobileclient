@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Edit Workout
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="!foundWorkout">
+    <ion-button expand="block" (click)="save()">CREATE WORKOUT</ion-button>
+    <br />
+  </div>
+
+  <div class="list-label" style="margin-top: 20px;">Workout Name</div>
+  <!-- <ion-item>
+      <ion-label position="fixed">Icon</ion-label>
+      <div>
+        <activity-icon style="width: 70px; height: 70px" [name]="workout.icon" [primarycolor]="primarycolor"
+          [secondarycolor]="secondarycolor">
+        </activity-icon>
+        <ion-button expand="block" (click)="changeIcon()">Change Icon</ion-button>
+      </div>
+    </ion-item> -->
+  <ion-item>
+    <ion-input clearInput="true" placeholder="Enter a workout name (like Upper Body)" type="text"
+      [(ngModel)]="foundWorkout.name"></ion-input>
+  </ion-item>
+
+  <div *ngIf="foundWorkout && foundWorkout._id">
+    <div class="list-label" style="margin-top: 20px;">Add exercises to your workout</div>
+    <ion-list *ngIf="foundActivities.length > 0">
+      <ion-reorder-group disabled="false" (ionItemReorder)="reorder($event)">
+          <ion-item *ngFor="let activity of foundActivities" (click)="editActivity(activity._id)">
+            <ion-reorder slot="start"></ion-reorder>
+            <ion-label>
+              <span *ngIf="activity.logLabel">{{activity.goal}} {{activity.logLabel}}</span>
+              <span *ngIf="!activity.logLabel">{{activity.goal}} {{activity.label}}</span>
+            </ion-label>
+            <ion-icon style="cursor: pointer" (click)="deleteActivity(activity, $event)" slot="end" name="close"></ion-icon>
+          </ion-item>
+      </ion-reorder-group>
+    </ion-list>
+
+    <ion-list lines="full">
+      <ion-item button style="color: #387fff; text-align: center" (click)="createActivity()">
+        <span *ngIf="foundActivities.length === 0">
+          Add an exercise
+        </span>
+        <span *ngIf="foundActivities.length > 0">
+          Add another exercise
+        </span>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+      <!-- <ion-button *ngIf="foundWorkout._id" expand="block" color="success" fill="outline" (click)="createActivity()">ADD
+        NEW EXERCISE
+      </ion-button> -->
+      <ion-button *ngIf="foundWorkout._id" color="danger" expand="block" fill="solid" (click)="delete()">DELETE WORKOUT
+      </ion-button>
+    </div>
+  </div>
+
+
+</ion-content>

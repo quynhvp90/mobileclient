@@ -1,0 +1,31 @@
+<ion-content class="config padding">
+  <ion-row *ngIf="ajaxRunning">
+    <ion-col>
+        <div>Confirming your email address</div>
+        <ion-spinner></ion-spinner>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="!ajaxRunning && !isConfirmed">
+    <ion-col>
+      <ion-item>
+          {{ message }}
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="!ajaxRunning && isConfirmed">
+    <ion-col>
+      <ion-item>
+          {{ message }}
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="!ajaxRunning && isConfirmed">
+      <ion-col>
+        <ion-item>
+            <ion-button color="primary" expand="block" (click)="login()">
+              LOGIN TO CONTINUE
+            </ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+</ion-content>

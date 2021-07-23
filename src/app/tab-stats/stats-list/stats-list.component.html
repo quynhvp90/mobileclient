@@ -1,0 +1,15 @@
+<ion-header class="activity-list-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-title style="width: 100%; text-align: center;">
+      Stats
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <stats-calendar-week></stats-calendar-week>
+  <ion-list lines="full">
+    <ion-item *ngFor="let activity of activities" detail (click)="viewDetail(activity)">
+      <stats-row [activity]="activity" style="width: 100%;"></stats-row>
+    </ion-item>
+  </ion-list>
+</ion-content>

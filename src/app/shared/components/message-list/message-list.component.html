@@ -1,0 +1,47 @@
+<div *ngIf="userService && userService.user && messageService && messageService.foundMessages" class="message-list">
+  <div *ngIf="allowEngagement"
+      style="margin-bottom: 10px;
+      background: #fff;
+      padding: 5px;">
+    <ion-row>
+      <ion-col  (click)="sendMessage($event)" *ngIf="userService.user.avatar" style="padding: 5px 5px 5px 10px; width: 50px; max-width: 50px;">
+        <user-avatar [imageName]="userService.user.avatar"></user-avatar>
+      </ion-col>
+      <ion-col (click)="sendMessage($event)" style="width: 100%; display: flex; align-items: center;">
+        <div style="border-radius: 20px;
+        border: 1px solid #cccccc;
+        background: #efefef;
+        width: 100%;
+        padding: 10px;
+        color: #777;">
+          {{ addYourOwnText }}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="messageService.loading">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!messageService.loading">
+      <div style="--padding-start: 0px;" *ngFor="let foundMessage of messageService.foundMessages" slot="start">
+        <message-item style="width: 100%;" [allowEngagement]="allowEngagement" [foundMessage]="foundMessage"></message-item>
+      </div>
+      <ion-item style="text-align: center" *ngIf="messageService.foundMessages.length === 0">
+        <ion-label>
+         {{ noMessagesFoundText }}
+        </ion-label>
+      </ion-item>
+  </div>
+  <div *ngIf="messageService.foundMessages && messageService.foundMessages.length > 0">
+    <div *ngIf="showInfiniteScroll">
+      <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+    <div *ngIf="!showInfiniteScroll && messageService.foundMessages.length >= 30"  style="text-align: center;">
+      <div (click)="loadMoreButton($event)" style="margin: 10px; padding: 10px; font-weight: bold; color: #24829b;">LOAD MORE</div>
+    </div>
+  </div>
+</div>

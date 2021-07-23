@@ -1,0 +1,78 @@
+<ion-header>
+    <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button style="color: #fff;"></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="activity" style="width: 100%; text-align: center;">
+      {{ activity.label }}
+    </ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-button style="color: #fff;" (click)="editActivity()">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+        EDIT
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="stat-detail-content" style="--background: #e6ebf1">
+    <ion-card  *ngIf="activity">
+        <ion-card-header style="
+        background-color: #daf8fc;
+        font-size: 16px;
+        color: #000;">
+            Personal Record:
+            <span style="font-weight: bold;
+        color: #238193;
+        font-size: 18px;">{{ activity.personalRecord | number: '2.' }} </span>
+        </ion-card-header>
+    </ion-card>
+
+    <ion-grid style="margin: 10px;">
+      <ion-row>
+        <ion-col (click)="segmentChanged('week')" [ngClass]="{'active' : groupBy === 'week'}" size="4">
+          Week
+        </ion-col>
+        <ion-col (click)="segmentChanged('month')" [ngClass]="{'active' : groupBy === 'month'}" size="4">
+          Month
+        </ion-col>
+        <ion-col (click)="segmentChanged('year')" [ngClass]="{'active' : groupBy === 'year'}" size="4">
+          Year
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- <ion-segment class="ion-padding" (ionChange)="segmentChanged($event)" value="week">
+      <ion-segment-button value="week">
+        <ion-label>Week</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="month">
+        <ion-label>Month</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="year">
+        <ion-label>Year</ion-label>
+      </ion-segment-button>
+    </ion-segment> -->
+
+
+    <ion-card style="--background: #fff">
+      <ion-card-header style="
+            background-color: #daf8fc;
+            font-size: 16px;
+            color: #000;">
+        {{ chartLabel }} <span style="font-weight: bold;
+        color: #238193;
+        font-size: 18px;">{{ chartTotal | number: '2.' }} </span>
+      </ion-card-header>
+      <ion-card-content>
+        <div>
+          <canvas #barCanvas style="height: calc(100vh - 400px) !important;"></canvas>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-padding" style="margin-top: -20px;">
+      <ion-button expand="block" color="danger" (click)="removeStats()">Delete Stats</ion-button>
+    </div>
+
+</ion-content>

@@ -1,0 +1,28 @@
+.app-login {
+  .reason {
+    color: #ddd;
+    font-size: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+
+    a, a:visited {
+      color: #ddd;
+    }
+
+  }
+  .terms {
+    color: #ddd;
+    font-size: 13px;
+    text-align: center;
+
+    a, a:visited {
+      color: #ddd;
+    }
+  }
+
+  ion-input {
+    input {
+      background: #fff !important;
+    }
+  }
+}

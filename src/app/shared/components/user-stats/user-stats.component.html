@@ -1,0 +1,6 @@
+<div class="user-stats" style="text-align: center;" *ngIf="displayName !== 'Someone'">
+  <span class="streak" style="margin-right: 5px;">🗓️ {{ userStats.totalDaysLogged }}</span> 
+  <span class="streak" *ngIf="userStats.dailyStreaks <= 5">⚡ {{ userStats.dailyStreaks }}</span>
+  <span class="streak" *ngIf="userStats.dailyStreaks > 5 && userStats.dailyStreaks < 30">🔥 {{ userStats.dailyStreaks }}</span>
+  <span class="streak" *ngIf="userStats.dailyStreaks >= 30">🏆 {{ userStats.dailyStreaks }}</span>
+</div>

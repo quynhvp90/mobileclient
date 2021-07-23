@@ -1,0 +1,145 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Notifications
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveAndClose()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="notifications" style="--background: #e6ebf1">
+
+  <ion-button *ngIf="foundUser && (!foundUser.pushTokens || foundUser.pushTokens.length === 0)" (click)="registerPush()"
+    color="light" expand="block">Register Push Notification</ion-button>
+
+
+  <ion-item style="margin-top: 40px;" lines="full">
+    <ion-label>Enable Notifications</ion-label>
+    <ion-toggle [(ngModel)]="notificationSettings.enable"></ion-toggle>
+  </ion-item>
+
+  <div class="list-label" style="margin-top: 40px;">Remind me to start logging reps</div>
+  <ion-item lines="full">
+    <ion-label>At what time</ion-label>
+    <ion-select interface="popover" [(ngModel)]="reminderSettings.startReminderTime">
+      <ion-select-option [value]="0">Never</ion-select-option>
+      <ion-select-option [value]="1">1 AM</ion-select-option>
+      <ion-select-option [value]="2">2 AM</ion-select-option>
+      <ion-select-option [value]="3">3 AM</ion-select-option>
+      <ion-select-option [value]="4">4 AM</ion-select-option>
+      <ion-select-option [value]="5">5 AM</ion-select-option>
+      <ion-select-option [value]="6">6 AM</ion-select-option>
+      <ion-select-option [value]="7">7 AM</ion-select-option>
+      <ion-select-option [value]="8">8 AM</ion-select-option>
+      <ion-select-option [value]="9">9 AM</ion-select-option>
+      <ion-select-option [value]="10">10 AM</ion-select-option>
+      <ion-select-option [value]="11">11 PM</ion-select-option>
+      <ion-select-option [value]="12">12 PM</ion-select-option>
+      <ion-select-option [value]="13">1 PM</ion-select-option>
+      <ion-select-option [value]="14">2 PM</ion-select-option>
+      <ion-select-option [value]="15">3 PM</ion-select-option>
+      <ion-select-option [value]="16">4 PM</ion-select-option>
+      <ion-select-option [value]="17">5 PM</ion-select-option>
+      <ion-select-option [value]="18">6 PM</ion-select-option>
+      <ion-select-option [value]="19">7 PM</ion-select-option>
+      <ion-select-option [value]="20">8 PM</ion-select-option>
+      <ion-select-option [value]="21">9 PM</ion-select-option>
+      <ion-select-option [value]="22">10 PM</ion-select-option>
+      <ion-select-option [value]="23">11 PM</ion-select-option>
+      <ion-select-option [value]="24">12 AM</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Repeat</ion-label>
+    <ion-select style="max-width: 70% !important;" [(ngModel)]="reminderSettings.repeatReminder">
+      <ion-select-option value="never">Never</ion-select-option>
+      <ion-select-option value="throughout">Throughout the day</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Remind me on days</ion-label>
+    <ion-select multiple="true" [(ngModel)]="reminderSettings.days">
+      <ion-select-option value="1">Monday</ion-select-option>
+      <ion-select-option value="2">Tuesday</ion-select-option>
+      <ion-select-option value="3">Wednesday</ion-select-option>
+      <ion-select-option value="4">Thursday</ion-select-option>
+      <ion-select-option value="5">Friday</ion-select-option>
+      <ion-select-option value="6">Saturday</ion-select-option>
+      <ion-select-option value="0">Sunday</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+
+  <div class="list-label" style="margin-top: 40px;">Allow notifications between</div>
+  <ion-item lines="full">
+    <ion-label>Morning</ion-label>
+    <ion-select interface="popover" [(ngModel)]="notificationSettings.startHour">
+      <ion-select-option [value]="1">1 AM</ion-select-option>
+      <ion-select-option [value]="2">2 AM</ion-select-option>
+      <ion-select-option [value]="3">3 AM</ion-select-option>
+      <ion-select-option [value]="4">4 AM</ion-select-option>
+      <ion-select-option [value]="5">5 AM</ion-select-option>
+      <ion-select-option [value]="6">6 AM</ion-select-option>
+      <ion-select-option [value]="7">7 AM</ion-select-option>
+      <ion-select-option [value]="8">8 AM</ion-select-option>
+      <ion-select-option [value]="9">9 AM</ion-select-option>
+      <ion-select-option [value]="10">10 AM</ion-select-option>
+      <ion-select-option [value]="11">11 PM</ion-select-option>
+      <ion-select-option [value]="12">12 PM</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item lines="full">
+    <ion-label>Evening</ion-label>
+    <ion-select interface="popover" [(ngModel)]="notificationSettings.endHour">
+      <ion-select-option [value]="13">1 PM</ion-select-option>
+      <ion-select-option [value]="14">2 PM</ion-select-option>
+      <ion-select-option [value]="15">3 PM</ion-select-option>
+      <ion-select-option [value]="16">4 PM</ion-select-option>
+      <ion-select-option [value]="17">5 PM</ion-select-option>
+      <ion-select-option [value]="18">6 PM</ion-select-option>
+      <ion-select-option [value]="19">7 PM</ion-select-option>
+      <ion-select-option [value]="20">8 PM</ion-select-option>
+      <ion-select-option [value]="21">9 PM</ion-select-option>
+      <ion-select-option [value]="22">10 PM</ion-select-option>
+      <ion-select-option [value]="23">11 PM</ion-select-option>
+      <ion-select-option [value]="24">12 AM</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  
+
+  <div class="list-label" style="margin-top: 40px;">Additional options</div>
+  <!-- <ion-item lines="full">
+    <ion-label>Challenge Notifications</ion-label>
+    <ion-toggle [(ngModel)]="notificationSettings.enableChallenges"></ion-toggle>
+  </ion-item> -->
+  <ion-item lines="full">
+    <ion-label>Social Reactions (likes, etc.)</ion-label>
+    <ion-toggle [(ngModel)]="notificationSettings.enableReactions"></ion-toggle>
+  </ion-item>
+
+  <div style="margin-top: 30px;" *ngIf="foundUser && foundUser.pushTokens && foundUser.pushTokens.length > 0">
+    <div style="text-align: center; margin: 10px; color: #777; font-size: 12px;">
+      If you are not getting notifications, click the below button to re-register your device
+    </div>
+
+    <ion-button (click)="registerPush()" color="light" expand="block">Update Push Notification</ion-button>
+  </div>
+
+  <!--
+    <div style="text-align: center; margin: 10px; color: #777; font-size: 12px;">
+      Logreps sends other notifications like Challenges, Social Feedback, etc.
+    </div>
+  -->
+</ion-content>

@@ -1,0 +1,27 @@
+<div class="invites">
+  <div *ngIf="listInvite.length > 0" style="margin-top: 5px;">
+    <ion-list lines="full" *ngFor="let invite of listInvite">
+      <ion-item *ngIf="invite.lookups && invite.lookups.fromUser"
+        style="--background: #fcf8e3; color: #8a6d3b; text-align: center;">
+        <div style="margin-top: 5px; width: 100%;">
+          <div>
+            You have a friend request from: {{invite.lookups.fromUser.display}}
+          </div>
+          <ion-row>
+            <ion-col col-6>
+              <ion-button (click)="acceptInvite(invite)" expand="block" color="success">
+                Accept
+              </ion-button>
+            </ion-col>
+
+            <ion-col col-6>
+              <ion-button (click)="denyInvite(invite)" expand="block" color="danger">
+                Reject
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+</div>

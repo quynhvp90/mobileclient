@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Career.Place</title>
+
+  <base href="/" />
+
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src gap: https://accounts.google.com file://* *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *"> -->
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.7.0/introjs.min.css">
+
+  <!-- add to homescreen for ios -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+  <script>
+    var hostname = location.hostname;
+    console.log('hostname = ', hostname);
+    window.apiServer = 'https://mobile.career.place';
+    window.apiServer = 'http://localhost:3500';
+
+    var request = new XMLHttpRequest();
+    request.open('GET', window.apiServer + '/api/settings/keys', true);
+    request.setRequestHeader('Accept', 'application/json');
+
+    request.onload = function () {
+      if (request.status >= 200 && request.status < 400) {
+        // Success!
+        data = JSON.parse(request.responseText);
+        window.appkeys = data;
+        console.log('window.keys = ', window.appkeys);
+      } else {
+        console.error('error loading keys = ', request.responseTest)
+      }
+    };
+
+    request.onerror = function () {
+      console.error('error loading keys')
+    };
+    request.send();
+
+  </script>
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>

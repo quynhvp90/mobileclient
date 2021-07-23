@@ -1,0 +1,45 @@
+<div class="login-code" *ngIf="foundUser">
+  <div *ngIf="foundUser.isTempAccount">
+    <div *ngIf="mode === 'button'">
+      <ion-button (click)="addEmailOrPhone()" color="success" expand="block">Sign In / Create Account</ion-button>
+    </div>
+    <div *ngIf="mode === 'list'">
+      <ion-item button (click)="addEmailOrPhone()" style="--padding-start: 0px; color: #fff; --background: #dc3f3f; text-align: center">
+        <ion-label>
+          Sign In / Create Account
+        </ion-label>
+      </ion-item>
+    </div>
+    <div  *ngIf="errMsg && errMsg.length > 0" style="margin-top: 10px;" class="ion-padding">
+      <div class="alert alert-danger">
+        {{ errMsg }}
+      </div>
+    </div>
+
+  </div>
+
+
+  <div *ngIf="!foundUser.isTempAccount">
+    <div class="list-label" style="margin-top: 20px;">Authorization</div>
+    <ion-item lines="full" *ngFor="let item of emails">
+      <ion-label slot="start" style="max-width: 100px;">Email</ion-label>
+      <ion-label style="text-align: right;">{{ item.email }}</ion-label>
+    </ion-item>
+    <ion-item lines="full" button style="color: #387fff; text-align: right" (click)="addEmail()">
+      <ion-label>Add an email address</ion-label>
+    </ion-item>
+
+    <!-- <div class="list-label" style="margin-top: 20px;">Phones</div> -->
+    <ion-item lines="full" *ngFor="let item of phones">
+      <ion-label slot="start" style="max-width: 100px;">Phone</ion-label>
+      <ion-label style="text-align: right;">{{ item.number }}</ion-label>
+    </ion-item>
+    <ion-item lines="full" button style="color: #387fff; text-align: right" (click)="addPhone()">
+      <ion-label>Add a U.S. mobile number</ion-label>
+    </ion-item>
+
+    <div class="ion-padding">
+      <ion-button style="margin-top: 20px;" (click)="logout()" color="danger" expand="block">Logout</ion-button>
+    </div>
+  </div>
+</div>

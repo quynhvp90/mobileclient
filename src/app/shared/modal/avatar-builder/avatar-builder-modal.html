@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+      Select Avatar
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <ion-grid>
+    <ion-row>
+      <ion-col (click)="selectAvatar(avatar)" *ngFor="let avatar of avatarImages">
+        <ion-card style=" float: left;background: #fff; left: 10px; height: 90px; width: 100px; margin: 0px; padding: 0px">
+          <ion-card-content>
+            <user-avatar [width] = "'55px'" [height] = "'55px'" [imageName] = "avatar"></user-avatar>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

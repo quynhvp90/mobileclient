@@ -1,0 +1,34 @@
+<div *ngIf="socialService && socialService.listActivityLogs" class="social-list">
+  <div *ngIf="socialService.loading">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!socialService.loading">
+    <ion-list *ngIf="socialService.listActivityLogs.length === 0">
+      <ion-item class="ion-text-center">
+        <div>No activity found</div>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="socialService.listActivityLogs && socialService.listActivityLogs.length > 0">
+      <ion-list style="margin-bottom: 0px;">
+        <ion-item style="--padding-start: 0px;" *ngFor="let activityLog of socialService.listActivityLogs" slot="start">
+          <social-item style="width: 100%;" [activityLog]="activityLog"></social-item>
+        </ion-item>
+      </ion-list>
+      <div *ngIf="loadingMore">
+        <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      </div>
+
+      <div *ngIf="showInfiniteScroll">
+        <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+          <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </div>
+      <div *ngIf="!showInfiniteScroll" style="text-align: center;">
+        <div (click)="loadMoreButton($event)" style="margin: 10px; padding: 10px; font-weight: bold; color: #24829b;">LOAD MORE</div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+     Confirm Purchase
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form novalidate (ngSubmit)="buy()" [formGroup]="stripeForm">
+    <ion-item>
+        <ion-label position="fixed">Card Holder</ion-label>
+        <ion-input maxlength="25" type="text" 
+        formControlName="name" 
+        [(ngModel)]="cardModel.name"
+        placeholder="Enter Card Holder"
+        ></ion-input>
+
+       
+    </ion-item>
+    <div *ngIf="formErrors.name" class="error">
+      Card Holder is required
+    </div>
+    <ion-item>
+        <ion-label position="fixed">Email</ion-label>
+        <ion-input type="text" [(ngModel)]="cardModel.email" formControlName="email" placeholder="Enter Email"></ion-input>
+     
+    </ion-item>
+    <div *ngIf="formErrors.email" class="error">
+      {{ formErrors.email }}
+    </div>
+    <ion-item>
+      <ion-label position="fixed">Address 1</ion-label>
+      <ion-input type="text" [(ngModel)]="cardModel.address_line1" formControlName="address_line1" placeholder=""></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="fixed">Address 2</ion-label>
+    <ion-input type="text" [(ngModel)]="cardModel.address_line2" formControlName="address_line2" placeholder=""></ion-input>
+</ion-item>
+    <ion-item>
+        <ion-label position="fixed">Country</ion-label>
+        <ion-input type="text" [(ngModel)]="cardModel.address_country" formControlName="address_country" placeholder=""></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="fixed">City</ion-label>
+        <ion-input type="text" [(ngModel)]="cardModel.address_city" formControlName="address_city" placeholder=""></ion-input>
+        <ion-label position="fixed">State</ion-label>
+        <ion-input type="text" [(ngModel)]="cardModel.address_state" formControlName="address_state" placeholder=""></ion-input>
+    </ion-item>
+   
+    <div id="card-element" class="field"></div>
+
+    <div *ngIf="formErrors.cardError" class="error">
+      {{ formErrors.cardError }}
+    </div>
+
+    <ion-button style="text-align: center" type="submit">
+        Purchase
+    </ion-button>
+    
+  </form>
+</ion-content>
+

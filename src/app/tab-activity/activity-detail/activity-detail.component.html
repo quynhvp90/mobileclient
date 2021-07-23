@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button style="color: #fff;"></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="activity" style="width: 100%; text-align: center; text-transform: uppercase;">
+      {{ activity.label }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button style="color: #fff;" (click)="editActivity()">
+        Edit
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <!-- <ion-item lines="none">
+    <activity-row *ngIf="activity" [parent]="'detail'" [activity]="activity" style="width: 100%;">
+
+    </activity-row>
+  </ion-item> -->
+
+  <!-- <ion-button expand="block" class="action-button" (click)="logActivity()"
+    style="margin: 10px; height: 40px; font-size: 16px;">
+    {{ buttonMessage }}
+  </ion-button> -->
+
+  <activity-log (logged)="activityLogged()"></activity-log>
+
+  <div *ngIf="showList" style="margin-top: 40px;">
+    <ion-list *ngFor="let item of listActivityLogs | groupBy:'lookups.created'">
+      <ion-item>
+        <span style="font-weight: bold">{{ item.key }}</span>
+      </ion-item>
+
+      <ion-list>
+        <ion-item *ngFor="let activityLog of item.value">
+            <ion-label>
+              <ion-row>
+                <ion-col>{{activityLog.count}} {{activity.label}}</ion-col>
+                <ion-col>{{ activityLog.created | timeAgo}}</ion-col>
+              </ion-row>
+            </ion-label>
+            <ion-icon slot="end" style="cursor: pointer" (click)="deleteActivityLog(activityLog)" name="close">
+            </ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-list>
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+
+</ion-content>

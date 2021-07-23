@@ -1,0 +1,21 @@
+.banner-ad {
+  .basic {
+    background: #246d9b;
+    color: #ffffff;
+    padding: 5px 10px 5px 20px;
+    text-align: left;
+
+    .ad-header {
+      font-weight: bold;
+    }
+
+    .ad-body {
+      margin-top: 5px;
+    }
+
+    .ad-cta {
+      margin-top: 5px;
+      font-weight: bold;
+    }
+  }
+}

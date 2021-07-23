@@ -1,0 +1,50 @@
+<ion-header class="social-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-title style="width: 100%; text-align: center;">
+      Social Feed
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button style="color: #fff;" (click)="invite()">
+        Invite
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="!foundUser.isTempAccount" style="--background: #ebf4f6; color: #246779; text-align: center;">
+    <banner-ad></banner-ad>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="foundUser.isTempAccount" style="--background: #ebf4f6; color: #246779; text-align: center;">
+    <div>Your activities are currently logged as "Someone".  Click <a routerLink="/tabs/settings">here</a> to set your public name.</div>
+  </ion-toolbar>
+
+  <ion-toolbar class="social-navigation">
+    <ion-item lines="none">
+      <ion-label>
+        <ion-segment slot="start" (ionChange)="friendToggleChange($event)" [(ngModel)]="socialToggle">
+          <ion-segment-button value="public">
+            <ion-label>Public</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="friends">
+            <ion-label>Friends</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-label>
+      <!-- <ion-button slot="end" (click)="showFriends();">
+        <ion-icon name="person-add"></ion-icon>
+      </ion-button> -->
+    </ion-item>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1" class="social" id="listScroll">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div *ngIf="socialToggle === 'public'">
+    <social-list [mode]="'public'"></social-list>    
+  </div>
+  <div *ngIf="socialToggle === 'friends'">
+    <social-friend-list></social-friend-list>
+  </div>
+
+</ion-content>

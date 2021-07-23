@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Edit Exercise
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button  (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1;">
+  <ion-list style="margin-top: 20px;" *ngIf="foundActivity">
+    <ion-item button (click)="changeIcon()">
+      <ion-label>Exercise</ion-label>
+      <activity-icon style="width: 70px; height: 70px" [name]="foundActivity.name" [primarycolor]="primarycolor"
+        [secondarycolor]="secondarycolor" [activityId]="foundActivity._id">
+      </activity-icon>
+    </ion-item>
+    <ion-item>
+      <ion-label>Label</ion-label>
+      <ion-input type="text" style="text-align: right;" (ionChange)="updateActivityLabel()" [(ngModel)]="foundActivity.label"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Goal</ion-label>
+      <ion-input type="number" inputmode="numeric" style="text-align: right;" pattern="\\d*" [(ngModel)]="foundActivity.goal"></ion-input>
+    </ion-item>
+    <!-- <ion-item>
+      <ion-label>Record</ion-label>
+      <ion-input type="number" [(ngModel)]="foundActivity.personalRecord"></ion-input>
+    </ion-item> -->
+    <!-- <ion-item>
+      <ion-label>Muscles</ion-label>
+
+      <div (click)="selectMuscles()" style="width: 100%;
+      background-color: rgb(251, 251, 221);
+      height: 40px;
+      padding: 10px 8px;">{{ activity.muscles }}</div>    
+    </ion-item> -->
+  </ion-list>
+
+  <div style="margin-top: 20px;" class="list-label">Advanced Options</div>
+  <ion-list style="margin-bottom: 10px;" *ngIf="foundActivity">
+    <ion-item>
+      <ion-label>Measurement</ion-label>
+      <ion-select interface="popover" (ionChange)="measurementChange()" [(ngModel)]="foundActivity.measurement">
+        <ion-select-option value="repetitions">repetitions</ion-select-option>
+        <ion-select-option value="time">time</ion-select-option>
+        <ion-select-option value="distance">distance</ion-select-option>
+        <ion-select-option value="weight">weight</ion-select-option>
+        <ion-select-option value="other">other</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="foundActivity.measurement === 'time' || foundActivity.measurement === 'distance' || foundActivity.measurement === 'weight'">
+      <ion-label >Units</ion-label>
+      <ion-select interface="popover" (ionChange)="unitChange()" [(ngModel)]="foundActivity.unit">
+        <ion-select-option *ngIf="foundActivity.measurement === 'time'" value="sec">seconds</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'time'" value="min">minutes</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'time'" value="hr">hours</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'distance'" value="miles">miles</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'distance'" value="km">kilometers</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'weight'" value="lbs">lbs</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'weight'" value="kg">kg</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'weight'" value="oz">oz</ion-select-option>
+        <ion-select-option *ngIf="foundActivity.measurement === 'weight'" value="g">g</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="foundActivity.measurement === 'repetitions'">
+      <ion-label>Weight (optional)</ion-label>
+      <ion-input placeholder="25 lbs" type="text" (ionChange)="updateActivityLabel()" style="text-align: right;" [(ngModel)]="foundActivity.weight"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="foundActivity">
+    <div style="text-align: center;">Your exercise will be logged as</div>
+    <div style="text-align: center; font-weight: bold; font-size: 16px;">10 {{ foundActivity.logLabel }}</div>
+  </div>
+
+  <div class="ion-padding" style="margin-top: 10px;">
+    <ion-button color="success" fill="solid" expand="block" (click)="save()">SAVE</ion-button>
+    <ion-button style="margin-top: 20px;" color="warning" fill="solid" *ngIf="mode==='edit' && submode !== 'challenge'" expand="block" (click)="moveActivity()">MOVE</ion-button>
+    <ion-button style="margin-top: 20px;" color="danger" fill="solid" *ngIf="mode==='edit'" expand="block" (click)="delete()">DELETE</ion-button>
+  </div>
+
+  <div *ngIf="foundActivity && foundActivity.name === 'other'" style="margin-top: 10px;">
+    <ion-item >
+      <ion-label>Youtube Id (optional)</ion-label>
+      <ion-input placeholder="just the id like: 9Bevndlj3D0" type="text" (ionChange)="updateVideo()" style="text-align: right;" [(ngModel)]="foundActivity.youtube"></ion-input>
+    </ion-item>
+    <div style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+      Add a custom instructional video for your activity.  Enter just the YouTube video ID like "9Bevndlj3D0".
+    </div>
+  </div>
+
+  <div *ngIf="youtubeLink">
+    <div class="list-label" style="margin-top: 20px;">
+      Instructions
+    </div>
+
+    <div class="iframe-container">
+      <iframe width="560" height="315" [src]="youtubeLink" frameborder="0" allowfullscreen>
+      </iframe>  
+    </div>
+  </div>
+
+</ion-content>

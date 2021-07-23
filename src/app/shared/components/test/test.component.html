@@ -1,0 +1,7 @@
+<div class="test">
+  <activity-icon [name]="'pushup'" [primarycolor]="'#FF6A01'" [secondarycolor]="'#FF8E3D'"></activity-icon>
+  <activity-icon [name]="'situp'" [primarycolor]="'#FF6A01'" [secondarycolor]="'#FF8E3D'"></activity-icon>
+  <div  *ngFor="let activity of activities">
+      <activity-icon [name]="activity.name" [primarycolor]="activity.primarycolor" [secondarycolor]="activity.secondarycolor"></activity-icon>
+  </div>
+</div>

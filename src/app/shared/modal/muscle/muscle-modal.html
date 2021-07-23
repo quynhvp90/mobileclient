@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title style="text-align: center">
+      Select Muscles
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        Close
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+        <ion-button (click)="save()" style="color: #fff;">
+          Save
+        </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <muscle [muscles] = "muscles" (pathsSelected) = "handlerSelectedMuscles($event)"></muscle>
+  
+</ion-content>

@@ -1,0 +1,15 @@
+<div class="user-avatar">
+  <div class="avatar-img"
+    [style.width]="width"
+    [style.height]="height"
+    [style.min-width]="width"
+    [style.min-height]="height"
+    *ngIf="avatar.url">
+    <img
+      [src]="avatar.url"
+      [style.width]="width"
+      [style.height]="height"
+      onError="this.src='./assets/img/avatars/000.svg';" />
+  </div>
+  
+</div>

@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{ foundChallengeTeam.name }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="editTeam()">
+        Edit
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div style="padding-bottom: 20px;">
+    <challenge-row style="width: 100%;" [challengeHydrated]="foundChallenge" [challengeRowItem]="foundChallengeTeam.lookups.challengeRowItem"></challenge-row>
+  </div>
+
+  <div *ngIf="loading">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!loading">
+    <div class="ion-padding" *ngIf="showJoinTeam">
+      <ion-button expand="block" color="success" (click)="joinTeam()">JOIN TEAM</ion-button>
+    </div>
+
+    <div class="list-label">Team Progress</div>
+
+    <div  *ngIf="showLogActivity">
+      <ion-list lines="full" style="margin-bottom: 10px;">
+        <ion-item *ngFor="let activity of foundChallengeTeam.lookups.activities" (click)="viewActivityDetail(activity)">
+          <activity-row [showAdd]="true" [activity]="activity" style="width: 100%;">
+          </activity-row>
+        </ion-item>
+      </ion-list>
+      <div *ngIf="showLogActivity" style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+        Click on a row above to log an activity
+      </div>
+    </div>
+
+    <ion-list lines="full" *ngIf="!showLogActivity">
+      <ion-item *ngFor="let activity of foundChallengeTeam.lookups.activities">
+        <activity-row [activity]="activity" style="width: 100%;">
+        </activity-row>
+      </ion-item>
+    </ion-list>
+
+    <div class="list-label" style="margin-top: 30px;">Participant Contribution</div>
+    <div  *ngIf="foundChallengeTeam.lookups.users && foundChallengeTeam.lookups.users.length > 0">
+      <ion-list lines="full" style="margin-bottom: 0px;">
+        <ion-item style="--padding-start: 0px; " detail="true" *ngFor="let challengeUser of foundChallengeTeam.lookups.users;"
+        (click)="viewTeamMemberDetail(challengeUser)">
+          <challenge-row [challengeHydrated]="foundChallenge" [challengeRowItem]="challengeUser" style="width: 100%; margin-bottom: 5px;"></challenge-row>
+        </ion-item>
+      </ion-list>
+      <div style="text-align: left; margin: 10px; color: #777; font-size: 12px;">
+        The bar represents the amount of help a participant gave to the challenge
+      </div>
+    </div>
+    <ion-item lines="full" *ngIf="!foundChallengeTeam.lookups.users || foundChallengeTeam.lookups.users.length === 0">
+      <ion-label>No one has joined this team</ion-label>
+    </ion-item>
+
+    <div class="ion-padding" *ngIf="showSwitchTeam">
+      <ion-button expand="block" color="success" (click)="switchTeam()">SWITCH TO THIS TEAM</ion-button>
+    </div>
+
+  </div>
+</ion-content>

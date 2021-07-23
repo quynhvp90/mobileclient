@@ -1,0 +1,135 @@
+<ion-content class="logreps-intro">
+
+    <ion-slides [pager]="true" style="height: 100%;" #slides>
+      <ion-slide style="background-color: #1B586B">
+
+        <div>
+          <div class="ion-text-center">
+            <div>
+              <h2 style="color: #fff;">Welcome to Career.Place</h2>
+            </div>
+            <!-- <img src="/assets/img/intro/logo-one.svg"> -->
+          </div>
+          <div style="color: #ffffff">
+            Fancy graphic will be shown here.  But for now click SKIP below.
+          </div>
+          <div>
+            <ion-spinner name="dots" style="--color: #ffffff"></ion-spinner>
+            <!-- <ion-button color="primary" (click)="slideNext()">
+                NEXT
+            </ion-button> -->
+          </div>
+        </div>
+
+      </ion-slide>
+      <!-- <ion-slide style="background-color: #1B586B; color: #fff;">
+        <div>
+          <h2>Track your goals</h2>
+          <div style="text-align: right; position: relative; top: 20px;">Your activity for the day</div>
+          <div hint="arrow down" style="position: relative; z-index: 3;top: 30px; left: 50px;">
+              <img src="/assets/img/intro/arrow-down-white.svg">
+
+          </div>
+          <div style=" background: #fff; color: #000;
+          padding: 10px 20px 20px;
+          border-radius: 5px;">
+            <div>
+                <span style="font-size: 30px">30</span>
+                <span style="margin-left: 10px; font-size: 15px; color: #666;">Push-ups</span>
+            </div>
+            <div>
+                <div style="float:right; font-size: 11px; color: #666;  padding-left: 5px;">100 goal</div>
+                <div style="overflow:hidden;">
+                    <div class="gradBar"></div>
+                    <div class="gradBarToGo"></div>
+                </div>
+            </div>
+          </div>
+          <div hint="arrow up" style="position: relative; z-index: 3; left: 20px; top: -30px">
+              <img src="/assets/img/intro/arrow-up-white.svg">
+
+          </div>
+          <div style="text-align: left; position: relative; top: -30px">Your daily goal</div>
+          <ion-button color="primary" (click)="this.slideNext()">
+              NEXT
+          </ion-button>
+        </div>
+      </ion-slide>
+      <ion-slide style="background-color: #1B586B; color: #fff;">
+        <div>
+            <h2 style="color: #fff;">Sync across all devices &amp; the web</h2>
+            <div class="introActivityList">
+              <div>        
+                  <activity-icon
+                      [name]="'pushup'"
+                      [activityId] = "'1'"
+                      [primarycolor]="introPrimaryColor"
+                      [secondarycolor]="introSecondaryColor">                        
+                  </activity-icon>
+                  <span>Push-ups</span>
+              </div>                   
+              <div>        
+                  <activity-icon
+                      [name]="'pullup'"
+                      [activityId] = "'2'"
+                      [primarycolor]="introPrimaryColor"
+                      [secondarycolor]="introSecondaryColor"
+                      style="width: 60px; height: 65px;">
+                  </activity-icon>
+                  <span>Pull-ups</span>
+              </div>
+              <div>
+                  <activity-icon
+                      [name]="'squat'"
+                      [activityId] = "'3'"
+                      [primarycolor]="introPrimaryColor"
+                      [secondarycolor]="introSecondaryColor"
+                      style="width: 60px; height: 65px;">
+                  </activity-icon>
+                  <span>Squats</span>
+              </div>
+              <div>
+                  <activity-icon
+                      [name]="'lunge'"
+                      [activityId] = "'4'"
+                      [primarycolor]="introPrimaryColor"
+                      [secondarycolor]="introSecondaryColor"
+                      style="width: 60px; height: 65px;">
+                  </activity-icon>
+                  <span>Dips</span>
+              </div>
+              <div style="margin: 5px;">...and many more</div>
+            </div>
+            <ion-button color="primary" (click)="this.slideNext()">
+                NEXT
+            </ion-button>
+        </div>
+      </ion-slide>
+      <ion-slide style="background-color: #1B586B">
+        <div class="ion-text-center">
+          <h2 style="color: #fff;">Welcome to Career.Place</h2>
+          <div class="buttons">
+              <ion-button color="primary" (click)="skipIntro('register')">
+                  START
+              </ion-button>
+          </div>
+        </div>
+      </ion-slide> -->
+    </ion-slides>
+
+</ion-content>
+
+<ion-footer class="logreps-footer">
+  <ion-toolbar>
+    <!-- <ion-buttons slot="start">
+      <ion-button style="width: 100px;" fill="solid" color="danger" (click)="skipIntro('register')">
+        REGISTER
+      </ion-button>
+    </ion-buttons> -->
+    <ion-buttons slot="end">
+      <ion-button style="width: 100px;"  fill="solid" color="success" (click)="skipIntro('login')">
+        SKIP
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

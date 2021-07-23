@@ -1,0 +1,15 @@
+{
+  "name": "careerplace",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "bdc95bf0",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://localhost:4000/api"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+<div *ngIf="notificationService" class="notification-list">
+  <div *ngIf="notificationService.loading">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!notificationService.loading">
+    <ion-list *ngIf="notificationService.foundNotifications.length > 0;">
+      <ion-item-sliding #slidingNotification *ngFor="let foundNotification of notificationService.foundNotifications; let i = index;">
+        <ion-item [detail]="foundNotification.lookups.navLink" [ngClass]="foundNotification.lookups.class" style="--padding-start: 0px;" slot="start">
+          <notification-item #notificationItem style="width: 100%;" [notificationLog]="foundNotification"></notification-item>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger"
+            (click)="dismiss(slidingNotification, foundNotification, i)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>  
+      </ion-item-sliding>
+    </ion-list>
+    <ion-card style="--background: #fff;"  class="ion-padding" *ngIf="notificationService.foundNotifications.length === 0">
+      <ion-card-title>
+        You're all caught up on notifications 👍
+      </ion-card-title>
+      <ion-card-content>
+        <img src="https://logreps-public.s3.amazonaws.com/images/misc/resting_park.jpg">
+
+        <div style="margin-top: 20px; font-weight: bold;">
+          Here you'll see:
+        </div>
+        <div>
+          <ul>
+            <li>Updates from friends</li>
+            <li>Invitations to join challenges</li>
+            <li>Public announcements</li>
+          </ul>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div *ngIf="notificationService.foundNotifications && notificationService.foundNotifications.length > 0">
+    <div *ngIf="showInfiniteScroll">
+      <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+    <div *ngIf="!showInfiniteScroll" style="text-align: center;">
+      <div (click)="loadMoreButton($event)" style="margin: 10px; padding: 10px; font-weight: bold; color: #24829b;">LOAD MORE</div>
+    </div>
+  </div>
+</div>

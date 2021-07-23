@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon style="font-size: 30px;" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      User Privacy
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveAndClose()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-privacy" style="--background: #e6ebf1">
+
+
+  <div class="list-label" style="margin-top: 20px;">Public Social Feed</div>
+  <ion-item lines="full">
+    <ion-label>Show my activity in the public feed</ion-label>
+    <ion-toggle [(ngModel)]="showActivityInPublicFeed"></ion-toggle>
+  </ion-item>
+
+  <div style="text-align: left;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">The only data shown in the Public Social Feed is your avatar, name, and your logged activity.  It's a fun way to participate in the LogReps community.  You can choose any anonymous name you want.  Configuring the above, you can toggle OFF to not participate in the public feed.
+  </div>
+
+  <div class="ion-padding" style="text-align: center; color: #777;
+  font-size: 12px;">
+    <a href="https://www.logreps.com/static/privacy-policy.html">Privacy Policy</a> and <a href="https://www.logreps.com/static/terms.html">Terms of Service</a>
+  </div>
+
+</ion-content>

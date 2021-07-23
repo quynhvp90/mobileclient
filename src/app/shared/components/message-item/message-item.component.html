@@ -1,0 +1,123 @@
+<div *ngIf="foundMessage" class="message-item">
+  <div *ngIf="foundMessage.tag" class="alert alert-danger">{{ foundMessage.tag }}</div>
+  <ion-row  *ngIf="foundMessage" style="margin-left: -10px;">
+    <ion-item  style="--padding-start: 0px;" lines="none" *ngIf="foundMessage.lookups && foundMessage.lookups.fromUser && foundMessage.lookups.fromUser.avatar">
+      <div slot="start" (click)="userStats.showStats($event)" *ngIf="foundMessage.lookups.fromUser.avatar"  style="padding-left: 5px; padding-top: 5px;">
+        <user-avatar [imageName]="foundMessage.lookups.fromUser.avatar"></user-avatar>
+        <user-stats #userStats
+          style="position: relative;
+          top: -10px;
+          margin-bottom: -10px;"
+          [displayName]="foundMessage.lookups.fromUser.publicName" [userStats]="foundMessage.lookups.fromUser.stats"></user-stats>
+      </div>
+      <ion-label>
+        <div style="font-size: 16px; font-weight: 500;">
+          {{ foundMessage.lookups.fromUser.publicName }}
+        </div>
+        <div>
+          <div style="display: inline-block; color: #777; font-size: 12px;"> {{ foundMessage.lookups.created }}</div>
+        </div>
+      </ion-label>
+    </ion-item>
+    <ion-item  style="--padding-start: 0px;" lines="none" *ngIf="foundMessage.lookups && foundMessage.lookups.fromTeam">
+      <div slot="start" style="padding-left: 5px; padding-top: 5px;">
+        <challenge-team-icon [icon]="foundMessage.lookups.fromTeam.icon"></challenge-team-icon>
+      </div>
+      <ion-label>
+        <div style="font-size: 16px; font-weight: 500;">
+          {{ foundMessage.lookups.fromTeam.name }}
+        </div>
+        <div>
+          <div style="display: inline-block; color: #777; font-size: 12px;"> {{ foundMessage.lookups.created }}</div>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-row>
+  <ion-row>
+    <div style="font-size: 16px; margin-top: 5px;
+      margin-bottom: 5px;" [innerHtml]="body">
+    </div>
+  </ion-row>
+  <div *ngIf="hasEmotes">
+    <ion-row>
+      <ion-col>
+        <div style="margin-top: 5px;">
+          <emote-stats [foundMessage]="foundMessage"></emote-stats>
+
+          <!-- <img src="/assets/img/emotes/like-gray.svg" style="border: 1px solid white; border-radius: 50%;"> -->
+          <!-- <img *ngIf="showLike" style="width: 20px;" src="/assets/img/emotes/like.svg">
+          <img *ngIf="showLove" style="width: 20px;" src="/assets/img/emotes/love.svg">
+          <img *ngIf="showWow" style="width: 20px;" src="/assets/img/emotes/wow.svg">
+          <img *ngIf="showHaha" style="width: 20px;" src="/assets/img/emotes/haha.svg">
+          <span *ngIf="extraCount" style="color: #777;
+                font-size: 16px;
+                position: relative;
+                top: -4px; margin-left: 2px">{{ extraCount }}</span> -->
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="allowEngagement" style="
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      border-top: 1px solid #efefef;
+      color: #63656A;
+      padding: 5px;
+      font-size: 16px;">
+    <div (click)="emote($event)">
+      <ion-icon class="action-icon" name="thumbs-up"></ion-icon> <span class="action-label">Like</span>
+    </div>
+    <div (click)="sendComment($event)">
+      <ion-icon class="action-icon" name="chatboxes"></ion-icon> <span class="action-label">Comment</span>
+    </div>
+    <div (click)="message($event)">
+      <ion-icon class="action-icon" name="send"></ion-icon> <span class="action-label">Message</span>
+    </div>
+  </div>
+  <div *ngIf="comments.length > 0" style="border-top: 1px solid #efefef; margin-top: 5px;">
+    <ion-row *ngFor="let comment of comments">
+      <ion-row>
+        <ion-col *ngIf="comment.fromUserAvatar" style="padding: 5px 5px 5px 10px; width: 50px; max-width: 50px;">
+          <user-avatar [imageName]="comment.fromUserAvatar"></user-avatar>
+          <!-- <user-stats #userStats [displayName]="userService.user.publicName" [userStats]="userService.user.stats"></user-stats> -->
+        </ion-col>
+        <ion-col style="width: 100%; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div style="border-radius: 20px;
+            background: #efefef;
+            width: 100%;
+            padding: 10px;
+            display: inline-block;
+            font-size: 14px;
+            color: #000;">
+            <div style="font-weight: 600; position: relative; top: -5px">{{ comment.fromUserDisplay }}</div>
+            <div>
+              <div [innerHtml]="comment.comment">
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 12px;  margin-left: 12px; color: #777;">{{ comment.lookups.ago }}</div>
+        </ion-col>
+      </ion-row>
+    </ion-row>
+  </div>
+  <div *ngIf="allowEngagement && comments.length > 0">
+    <ion-row>
+      <ion-col *ngIf="userService.user.avatar" style="padding: 5px 5px 5px 10px; width: 50px; max-width: 50px;">
+        <user-avatar [imageName]="userService.user.avatar"></user-avatar>
+        <!-- <user-stats #userStats [displayName]="userService.user.publicName" [userStats]="userService.user.stats"></user-stats> -->
+      </ion-col>
+      <ion-col (click)="sendComment($event)" style="width: 100%; display: flex; align-items: center;">
+        <div style="border-radius: 20px;
+        border: 1px solid #cccccc;
+        background: #efefef;
+        width: 100%;
+        padding: 10px;
+        color: #777;">
+          Write a comment...
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

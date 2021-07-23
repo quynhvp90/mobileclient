@@ -1,0 +1,76 @@
+.challenge-list {
+  width: 100%;
+
+  .workouts {
+    margin-top: -20px;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    &.short-detail {
+      ion-card {
+        min-height: 150px;
+        max-height: 150px;
+      }
+
+      ion-card-header {
+        padding-bottom: 0px;
+      }
+    }
+
+    &.long-detail {
+      ion-card {
+        min-height: 410px;
+        max-height: 410px;  
+      }
+    }
+
+    ion-card {
+      background: #fff;
+      cursor: pointer;
+      max-width: 250px;
+      display: inline-block;
+      white-space: normal;
+      min-height: 394px;
+      max-height: 394px;
+      margin: 16px 10px 16px 10px;  
+
+      ion-card-header {
+        padding: 5px 10px 10px;
+
+        ion-card-subtitle {
+          font-size: 12px;
+        }
+        ion-card-title {
+          font-size: 18px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow-x: hidden;
+        }
+      }
+
+      ion-card-content {
+        padding: 0px 10px 10px;
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;  
+          overflow: hidden;
+          min-height: 66px;
+          max-height: 66px;
+        }
+
+        .join-button {
+          margin-top: 10px;
+          font-weight: bold;
+          color: #24829b;
+        }
+
+        .challenge-row {
+          ion-label {
+            margin: 0px !important;
+          }
+        }
+      }
+    }
+  }
+}

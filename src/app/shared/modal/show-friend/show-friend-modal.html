@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-title style="text-align: center">
+      Friend Detail
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  
+  </ion-toolbar>
+</ion-header>
+<ion-content >
+  <ion-item>
+    <ion-avatar slot="start">
+      <user-avatar [width] = "'35px'" [height] = "'35px'" [imageName] = "user.avatar"></user-avatar>
+    </ion-avatar>
+    <ion-label>
+      <h3>{{user.publicName}}</h3>
+      <p>{{user.email}}</p>
+    </ion-label>
+  </ion-item>
+  <div class="ion-padding">
+    <ion-button expand="block" color="danger" fill="solid" (click)="remove()">Remove Friend</ion-button>    
+  </div>
+</ion-content>

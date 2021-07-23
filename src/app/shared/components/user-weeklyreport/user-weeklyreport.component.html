@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon style="font-size: 30px;" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      Weekly Report Settings
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveAndClose()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-weeklyreport" style="--background: #e6ebf1">
+  <div class="alert alert-warning" style="border-radius: 0px;" *ngIf="showWarning">
+    You need to configure an email address in order to receive a weekly report via email
+  </div>
+
+  <div style="text-align: left;
+    margin: 10px;
+    color: #777;
+    font-size: 12px;">A weekly report will be emailed to you every Monday.
+  </div>
+
+  <!-- <div class="list-label" style="margin-top: 20px;">Enable Data</div> -->
+  <ion-list lines="full">
+    <ion-item>
+      <ion-label>Enable Weekly Report</ion-label>
+      <ion-toggle (click)="updateSubcription($event)" [(ngModel)]="subscribed"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Your time zone</ion-label>
+      <ion-select style="    text-align: right;
+      max-width: 70% !important;" [(ngModel)]="userTimezone" placeholder="Select One">
+        <ion-select-option *ngFor="let zone of zones" [value]="zone">{{ zone }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+
+  <div *ngIf="weeks && weeks.length > 0">
+    <div class="list-label" style="margin-top: 20px;">Retrieve a weekly report</div>
+
+    <ion-list lines="full">
+      <ion-item>
+        <ion-select style=" min-width: 100%;
+        padding-left: 0;" [(ngModel)]="runReportDate" placeholder="Select Week">
+          <ion-select-option *ngFor="let week of weeks" [value]="week.value">{{ week.label }}
+          </ion-select-option>
+        </ion-select>
+        <!-- <ion-datetime  [(ngModel)]="runReportDate"></ion-datetime> -->
+      </ion-item>
+      <ion-item button (click)="runReport()" style="color: #387fff;">
+        <ion-label>
+          Generate Report
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngIf="reportLink" lines="full">
+      <ion-item button (click)="viewReport()" style="color: #387fff;">
+        <ion-label>
+          View Report
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>

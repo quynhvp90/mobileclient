@@ -1,0 +1,6 @@
+<ion-item lines="full" class="stopwatch" style="font-size: 48px;">
+  <ion-label>{{ timeElements.minutes }}:{{ timeElements.seconds }}:{{ timeElements.milliseconds }}</ion-label>
+  <ion-icon slot="end" name="pause" *ngIf="!paused" (click)="pause()"></ion-icon>
+  <ion-icon slot="end" name="play" *ngIf="paused" (click)="resume()"></ion-icon>
+  <ion-icon slot="end" name="refresh-circle" *ngIf="paused" (click)="startTimer()"></ion-icon>
+</ion-item>

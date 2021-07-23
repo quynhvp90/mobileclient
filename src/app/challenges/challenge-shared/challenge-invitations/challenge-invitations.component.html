@@ -1,0 +1,86 @@
+<div class="challenge-invitations">
+  <ion-progress-bar *ngIf="loadingChallengeInvitations" type="indeterminate"></ion-progress-bar>
+  <div *ngIf="!loadingChallengeInvitations">
+    <div *ngIf="mode === 'invitations'">
+      <!-- <div style="margin-top: 20px;" class="list-label">Challenge Invitations</div> -->
+      <div class="workouts short-detail" style="margin-top: 20px;">
+        <ion-card  *ngFor="let inviteChallenge of listChallengeInvite" (click)="viewChallenge(inviteChallenge)">
+          <img src="{{ inviteChallenge.advanced.bannerImage }}">
+          <ion-card-header>
+            <ion-card-title>{{ inviteChallenge.name }}</ion-card-title>
+            <challenge-timer [mode]="'short'" [challenge]="inviteChallenge"></challenge-timer>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="join-button">
+              JOIN
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card (click)="createChallenge()">
+          <img src="https://logreps-public.s3.amazonaws.com/images/banners/challenge-background-13.png">
+          <ion-card-header>
+            <ion-card-title>New Challenge</ion-card-title>
+            <div>Create a solo or group challenge</div>
+            <!-- <challenge-timer [mode]="short" [challenge]="inviteChallenge"></challenge-timer> -->
+          </ion-card-header>
+          <ion-card-content>
+            <div class="join-button" style="color: #0ec254">
+              CREATE CHALLENGE
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card (click)="enterChallengeCode()">
+          <img src="https://logreps-public.s3.amazonaws.com/images/banners/challenge-background-01.png">
+          <ion-card-header>
+            <ion-card-title>Private Challenge</ion-card-title>
+            <div>Have a code to join a challenge?</div>
+            <!-- <challenge-timer [mode]="short" [challenge]="inviteChallenge"></challenge-timer> -->
+          </ion-card-header>
+          <ion-card-content>
+            <div class="join-button">
+              ENTER CODE
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- <ion-list lines="full">
+      <ion-item (click)="enterChallengeCode()" button style="color: #387fff; text-align: center;">
+        <ion-label>
+          Join a private challenge
+        </ion-label>
+      </ion-item>
+    </ion-list> -->
+
+    <div *ngIf="mode === 'public' && listChallengeInvite.length > 0" style="margin-top: 20px;">
+      <div class="list-label">Public Challenges You Can Join</div>
+      <div class="workouts long-detail">
+        <ion-card  *ngFor="let inviteChallenge of listChallengeInvite" (click)="viewChallenge(inviteChallenge)">
+          <img src="{{ inviteChallenge.advanced.thumbnailImage }}" />
+          <div class="ribbon" *ngIf="inviteChallenge.advanced.tag">
+            <div class="ribbonGreen">{{ inviteChallenge.advanced.tag }}</div>
+          </div>
+          <div class="ribbon" *ngIf="inviteChallenge.advanced.difficulty">
+            <div class="ribbonRed">{{ inviteChallenge.advanced.difficulty }}</div>
+          </div>
+          <ion-card-header>
+            <!-- <ion-card-subtitle>Ends in 338 days &#8226; stats refresh every day</ion-card-subtitle> -->
+            <ion-card-title>{{ inviteChallenge.name }}</ion-card-title>
+            <challenge-timer [mode]="'short'" [challenge]="inviteChallenge"></challenge-timer>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="line-clamp-3">
+              {{ inviteChallenge.description }}
+            </div>
+            <div class="join-button">
+              JOIN
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</div>

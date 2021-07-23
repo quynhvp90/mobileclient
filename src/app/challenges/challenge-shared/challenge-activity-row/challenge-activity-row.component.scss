@@ -1,0 +1,15 @@
+.challenge-activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .svg {
+    text-align: center;
+  }
+  svg {
+    height: 50px;
+    position: relative;
+    top: 0px !important;
+  }
+}

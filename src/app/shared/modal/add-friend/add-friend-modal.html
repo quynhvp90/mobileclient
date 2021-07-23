@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+    <ion-title style="text-align: center">
+      Invite Friend
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">
+        Send
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <div class="list-label" style="margin-top: 20px;">
+    To
+  </div>
+    <ion-item lines="full">
+      <ion-input type="text" [(ngModel)]="contact.email" placeholder="Enter an email address"></ion-input>
+    </ion-item>
+    <div class="list-label" style="margin-top: 20px;">
+      Message
+    </div>
+    <ion-item lines="full">
+      <ion-textarea style="margin-bottom: 5px;" rows="6" cols="20" [(ngModel)]="contact.inviteMessage" placeholder="Enter an invite message here..."></ion-textarea>
+    </ion-item>
+</ion-content>

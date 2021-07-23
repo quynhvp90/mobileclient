@@ -1,0 +1,24 @@
+<ion-app [ngClass]="{'is-desktop' : globalService.isDesktop, 'is-mobile': globalService.isMobile, 'is-cordova': globalService.isCordova, 'is-capacitor': globalService.isCapacitor}">
+    <ion-menu menuId="main" contentId="main" *ngIf="userLoggedIn">
+      <ion-header class="fixed">
+        <ion-toolbar class="top-toolbar" fixed class="fixed">
+          <ion-title>Menu</ion-title>
+          <ion-buttons slot="end">
+            <ion-menu-toggle>
+                <ion-button style="color: #fff;">
+                  <ion-icon slot="icon-only" name="close"></ion-icon>
+                </ion-button>
+            </ion-menu-toggle>
+            </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        Menu Items here....
+        <!-- <logreps-workouts>
+
+        </logreps-workouts> -->
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main"></ion-router-outlet>
+  </ion-app>
+  

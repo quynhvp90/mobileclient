@@ -1,0 +1,10 @@
+<div class="emote-popover" style="display: flex; flex-direction: row">
+  <img (click)="emote('like')" src="/assets/img/emotes/like.svg" style="border: 1px solid white; border-radius: 50%;">
+  <img (click)="emote('love')" src="/assets/img/emotes/love.svg" style="border: 1px solid white; border-radius: 50%;">
+  <img (click)="emote('wow')" src="/assets/img/emotes/wow.svg" style="border: 1px solid white; border-radius: 50%;">
+  <img (click)="emote('haha')" src="/assets/img/emotes/haha.svg" style="border: 1px solid white; border-radius: 50%;">
+  <div *ngIf="showChat" style="border-left: 2px solid #cacaca;
+  width: 5px;
+  margin: 5px 0px 5px 5px;"></div>
+  <img *ngIf="showChat" (click)="emote('chat')" src="/assets/img/emotes/chat.svg" style="border: 1px solid white; border-radius: 50%;">
+</div>

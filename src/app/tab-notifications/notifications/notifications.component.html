@@ -1,0 +1,23 @@
+<ion-header class="notifications-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-title style="width: 100%; text-align: center;">
+      Notifications
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="notificationService.foundNotifications.length > 0" style="color: #fff;" (click)="clearNotifications()">
+        Clear
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content class="notifications" id="listScroll" style="--background: #e6ebf1;">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <notification-list></notification-list>
+
+</ion-content>

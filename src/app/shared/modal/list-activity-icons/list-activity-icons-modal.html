@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Select Exercise
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <ion-list lines="full" style="margin-top: 20px; margin-bottom: 0px;">
+    <ion-item>
+      <ion-label position="fixed">Search</ion-label>
+      <ion-input placeholder="search exercises" (ionChange)="onSearch($event.target.value)" [(ngModel)]="searchFilter">
+
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="fixed">Filter Type</ion-label>
+      <ion-select [(ngModel)]="exerciseType" (ionChange)="changeExerciseType($event)">
+        <ion-select-option value="all">All</ion-select-option>
+        <ion-select-option value="abs">Abdominals</ion-select-option>
+        <ion-select-option value="cardio">Cardio</ion-select-option>
+        <ion-select-option value="core">Core</ion-select-option>
+        <ion-select-option value="upper">Upper Body</ion-select-option>
+        <ion-select-option value="lower">Lower Body</ion-select-option>
+        <ion-select-option value="weights">Weights</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+  <!-- <ion-item lines="full" detail="true" (click)="addYourOwn()">
+    <ion-label style="color: blue;">
+      How to create a custom exercise?
+    </ion-label>
+  </ion-item> -->
+  <div class="ion-padding">
+    Don't see an exercise you want below?  You can easily "Create Your Own".  See instructions <a href="https://www.youtube.com/watch?v=mecp1RNXYGg" target="_blank">here</a>.
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col (click)="selectExcersice(defaultExercise)">
+        <ion-card style="background: #fff; width: 100px; height: 130px; margin: 2px; padding: 5px;">
+          <ion-card-title style="font-weight: normal; height: 36px; text-align: center; font-size: 15px;">{{defaultExercise.label}}</ion-card-title>
+          <ion-card-content>
+            <activity-icon [name]="defaultExercise.name" [primarycolor]="primarycolor" [secondarycolor]="secondarycolor"
+              [activityId]="">
+            </activity-icon>
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col (click)="selectExcersice(item)" *ngFor="let item of exercises">
+        <ion-card style="background: #fff; width: 100px; height: 130px; margin: 2px; padding: 5px;">
+          <ion-card-title style="font-weight: normal; height: 36px; text-align: center; font-size: 15px;">{{item.label}}</ion-card-title>
+          <ion-card-content>
+            <activity-icon [name]="item.name" [primarycolor]="primarycolor" [secondarycolor]="secondarycolor"
+              [activityId]="">
+            </activity-icon>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+      <ion-col style="min-width: 120px;"></ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

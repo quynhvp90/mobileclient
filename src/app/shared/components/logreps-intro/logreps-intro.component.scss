@@ -1,0 +1,36 @@
+.logreps-intro {
+  height: 100%;
+
+  .gradBar {
+    height: 10px;
+    display:inline-block;   
+    width: 30%;
+    background: linear-gradient(to right, #76BF00, #86DE00); /* Standard syntax (must be last) */
+    transition: width 1s ease-in-out;
+  }
+
+  .gradBarToGo {
+    display: inline-block;
+    background-color: lightgray;
+    height: 1px;
+    display:inline-block;   
+    width: 70%;
+    transition: width 1s ease-in-out;
+  }
+
+  .introActivityList span {
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  
+  .introActivityList activity-icon {
+    display: inline-block;
+    vertical-align: middle;
+    svg {
+      width: 65px;
+      height: 65px;
+    }
+  }
+  
+}

@@ -1,0 +1,3 @@
+/api/*  https://production-api.logreps.com/api/:splat  200
+/*    /index.html   200
+

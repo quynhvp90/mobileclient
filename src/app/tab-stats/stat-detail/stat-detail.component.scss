@@ -1,0 +1,31 @@
+.stat-detail-content {
+  ion-grid {
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0px;
+    ion-col {
+      text-align: center;
+      background: #fff;
+    }
+
+    ion-col:first-child {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    ion-col:last-child {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    ion-col:not(:first-child) {
+      border-left: 1px solid #ccc;
+    }
+
+    .active {
+      font-weight: bold;
+      background: #daf8fc;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" style="color: #fff;">
+        X
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{ title }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="post()" style="color: #fff;">
+        {{ action }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content style="--background: #e6ebf1">
+  <ion-textarea #messageTextArea
+    autocorrect="off" autocapitalize="sentences"
+    maxlength="1000" type="text" style="text-align: left; background: #fff;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;" rows="25" [(ngModel)]="message" placeholder="{{ placeholder }}">
+  </ion-textarea>
+  <div *ngIf="message && message.length > 0" style="    text-align: right;
+    padding: 5px;
+    color: #777;">
+    {{ (1000 - message.length) }} characters left 
+  </div>
+</ion-content>

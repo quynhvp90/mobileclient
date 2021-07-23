@@ -1,0 +1,85 @@
+<ion-header class="challenge-list-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+      Challenges
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!foundUser.isTempAccount" style="color: #fff;" (click)="addChallenge()">
+        New
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1;" class="challenge-list">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  <div *ngIf="!loading">
+    <invites></invites>
+
+    <challenge-invitations [mode]="'invitations'" (newChallenge)="addChallenge()"></challenge-invitations>
+
+    <div *ngIf="foundChallenges.length > 0">
+      <div class="list-label">My Challenges</div>
+      <div class="workouts">
+        <ion-card style="background: #fff; min-height: 290px; max-height: 290px;" *ngFor="let foundChallenge of foundChallenges"  (click)="viewDetail(foundChallenge)">
+          <img src="{{ foundChallenge.advanced.bannerImage }}">
+          <ion-card-header>
+            <ion-card-title>{{ foundChallenge.name }}</ion-card-title>
+            <!-- <div>{{ foundChallenge.lookups.durationStr }}</div> -->
+            <challenge-timer [mode]="'short'" [challenge]="foundChallenge"></challenge-timer>
+          </ion-card-header>
+    
+          <ion-card-content>
+            <div *ngIf="foundChallenge.teams && foundChallenge.teams.enabled" style="min-height: 130px; max-height: 130px;">
+              <ion-list lines="none" style="min-height: 120px; max-height: 120px;" *ngIf="foundChallenge.teams.roster && foundChallenge.teams.roster.length > 0" class="no-last-border">
+                <ion-item  class="ion-no-padding" *ngFor="let challengeTeam of foundChallenge.lookups.rosterTop;">
+                  <challenge-row *ngIf="challengeTeam && challengeTeam.lookups" [challengeHydrated]="foundChallenge" [challengeRowItem]="challengeTeam.lookups.challengeRowItem" style="width: 100%; margin-bottom: 5px;"></challenge-row>
+                </ion-item>
+              </ion-list>
+
+              <div style=" font-size: 15px;
+                text-align: right;
+                color: #666;
+                min-height: 21px;
+                max-height: 21px;
+                padding-left: 5px">
+                <span *ngIf="foundChallenge.teams.roster.length > foundChallenge.lookups.rosterTop.length">
+                  +{{ foundChallenge.teams.roster.length - foundChallenge.lookups.rosterTop.length }} other team(s)
+                </span>
+              </div>
+            </div>
+            <div *ngIf="!foundChallenge.teams || !foundChallenge.teams.enabled" style="min-height: 130px; max-height: 130px;">
+              <ion-list style="min-height: 120px; max-height: 120px;" lines="none" *ngIf="foundChallenge.lookups && foundChallenge.lookups.usersTop">
+                <ion-item class="ion-no-padding" *ngFor="let challengeUser of foundChallenge.lookups.usersTop">
+                  <challenge-row [challengeHydrated]="foundChallenge" [challengeRowItem]="challengeUser" style="width: 100%; margin-bottom: 5px;"></challenge-row>
+                </ion-item>
+              </ion-list>
+
+              <div style=" font-size: 15px;
+                  text-align: right;
+                  color: #666;
+                  min-height: 21px;
+                  max-height: 21px;
+                  padding-left: 5px">
+                  <span *ngIf="foundChallenge.lookups.totalUsers > foundChallenge.lookups.usersTop.length">
+                    +{{ foundChallenge.users.length - foundChallenge.lookups.usersTop.length }} other participant(s)
+                  </span>
+              </div>
+            </div>
+  
+            <div class="join-button">
+              OPEN
+            </div>
+          </ion-card-content>
+    
+        </ion-card>
+      </div>
+    </div>
+
+
+    <challenge-invitations [mode]="'public'"></challenge-invitations>
+  </div>
+</ion-content>

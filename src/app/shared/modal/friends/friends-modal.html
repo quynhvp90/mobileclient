@@ -1,0 +1,59 @@
+<ion-header class="friends-modal-header">
+  <ion-toolbar>
+    <ion-title>
+      Your Friends
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon style="font-size: 30px;" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="foundUser.isTempAccount" style="margin-top: 10px;" class="ion-padding">
+    <ion-label style="margin-top: 20px">
+      <ion-row class="ion-text-center">
+        You must first login (for free) to invite friends
+      </ion-row>
+    </ion-label>
+    <div class="ion-padding">
+      <ion-button expand="block" color="success" (click)="goSettingPage()">Go to Settings
+      </ion-button>
+    </div>
+  </div>
+  <div *ngIf="!foundUser.isTempAccount">
+    <div *ngIf="contacts.length === 0">
+      <ion-grid style="margin-top: 20px">
+        <ion-row class="ion-text-center">
+          You have no friends. Invite a friend to connect on LogReps by clicking the button below
+        </ion-row>
+      </ion-grid>
+
+    </div>
+
+    <div *ngIf="contacts.length > 0">
+      <ion-list lines="full">
+        <ion-item  *ngFor="let contact of contacts" (click)="showFriend(contact)">
+          <ion-avatar slot="start">
+            <user-avatar *ngIf="contact.fromUserId === currentUser._id" [width] = "'35px'" [height] = "'35px'" [imageName] = "contact.lookups.toUser.avatar"></user-avatar>
+            <user-avatar *ngIf="contact.toUserId === currentUser._id" [width] = "'35px'" [height] = "'35px'" [imageName] = "contact.lookups.fromUser.avatar"></user-avatar>
+          </ion-avatar>
+          <ion-label>
+            <h3 *ngIf="contact.fromUserId === currentUser._id">{{ contact.lookups.toUser.display }}</h3>
+            <h3 *ngIf="contact.toUserId === currentUser._id">{{ contact.lookups.fromUser.display }}</h3>
+            <p *ngIf="contact.fromUserId === currentUser._id && !contact.invitationAccepted">Invited {{ contact.created | timeAgo }}</p>
+            <p *ngIf="contact.toUserId === currentUser._id && !contact.invitationAccepted">You have not yet accepted this invitation sent {{ contact.created | timeAgo }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div class="ion-padding">
+      <ion-button expand="block" color="success" fill="solid" (click)="addViaEmail()">Invite via Email</ion-button>
+      <ion-button expand="block" color="success" fill="solid" (click)="addViaText()" style="margin-top: 20px;">Invite via Text</ion-button>
+    </div>
+  </div>
+
+
+</ion-content>

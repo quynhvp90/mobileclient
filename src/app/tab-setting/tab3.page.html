@@ -1,0 +1,140 @@
+<ion-header class="activity-list-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-title style="width: 100%; text-align: center;">
+      Settings
+    </ion-title>
+  </ion-toolbar>
+  <!-- <ion-toolbar *ngIf="foundUser.isTempAccount" style="--background: #fcf8e3; color: #8a6d3b; text-align: center;">
+    Sign-in (for free) so you can save and sync your activities across all mobile devices and the web, invite friends, and create challenges.
+  </ion-toolbar> -->
+  <ion-toolbar *ngIf="!foundUser.isTempAccount" style="--background: #fcf8e3; color: #8a6d3b; text-align: center;">
+    <banner-ad [mode]="'support'"></banner-ad>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="tab3" style="--background: #e6ebf1;">
+  <div *ngIf="foundUser.isTempAccount">
+    <div style="text-align: left; background: #ffffff; border-bottom: 1px solid #cccccc; text-align: center; background: #f7f7f7; padding: 10px; color: #dc3f3f; font-weight: bold;font-size: 12px;">
+      Oh no <span style="margin-right: 5px;">😨</span> it looks like you're not signed in. Create an account for free <span style="margin-right: 5px;">😊</span> to keep your data safe.
+    </div>
+
+    <login-code [mode]="'list'"></login-code>
+  </div>
+
+
+  <div style="margin-top: 20px;">
+    <user-setting></user-setting>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <ion-item lines="full" button (click)="openFeatureSuggestions()">
+      <ion-icon slot="start" style="color: #666;" name="bulb"></ion-icon>
+      <ion-label>Feature Suggestions</ion-label>
+    </ion-item>
+  </div>
+  <div style="text-align: left; margin: 2px 10px 10px 10px; color: #777; font-size: 12px;">
+    We love hearing from you on any ideas you have
+  </div>
+  
+
+  <div style="margin-top: 30px;">
+    <ion-item lines="full" button (click)="openPrivacy()">
+      <ion-icon slot="start" style="color: #666;" name="lock"></ion-icon>
+      <ion-label>Privacy</ion-label>
+    </ion-item>
+  </div>
+  <div style="text-align: left; margin: 2px 10px 10px 10px; color: #777; font-size: 12px;">
+    Configure your privacy settings
+  </div>
+
+
+  <div style="margin-top: 30px;">
+    <ion-item lines="full" button (click)="openWeeklyReport()">
+      <ion-icon slot="start" style="color: #666;" name="clipboard"></ion-icon>
+      <ion-label>Weekly Report</ion-label>
+    </ion-item>
+  </div>
+  <div style="text-align: left; margin: 2px 10px 10px 10px; color: #777; font-size: 12px;">
+    Configure your Weekly Report settings and view previous weekly reports
+  </div>
+
+  <div style="margin-top: 30px;" *ngIf="globalService.isCapacitor">
+    <ion-item lines="full" button (click)="openNotifications()">
+      <ion-icon slot="start" style="color: #666;" name="notifications"></ion-icon>
+      <ion-label>Notifications & Reminders</ion-label>
+    </ion-item>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <ion-item lines="full" button (click)="openUserHealth()">
+      <ion-icon slot="start" style="color: #666;" name="medkit"></ion-icon>
+      <ion-label>Health</ion-label>
+    </ion-item>
+  </div>
+  <div style="text-align: left; margin: 2px 10px 10px 10px; color: #777; font-size: 12px;">
+    Configure Health settings to sync to Apple HealthKit, Google Fit, and to sync workouts and record calories
+  </div>
+
+  <div style="margin-top: 30px;">
+    <ion-item lines="full" button (click)="exportData()">
+      <ion-icon slot="start" style="color: #666;" name="download"></ion-icon>
+      <ion-label>Export Data</ion-label>
+    </ion-item>
+  </div>
+  <div style="text-align: left; margin: 2px 10px 10px 10px; color: #777; font-size: 12px;">
+    Your data is automatically saved to the cloud.  Here, you can export all of your data to MS Excel or CSV.
+  </div>
+
+  <div *ngIf="!foundUser.isTempAccount" style="margin-top: 30px;">
+    <login-code></login-code> <!-- will be logout -->
+  </div>
+
+
+  <!-- <div class="well">
+    <purchase-license></purchase-license>
+  </div> -->
+
+  <!-- <div class="well" style="padding: 15px;">
+    <div class="title">Tips</div>
+    For tips visit our website at <a target="_blank" href="https://logreps.com">https://logreps.com</a>
+  </div> -->
+
+
+  <div style="margin-top: 20px; color: #777;" class="ion-padding">
+    <div style="margin-bottom: 20px;">
+      <banner-ad [mode]="'rate'"></banner-ad>
+    </div>
+
+    <div style="font-size: 12px; margin-top: 30px;">
+      <div style="text-align: center;">
+        Version
+      </div>
+      <div style="text-align: center;">
+        {{ version }} / {{ apiVersion }}
+      </div>
+    </div>
+    <!-- <div style="margin-top: 5px;">
+      Id: {{ foundUser.primaryEmail }}
+    </div> -->
+
+    <div *ngIf="isCapacitor" style="margin-top: 5px;">
+      <!-- <div>Connected to the {{ ionicConfig.deployChannel }}.</div> -->
+
+      <div *ngIf="ionicConfig.updateAvailable">
+        <div>Update {{ ionicConfig.updateSnapshot }} is available</div>
+        <div *ngIf="!ionicConfig.downloadStarted" style="margin-top: 5px;">
+          <ion-button (click)="performManualUpdate()" color="secondary" expand="block">Update</ion-button>
+        </div>
+
+        <div *ngIf="ionicConfig.downloadProgress > 0">Download Progress {{ ionicConfig.downloadProgress }} / 100</div>
+        <div class="alert alert-info">
+          {{ ionicConfig.msg }}
+        </div>
+      </div>
+
+      <!-- <div>{{ ionicConfig | json }}</div> -->
+    </div>
+
+  </div>
+
+</ion-content>

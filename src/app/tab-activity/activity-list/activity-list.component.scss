@@ -1,0 +1,51 @@
+
+
+.activity-list-header {
+
+ .nagging-banner {
+    --ion-background-color: red !important;;
+  }
+  .date-navigation {
+    padding: 0px;
+    ion-grid {
+      padding: 0px;
+      ion-col {
+        padding: 0px;
+      }
+    }
+
+    .buttonHeaderNavigationOff {
+      color: #ccc !important;
+    }
+  }
+
+  .challenge-timer {
+    font-size: 12px;
+    .not-started {
+      color: white !important;
+    }
+  
+    .inprogress {
+      color: white !important;
+    }
+  
+    .finished {
+      color: white !important;
+    }
+  }
+}
+
+// #wrapper{
+//   position: relative !important;
+// }
+.activity-list-content {
+  ion-list {
+    padding-bottom: 0px;
+  }
+
+  .challenge-timer {
+    .reset-stats {
+      display: none;
+    } 
+  }
+}

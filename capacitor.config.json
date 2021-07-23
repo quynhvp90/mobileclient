@@ -1,0 +1,6 @@
+{
+  "appId": "com.careerplace.app",
+  "appName": "careerplace",
+  "webDir": "www",
+  "npmClient": "npm"
+}

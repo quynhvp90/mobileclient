@@ -1,0 +1,41 @@
+<ion-row [hidden]="!activity || showCongrats" class="activity-row">
+  <ion-col size="auto">
+    <div style="padding-right: 10px; width: 100px; height: 100px">
+      <activity-icon [name]="activity.name" [primarycolor]="primarycolor" [secondarycolor]="secondarycolor"
+        [activityId]="activity._id">
+      </activity-icon>
+    </div>
+  </ion-col>
+
+  <ion-col style="padding-top: 10px;">
+    <div>
+      <span style="font-size: 30px">
+        <ng2-odometer [number]="count"
+          [config]="{ value: count, duration: 1000, animation: 'count', format: '(,ddd).dd', theme: 'default', auto: true }">
+        </ng2-odometer>
+      </span>
+      <span style="font-size: 15px; color: #666;"> {{ logLabel }}</span>
+    </div>
+    <div>
+      <div style="float:right; font-size: 15px; color: #666;  padding-left: 5px;">
+        {{ activity.goal}} goal
+      </div>
+      <div style="overflow:hidden;">
+        <div class="gradBar" [ngStyle]="gradBar"></div>
+        <div class="gradLightGray" [ngStyle]="gradBarToGo"></div>
+      </div>
+    </div>
+    <!-- <div style="color: #ccc; font-size: 12px;">est calories burned: {{ activity.lookup.calories }}</div> -->
+  </ion-col>
+  <ion-col size="auto" *ngIf="showAdd" style="
+    color: #c0c0c0;
+    display: flex;
+    justify-content: center;
+    align-items: center; font-size: 26px; width: 30px;">
+    <ion-icon name="add" style="margin-right: -5px;"></ion-icon>
+  </ion-col>
+</ion-row>
+
+<div [hidden]="!activity || !showCongrats" style="height: 100px;" class="activity-row" [attr.id]="activity._id">
+  <!-- Congratulations! -->
+</div>

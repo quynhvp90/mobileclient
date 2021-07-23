@@ -1,0 +1,41 @@
+<div class="stats-calendar-week">
+    <ion-slides [pager]="true" style="height: 100%;" #slides>
+      <ion-slide>
+        <div class="stat-container">
+          <div style="text-align: center;">Total activities logged this week</div>
+          <div>
+              <canvas #weekBarCanvas style="height: 200px !important; width: calc(100% - 200px);"></canvas>                      
+          </div>
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div class="stat-container">
+          <div style="text-align: center;">Last 4 weeks of activity</div>
+          <ion-grid style="width: 100%;">
+              <ion-row>
+                <ion-col style="min-width: 60px;"></ion-col>
+                <ion-col>M</ion-col>
+                <ion-col>T</ion-col>
+                <ion-col>W</ion-col>
+                <ion-col>T</ion-col>
+                <ion-col>F</ion-col>
+                <ion-col>S</ion-col>
+                <ion-col>S</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let week of calendar.weeks">
+                <ion-col>
+                  {{ week.label }}
+                </ion-col>
+                <ion-col *ngFor="let day of week.days">
+                  <ion-icon style="color: #289323" *ngIf="day === -1" name="star"></ion-icon>
+                  <ion-icon style="color: #cccccc"*ngIf="day === 0" name="radio-button-off"></ion-icon>
+                  <ion-icon style="color:#238193" *ngIf="day > 0" name="checkmark-circle"></ion-icon>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+        </div>
+
+      </ion-slide>
+    </ion-slides>
+
+</div>

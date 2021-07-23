@@ -1,0 +1,133 @@
+<ion-header class="social-chat-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="backToSocial()">
+        <ion-icon src="/assets/img/back.svg" style="fill: #3780ff;"></ion-icon>
+      </ion-button>
+      <!-- <ion-back-button style="color: #fff;"></ion-back-button> -->
+    </ion-buttons>
+    <div style="width: 100%; text-align: center;">
+      <ion-item lines="none" *ngIf="chatUser" class="ion-no-padding">
+        <div slot="start" *ngIf="!chatUser.stats" style="padding-left: 5px; padding-top: 5px;">
+          <user-avatar [width]="'40px'" [height]="'40px'" [imageName]="chatUser.avatar"></user-avatar>
+        </div>
+        <div slot="start" *ngIf="chatUser.stats" style="padding-left: 5px; padding-top: 5px;">
+          <user-avatar [width]="'40px'" [height]="'40px'" [imageName]="chatUser.avatar"></user-avatar>
+        </div>
+        <ion-label>
+          <div style="font-size: 16px; font-weight: bold;">{{ chatUser.publicName }}</div>
+          <div *ngIf="chatUser.lookups" style="font-size: 12px; color: #777">{{ chatUser.lookups.tagLine }}</div>
+        </ion-label>
+      </ion-item>
+    </div>
+    <!-- <ion-buttons slot="end">
+      <ion-button style="color: #fff;" (click)="showFriends()">
+        Invite
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+  <ion-toolbar *ngIf="isLoaded && foundMessages.length > 0" style="--background: #ebf4f6; color: #246779; text-align: left;
+    font-size: 12px; padding: 0px 5px 0px 5px;">
+    This "chat" feature is in testing. If you have any issues, or any feedback, please contact <a
+        href="mailto:support@logreps.com">support@logreps.com</a>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="loadingMessages" type="indeterminate"></ion-progress-bar>
+</ion-header>
+<ng-container *ngIf="isLoaded && (!chatUser || !chatUser.lookups || !chatUser.lookups.isFriend)">
+  <ion-content style="--background: #e6ebf1;">
+    <div>
+      <ion-card style="background: #fff;" class="ion-padding">
+        <ion-card-title style="font-size: 16px;">
+          Sorry, you need to be friends with this person before you can chat with them
+        </ion-card-title>
+
+        <ion-card-content>
+          <img src="https://logreps-public.s3.amazonaws.com/images/misc/friends_chatting.jpg">
+
+          <div style="margin-top: 20px; font-weight: bold;">
+            How do you become their friend?
+          </div>
+          <div>
+            <ul>
+              <li>If you're in a challenge together, it's easy to send a request; or</li>
+              <li>Send them your personal "friend request link"</li>
+            </ul>
+          </div>
+          <div class="ion-padding">
+            <ion-button (click)="invite()" color="success" expand="block">Invite</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-content>
+</ng-container>
+<ng-container *ngIf="isLoaded && chatUser && chatUser.lookups && chatUser.lookups.isFriend">
+  <ion-content *ngIf="totalMessages === 0">
+    <div style="height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow-y: hidden;">
+      <img src="https://logreps-public.s3.amazonaws.com/images/misc/start-the-conversation.jpg">
+    </div>
+  </ion-content>
+
+  <ion-content *ngIf="totalMessages > 0" id="idSocialChatContent" class="social-chat ion-padding" [scrollEvents]="true"
+    (ionScroll)="onScroll($event)">
+    <!-- <ion-infinite-scroll [disabled]="foundMessages.length < 15" [position]="top" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="dots">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll> -->
+
+    <div class="chat-box">
+      <div *ngFor="let messageGroup of messageGroups.slice().reverse()">
+        <div style="text-transform: uppercase;
+          color: #777;
+          font-size: 12px;
+          text-align: center;
+          margin-top: 20px;">{{ messageGroup.date | date:'MMM d, h:mm a' }} </div>
+        <div *ngFor="let group of messageGroup.groups.slice().reverse()" class="messages {{group.class}}">
+          <ng-container *ngFor="let message of group.messages.slice().reverse(); index as i">
+            <!-- <div>{{ message.date | date:'MMM d, h:mm a' }} </div> -->
+            <ng-container *ngIf="group.class === 'yours'">
+              <div *ngIf="i === group.messages.length - 1" style="display: flex; width: 100%;">
+                <user-avatar style="margin-top: 5px; margin-bottom: 5px; margin-right: 10px;" [width]="'34px'"
+                  [height]="'34px'" [imageName]="message.avatar"></user-avatar>
+                <div class="message">{{ message.body }}</div>
+              </div>
+              <div *ngIf="i < group.messages.length - 1" class="message no-avatar">
+                {{ message.body }}
+              </div>
+            </ng-container>
+            <ng-container *ngIf="group.class === 'mine'">
+              <div class="message">
+                {{ message.body }}
+              </div>
+            </ng-container>
+
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+
+  <ion-footer no-border="true" class="social-chat">
+    <ion-toolbar>
+      <div *ngIf="savingMessage">
+        <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      </div>
+      <ion-item lines="none" style="border: 1px solid #ccc; border-radius: 10px;">
+        <ion-textarea [disabled]="savingMessage" [(ngModel)]="inputChat" autoGrow="true"
+          style="min-height: 40px; --border-radius: 10px;" maxlength="500" autocapitalize="true"
+          placeholder="Start Typing..."></ion-textarea>
+        <ion-buttons>
+          <ion-button [disabled]="savingMessage" slot="icon-only" (click)="sendChat()">
+            <ion-icon style="font-size: 36px;" name="send"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+    </ion-toolbar>
+  </ion-footer>
+
+</ng-container>

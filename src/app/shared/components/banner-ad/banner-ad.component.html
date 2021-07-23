@@ -1,0 +1,27 @@
+<div class="banner-ad" style="width: 100%;">
+  <div *ngIf="mode === 'dashboard' && bannerAdItem">
+    <div class="basic" [style.background-color]="bannerAdItem.colors.background">
+      <div class="ad-header">
+        <span>{{ bannerAdItem.title }}</span>
+        <span style="    float: right;
+        position: relative;
+        top: -13px;
+        right: -10px;">
+          <ion-button style="color: #ffffff; font-weight: bold;" fill="clear" (click)="bannerAdItem = null">X</ion-button>
+        </span>
+      </div>
+      <div class="ad-body" [innerHtml]="bannerAdItem.body"></div>
+      <div class="ad-cta" *ngIf="bannerAdItem.button.label.length > 0">
+        <!-- <ion-button color="warning" fill="solid" size="small" (click)="bannerAdItem = null">DISMISS</ion-button> -->
+        <ion-button *ngIf="bannerAdItem.button.link !== 'support@logreps.com'" fill="clear" size="small" style="color: #ffffff; position: relative; left: -14px; font-weight: bold;" (click)="adClicked()">{{ bannerAdItem.button.label }}</ion-button>
+        <ion-button *ngIf="bannerAdItem.button.link === 'support@logreps.com'" fill="clear" size="small" style="color: #ffffff; position: relative; left: -14px; font-weight: bold;" href="mailto:support@logreps.com">{{ bannerAdItem.button.label }}</ion-button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="mode === 'rate'" (click)="rateApp()" style="width: 100%;">
+    This app is FREE with no ads!  If you <span style="margin-right: 5px;">❤️</span> this app, please click <a style="text-decoration: underline;">here</a> to rate it on the app store.
+  </div>
+  <div *ngIf="mode === 'support'">
+    Please email us any feedback and suggestions at <a href="mailto:support@logreps.com">support@logreps.com</a>.
+  </div>
+</div>

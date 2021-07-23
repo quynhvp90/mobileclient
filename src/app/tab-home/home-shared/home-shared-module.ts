@@ -4,9 +4,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { ActivityLogComponent } from './activity-log/activity-log.component';
-import { ActivityLogModal } from './activity-log/activity-log.modal';
-
 @NgModule({
   imports: [
     IonicModule,

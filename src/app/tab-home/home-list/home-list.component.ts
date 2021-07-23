@@ -1,30 +1,18 @@
-declare var introJs: any;
 import * as _ from 'lodash';
 
-import { Component, OnInit, OnDestroy, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import {
-  HomeLogService,
-  HomeService,
   BroadcastService,
-  IonicAlertService,
   UserService,
-  WorkoutService,
-  TipsService,
-  ChallengeService,
   GlobalService,
-  PostService,
-  ShareService,
 } from '../../shared/services';
 
-import { IonItemSliding, MenuController, LoadingController, NavController, ModalController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { LoadingController } from '@ionic/angular';
 
 import {
-  Router, ActivatedRoute,
+  ActivatedRoute,
 } from '@angular/router';
-import { IUserDocument } from '../../shared/models/user/user.interface';
 
-const jsFilename = 'home-list: ';
 
 @Component({
   selector: 'home-list',
@@ -81,7 +69,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
   }
 
   public ionViewWillEnter() {
-    const $this = this;
   }
 
   public ionViewWillLeave() {

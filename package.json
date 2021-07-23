@@ -48,7 +48,7 @@
     "@ionic/storage": "^2.2.0",
     "@types/intro.js": "^2.4.4",
     "anchorme": "^2.1.2",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "cordova-plugin-firebase-analytics": "^4.3.0",
     "cordova-plugin-firebase-dynamiclinks": "^4.4.0",
     "cordova-plugin-ionic": "5.4.7",

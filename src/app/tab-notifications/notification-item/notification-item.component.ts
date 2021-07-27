@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, Input, ViewEncapsulation } from '@angular
 import { NavController, PopoverController } from '@ionic/angular';
 import { ActivityLogService, BroadcastService, NotificationService, UserService } from '../../shared/services';
 import { INotificationLogDocument } from 'src/app/shared/models/notification-log.interface';
-import { SocialChatService } from 'src/app/tab-social/social-shared/social-chat/social-chat.service';
 import * as moment from 'moment';
 const jsFilename = 'notification-item: ';
 
@@ -25,7 +24,7 @@ export class NotificationItemComponent implements OnInit, OnDestroy {
     private broadcastService: BroadcastService,
     private navCtrl: NavController,
     private notificationService: NotificationService,
-    private socialChatService: SocialChatService,
+    // private socialChatService: SocialChatService,
   ) {
   }
 
@@ -88,9 +87,9 @@ export class NotificationItemComponent implements OnInit, OnDestroy {
 
     });
     if (this.notificationLog.dbModel === 'chatroom') {
-      this.socialChatService.openChat({
-        chatroomId: this.notificationLog.dbModelId,
-      });
+      // this.socialChatService.openChat({
+      //   chatroomId: this.notificationLog.dbModelId,
+      // });
       return;
     }
 

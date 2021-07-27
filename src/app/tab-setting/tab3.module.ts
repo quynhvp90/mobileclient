@@ -5,8 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tab3Page } from './tab3.page';
 import { SharedModule } from '../shared/shared.module';
-import { SocialSharedModule } from '../tab-social/social-shared/social-shared.module';
-
 
 @NgModule({
   imports: [
@@ -14,7 +12,6 @@ import { SocialSharedModule } from '../tab-social/social-shared/social-shared.mo
     CommonModule,
     FormsModule,
     SharedModule,
-    SocialSharedModule,
     RouterModule.forChild([{ path: '', component: Tab3Page }]),
   ],
   declarations: [Tab3Page],

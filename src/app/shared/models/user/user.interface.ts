@@ -123,7 +123,8 @@ export interface IUserPublicDetail {
   };
 }
 
-export interface IUserPublic extends IUser {
+export interface IUserPublic extends IUser { // TODO
+  defaultOrganizationId: string;
   emails?: {
     providerId: string;
     providerType: string;

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { BroadcastService, ChallengeService, ContactService, UserService, WorkoutService } from '../../../shared/services';
+import { BroadcastService, ContactService, UserService, WorkoutService } from '../../../shared/services';
 import { IContactDocument } from '../../models/contact/contact.interface';
 
 const jsFilename = 'invites: ';

@@ -8,7 +8,6 @@ import { NotificationListComponent } from './notification-list/notification-list
 import { NotificationItemComponent } from './notification-item/notification-item.component';
 
 import { Routes, RouterModule } from '@angular/router';
-import { SocialSharedModule } from '../tab-social/social-shared/social-shared.module';
 
 const routes: Routes = [
   {
@@ -23,7 +22,6 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     SharedModule,
-    SocialSharedModule,
     RouterModule.forChild(routes),
   ],
   exports: [

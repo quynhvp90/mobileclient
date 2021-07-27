@@ -9,15 +9,6 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        children: [
-          {
-            path: '',
-            loadChildren: '../tab-activity/tab1.module#Tab1PageModule',
-          },
-        ],
-      },
-      {
         path: 'home',
         children: [
           {
@@ -27,20 +18,11 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'activities',
+        path: 'jobs',
         children: [
           {
             path: '',
-            loadChildren: '../tab-activity/tab1.module#Tab1PageModule',
-          },
-        ],
-      },
-      {
-        path: 'stats',
-        children: [
-          {
-            path: '',
-            loadChildren: '../tab-stats/tab2.module#Tab2PageModule',
+            loadChildren: '../job/job.module#JobModule',
           },
         ],
       },
@@ -50,24 +32,6 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: '../tab-setting/tab3.module#Tab3PageModule',
-          },
-        ],
-      },
-      {
-        path: 'social',
-        children: [
-          {
-            path: '',
-            loadChildren: '../tab-social/tab-social.module#TabSocialPageModule',
-          },
-        ],
-      },
-      {
-        path: 'challenges',
-        children: [
-          {
-            path: '',
-            loadChildren: '../challenges/challenge.module#ChallengePageModule',
           },
         ],
       },

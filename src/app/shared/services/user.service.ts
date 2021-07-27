@@ -427,7 +427,7 @@ export class UserService {
 
     $this.getCurrentUserObservable = $this.apiService
       .get({
-        resource: 'users/current?timezone-offset=' + timezoneOffset,
+        resource: 'users/me?timezoneoffset=' + timezoneOffset,
       }).pipe(
         map((res) => {
           $this.user = <IUserPublic> res;

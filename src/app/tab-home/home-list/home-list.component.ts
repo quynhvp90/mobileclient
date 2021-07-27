@@ -7,11 +7,13 @@ import {
   GlobalService,
 } from '../../shared/services';
 
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 
 import {
   ActivatedRoute,
 } from '@angular/router';
+import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
+import { IJobUserStats } from 'src/app/job/job-shared/interfaces/job.interface';
 
 
 @Component({
@@ -24,13 +26,17 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private loader: HTMLIonLoadingElement = null;
   private subscriptions = [];
 
-  public loading = true;
+  public userStats: IJobUserStats[] = [];
+
+  public isLoading = true;
 
   constructor(
     private broadcastService: BroadcastService,
     public userService: UserService,
     private loadingController: LoadingController,
     public globalService: GlobalService,
+    private jobApiService: JobApiService,
+    private navCtrl: NavController,
     private route: ActivatedRoute,
   ) {
   }
@@ -60,6 +66,8 @@ export class HomeListComponent implements OnInit, OnDestroy {
       $this.loader = loader;
       // this.getActivities();
     });
+
+    $this.getData();
   }
 
   public ngOnDestroy() {
@@ -72,6 +80,22 @@ export class HomeListComponent implements OnInit, OnDestroy {
   }
 
   public ionViewWillLeave() {
+  }
+
+  private getData() {
+    const $this = this;
+    $this.isLoading = true;
+    $this.jobApiService.getStatsByOrganization($this.userService.user.defaultOrganizationId).subscribe((res) => {
+      $this.isLoading = false;
+      console.log('res = ', res);
+      $this.userStats = res.userStats;
+    });
+  }
+
+  public reviewJobApplicants(jobId) {
+    const $this = this;
+    const newUrl = '/tabs/jobs/' + jobId + '/homework';
+    $this.navCtrl.navigateForward(newUrl);
   }
 
 }

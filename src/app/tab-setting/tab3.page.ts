@@ -66,7 +66,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     const $this = this;
 
     this.apiService.get({
-      resource: 'version',
+      resource: 'v1/version',
     }).subscribe((res) => {
       console.log('res = ', res);
       $this.apiVersion = res.toString();
@@ -83,8 +83,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       const msgHdr = jsFilename + 'broadcastService: ';
       if (msg.name === 'login') {
-        $this.foundUser = this.userService.user;
-        this.setSubscription();
+        // $this.foundUser = this.userService.user;
+        // this.setSubscription();
       }
     });
     this.subscriptions.push(subscription);
@@ -92,215 +92,11 @@ export class Tab3Page implements OnInit, OnDestroy {
     this.platform.ready().then(() => {
       this.isCapacitor = this.platform.is('capacitor');
     });
-
-    this.setSubscription();
-
-    // this.authenticationService.logout();
-    this.checkChannel();
-  }
-
-  private setSubscription() {
-    this.subscribed = this.userService.user.subscribed;
-    if (this.foundUser.isTempAccount) {
-      this.subscribed = false;
-    }
-  }
-
-  public updateSubcription(event: any) {
-    if (this.foundUser.isTempAccount) {
-      event.stopImmediatePropagation();
-      event.stopPropagation();
-      this.ionicAlertService.presentAlert('You must sign in (for FREE) to configure your weekly reports');
-      return;
-    }
-    this.userService.patch({
-      action: 'update-subscription',
-      subscribed: !this.subscribed, // save the opposite as will toggle
-    }).subscribe((res) => {
-      console.log('res = ', res);
-    });
   }
 
   public ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
-  }
-
-  public async openUserHealth() {
-    const $this = this;
-    const msgHdr = jsFilename + 'openUserHealth: ';
-
-    const modal: HTMLIonModalElement =
-      await $this.modalController.create({
-        component: UserHealthComponent,
-        componentProps: {
-        },
-      });
-
-    modal.onDidDismiss().then((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-    });
-
-    await modal.present();
-  }
-
-  public async openPrivacy() {
-    const $this = this;
-    const msgHdr = jsFilename + 'openPrivacy: ';
-
-    const modal: HTMLIonModalElement =
-      await $this.modalController.create({
-        component: UserPrivacyComponent,
-        componentProps: {
-        },
-      });
-
-    modal.onDidDismiss().then((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-    });
-
-    await modal.present();
-  }
-
-  public async openFeatureSuggestions() {
-    const $this = this;
-    const msgHdr = jsFilename + 'openFeatureSuggestions: ';
-
-    const modal: HTMLIonModalElement =
-      await $this.modalController.create({
-        component: FeatureSuggestionsComponent,
-        componentProps: {
-        },
-      });
-
-    modal.onDidDismiss().then((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-    });
-
-    await modal.present();
-  }
-
-  public async openWeeklyReport() {
-    const $this = this;
-    const msgHdr = jsFilename + 'openWeeklyReport: ';
-
-    const modal: HTMLIonModalElement =
-      await $this.modalController.create({
-        component: UserWeeklyReportComponent,
-        componentProps: {
-        },
-      });
-
-    modal.onDidDismiss().then((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-    });
-
-    await modal.present();
-  }
-
-  public async exportData() {
-    const $this = this;
-    const modal: HTMLIonModalElement =
-      await $this.modalController.create({
-        component: ExportDataModal,
-      });
-    modal.onDidDismiss().then((detail) => {
-      console.log('detail = ', detail);
-      if (detail !== null && detail.data !== 'close') {
-
-      }
-    });
-    await modal.present();
-  }
-
-  public async openNotifications() {
-    const $this = this;
-    const msgHdr = jsFilename + 'openNotifications: ';
-
-    const modal: HTMLIonModalElement =
-      await $this.modalController.create({
-        component: NotificationsComponent,
-        componentProps: {
-        },
-      });
-
-    modal.onDidDismiss().then((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-    });
-
-    await modal.present();
-  }
-
-  private checkUpdate() {
-    const msgHdr = jsFilename + 'checkUpdate: ';
-    const $this = this;
-
-    // Deploy.checkForUpdate().then((update) => {
-    //   $this.ionicConfig.updateAvailable = update.available;
-    //   $this.ionicConfig.updateSnapshot = update.snapshot;
-    // });
-  }
-
-  private checkChannel() {
-    const msgHdr = jsFilename + 'checkChannel: ';
-    const $this = this;
-    try {
-      // $this.ionicConfig.msg = 'get configuration';
-      // Deploy.getConfiguration().then((config) => {
-      //   console.log(msgHdr + 'config = ', config);
-      //   if (config) {
-      //     $this.ionicConfig.deployChannel = config.channel;
-      //     $this.ionicConfig.isBeta = (config.channel === 'Beta');
-      //   } else {
-      //     console.log(msgHdr + 'no config found');
-      //   }
-      // }, (err) => {
-      //   $this.ionicConfig.msg = err;
-      //   $this.ionicConfig.msg = 'err = ' + err;
-      // });
-    } catch (err2) {
-      console.error(msgHdr + 'err2 = ', err2);
-      $this.ionicConfig.msg = 'err2 = ' + err2;
-      // We encountered an error.
-      // Here's how we would log it to Ionic Pro Monitoring while also catching:
-
-      // Pro.monitoring.exception(err);
-    }
-  }
-
-  public performManualUpdate() {
-    const $this = this;
-    $this.ionicConfig.downloadStarted = true;
-
-    try {
-      $this.ionicConfig.msg = 'checking updates';
-      // Deploy.checkForUpdate().then((update) => {
-      //   $this.ionicConfig.msg = 'update = ' + update;
-      //   if (update.available) {
-      //     $this.ionicConfig.downloadProgress = 0;
-
-      //     $this.ionicConfig.msg = 'downloading update';
-      //     Deploy.downloadUpdate((progress) => {
-      //       this.ionicConfig.downloadProgress = progress;
-      //     }).then(() => {
-      //       $this.ionicConfig.msg = 'extracting update';
-      //       Deploy.extractUpdate().then(() => {
-      //         $this.ionicConfig.msg = 'reloading app';
-      //         Deploy.reloadApp().then(() => {
-      //           $this.ionicConfig.msg = 'done';
-      //         });
-      //       });
-      //     });
-      //   }
-      // });
-    } catch (err3) {
-      $this.ionicConfig.msg = 'err3 = ' + err3;
-      // We encountered an error.
-      // Here's how we would log it to Ionic Pro Monitoring while also catching:
-
-      // Pro.monitoring.exception(err);
-    }
-
   }
 }

@@ -16,7 +16,6 @@ import { LoginCodeComponent } from './components/login-code/login-code.component
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { LogRepsIntroComponent } from './components/logreps-intro/logreps-intro.component';
-import { LogRepsWorkoutsComponent } from './components/logreps-workouts/logreps-workouts.component';
 import { PurchaseComponent } from './components/purchase-license/purchase-license.component';
 import { BannerAdComponent } from './components/banner-ad/banner-ad.component';
 import { LicenseModalModule } from './modal/license/license-modal.module';
@@ -105,7 +104,6 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     PasswordResetComponent,
     ConfirmComponent,
     LogRepsIntroComponent,
-    LogRepsWorkoutsComponent,
     GroupByPipe,
     TimeAgoPipe,
     UserAvatarComponent,
@@ -156,7 +154,6 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     PasswordResetComponent,
     ConfirmComponent,
     LogRepsIntroComponent,
-    LogRepsWorkoutsComponent,
     GroupByPipe,
     TimeAgoPipe,
     UserAvatarComponent,

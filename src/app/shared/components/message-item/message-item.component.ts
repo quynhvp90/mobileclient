@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { BroadcastService, ChallengeService, ChatroomService, IonicAlertService, MessageService, UserService } from '../../../shared/services';
+import { BroadcastService, ChatroomService, IonicAlertService, MessageService, UserService } from '../../../shared/services';
 import { EmotePopover } from 'src/app/shared/popover/emote/emote-popover';
 import { IMessageDocument, IMessageSocial } from '../../models/message.interface';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { SocialChatService } from 'src/app/tab-social/social-shared/social-chat/social-chat.service';
 import * as moment from 'moment';
 import { CreatePostModal } from '../../modal/create-post/create-post-modal';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -31,7 +30,6 @@ export class MessageItemComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private broadcastService: BroadcastService,
     private userService: UserService,
-    private socialChatService: SocialChatService,
     private modalController: ModalController,
     private popoverController: PopoverController,
     private sanitizer: DomSanitizer,
@@ -156,9 +154,9 @@ export class MessageItemComponent implements OnInit, OnDestroy {
   }
 
   public message() {
-    this.socialChatService.openChat({
-      userIds: [this.foundMessage.fromUserId],
-    });
+    // this.socialChatService.openChat({
+    //   userIds: [this.foundMessage.fromUserId],
+    // });
     return;
   }
 
@@ -182,9 +180,9 @@ export class MessageItemComponent implements OnInit, OnDestroy {
       const emote = val.data;
 
       if (emote === 'chat') {
-        this.socialChatService.openChat({
-          userIds: [this.foundMessage.fromUserId],
-        });
+        // this.socialChatService.openChat({
+        //   userIds: [this.foundMessage.fromUserId],
+        // });
         return;
       }
 

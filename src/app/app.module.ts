@@ -47,7 +47,6 @@ import {
   ContactService,
   ChatroomService,
   DocumentEventService,
-  ChallengeService,
   // ChallengeTeamService,
   AnimationService,
   DeepLinkService,
@@ -62,8 +61,7 @@ import {
   SettingsService,
   InviteService,
 } from './shared/services';
-import { WorkoutModalsModule } from './workouts/workout-modals/workout-modals.module';
-import { ActivityModalsModule } from './tab-activity/activity-modals/activity-modals-module';
+import { JobModule } from './job/job.module';
 
 @NgModule({
   declarations: [
@@ -85,8 +83,7 @@ import { ActivityModalsModule } from './tab-activity/activity-modals/activity-mo
       // pageTransition: 'ios-transition',
     }),
     IonicStorageModule.forRoot(),
-    WorkoutModalsModule,
-    ActivityModalsModule,
+    JobModule,
     AppRoutingModule,
   ],
   providers: [
@@ -99,7 +96,6 @@ import { ActivityModalsModule } from './tab-activity/activity-modals/activity-mo
     ContactService,
     ChatroomService,
     DocumentEventService,
-    ChallengeService,
     // ChallengeTeamService,
     AnimationService,
     DeepLinkService,

@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { JobsServicesModule } from '../../job/job-shared/job-services.module';
 
 @NgModule({
   imports: [
@@ -10,18 +11,13 @@ import { FormsModule } from '@angular/forms';
     SharedModule,
     CommonModule,
     FormsModule,
+    JobsServicesModule,
   ],
   exports: [
-    ActivityLogComponent,
-    ActivityLogModal,
   ],
   declarations: [
-    ActivityLogComponent,
-    ActivityLogModal,
   ],
   entryComponents: [
-    ActivityLogComponent,
-    ActivityLogModal,
   ],
 })
 export class ActivitySharedModule {}

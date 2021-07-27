@@ -22,7 +22,6 @@ export * from './stats.service';
 export * from './tips.service';
 export * from './orders.service';
 export * from './contact.service';
-export * from './challenge.service';
 export * from './animation.service';
 export * from './deeplink.service';
 export * from './push-notification.service';

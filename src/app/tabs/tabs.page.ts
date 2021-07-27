@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { ChallengeService, NotificationService } from '../shared/services';
-
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',

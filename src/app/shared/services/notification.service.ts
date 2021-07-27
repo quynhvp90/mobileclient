@@ -96,6 +96,14 @@ export class NotificationService {
       const msgHdr = 'getData: ';
       const $this = this;
 
+      const enabled = false;
+      if (!enabled) {
+        return resolve({
+          count: 0,
+          items: [],
+        });
+      }
+
       $this.loading = false;
       if (options && options.showLoading) {
         $this.loading = true;
@@ -172,6 +180,16 @@ export class NotificationService {
     return new Promise((resolve, reject) => {
       const msgHdr = 'getBell: ';
       const $this = this;
+
+      const enabled = false;
+      if (!enabled) {
+        console.log('checking notifications is disabled');
+        resolve({
+          count: 0,
+          items: [],
+        });
+        return;
+      }
 
       const filter = {
         where: {

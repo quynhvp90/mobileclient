@@ -1,7 +1,7 @@
 import { default as Document } from '../document.interface';
 
 export interface IOrganization {
-  name: string;
+  name?: string;
   logo?: string;
   website?: string;
   users?: [{

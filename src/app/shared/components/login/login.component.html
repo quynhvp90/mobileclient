@@ -1,5 +1,5 @@
 <!-- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '0px' }"></ngx-loading> -->
-<ion-content class="app-login ion-padding" style="--background: #1c586b;">
+<ion-content class="app-login ion-padding" style="--background: #f8f8f8;">
   <!-- <ion-row>
     <ion-col>
       <h1 class="logo">LOGO</h1>
@@ -15,109 +15,7 @@
       </ion-button>
     </ion-col>
   </ion-row> -->
-  <ion-row>
-    <ion-col>
-      <div class="ion-text-center">
-        <div>
-          <h2 style="color: #fff;">Welcome to Career.Place</h2>
-        </div>
-        <img style="width: 80px; height: 80px;"src="/assets/img/intro/logo-one.svg">
-      </div>
-    </ion-col>
-  </ion-row>
-  <ion-row *ngIf="mode === 'login'">
-
-        <!-- <h3 style="text-align: center">Login or Register</h3>
-        <div class="form-group social" style="text-align: center">
-          <button mat-fab style="background-color: #0177B5;" (click)="loginSSO('linkedin')">
-            <mat-icon svgIcon="linkin"></mat-icon>
-          </button>
-          <button mat-fab color="warn" (click)="loginSSO('google')">
-            <mat-icon svgIcon="googleplus"></mat-icon>
-          </button>
-          <button mat-fab color="primary" (click)="loginSSO('facebook')">
-            <mat-icon svgIcon="facebook"></mat-icon>
-          </button>
-        </div> -->
-
-        <!-- <div class="form-group">
-          <div style="text-align: center; padding: 15px 0px; font-weight: bold">
-            ~ or ~
-          </div>
-        </div> -->
-
-
-        <ion-col>
-          <ion-item style="--border-radius: 5px; margin-bottom: 10px;">
-            <ion-input placeholder="Email" [disabled]="!emailEnabled" type="email" name="email" [(ngModel)]="user.email" required>
-            </ion-input>
-          </ion-item>
-          <ion-item *ngIf="enablePassword" style="--border-radius: 5px; margin-bottom: 10px;">
-              <ion-input placeholder="Password" type="password" name="password" [(ngModel)]="user.password" required>
-              </ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-button type="submit" color="primary" expand="block" (click)="login()">
-          SIGN IN / REGISTER
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="enablePassword">
-      <ion-col>
-        <ion-button type="button" color="light" expand="block" (click)="passwordReset()">
-          RESET PASSWORD
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div class="terms">
-          By logging in, you agree to our 
-          <a href="https://www.logreps.com/static/privacy-policy.html">Privacy Policy</a> and <a href="https://www.logreps.com/static/terms.html">Terms of Service</a>.
-        </div>
-      </ion-col>
-    </ion-row>
-    <!-- <ion-row *ngIf="errorMessage">
-      <ion-col>
-        <ion-item>
-          {{ errorMessage }}
-        </ion-item>
-      </ion-col>
-    </ion-row> -->
   
-
-    <div class="confirm-register" *ngIf="mode === 'verify-code'">
-      <div class="confirm-register-content">
-        <div style="text-align: center;">
-          <div style="font-size: 20px; margin-bottom: 20px;">Please verify your email address</div>
-          Check your
-          <b class="ng-binding">{{ user.email }}</b> email
-          <br>and enter the code below
-        </div>
-        <div layout="row" layout-align="center" class="layout-align-center-stretch layout-row">
-          <div style="padding-top: 20px;">
-            <input id="idCodeA" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeA" (ngModelChange)="codeChange('idCodeA')"
-              aria-invalid="false">
-            <input id="idCodeB" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeB" (ngModelChange)="codeChange('idCodeB')"
-              aria-invalid="false">
-            <input id="idCodeC" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeC" (ngModelChange)="codeChange('idCodeC')"
-              aria-invalid="false">
-            <input id="idCodeD" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeD" (ngModelChange)="codeChange('idCodeD')"
-              aria-invalid="false">
-            <input id="idCodeE" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeE" (ngModelChange)="codeChange('idCodeE')"
-              aria-invalid="false">
-          </div>
-        </div>
-      </div>
-      <div class="confirm-register-action">
-        <button>Cancel</button>
-        <button color="primary" (click)="verifyCode()">VERIFY CODE</button>
-      </div>
-    </div>
     <!-- <ion-row>
       <ion-col>
         <ion-button class="log-in-button" color="danger" expand="block" (click)="checkUpdate()">
@@ -125,4 +23,142 @@
         </ion-button>
       </ion-col>
     </ion-row> -->
+    <ion-tabs>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center">
+            <div>
+              <h2 style="color: #4a4a4a;">Welcome to Career.Place</h2>
+            </div>
+            <img style="width: 80px; height: 80px;"src="/assets/img/intro/logo-one.svg">
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="mode === 'login'">
+    
+            <!-- <h3 style="text-align: center">Login or Register</h3>
+            <div class="form-group social" style="text-align: center">
+              <button mat-fab style="background-color: #0177B5;" (click)="loginSSO('linkedin')">
+                <mat-icon svgIcon="linkin"></mat-icon>
+              </button>
+              <button mat-fab color="warn" (click)="loginSSO('google')">
+                <mat-icon svgIcon="googleplus"></mat-icon>
+              </button>
+              <button mat-fab color="primary" (click)="loginSSO('facebook')">
+                <mat-icon svgIcon="facebook"></mat-icon>
+              </button>
+            </div> -->
+    
+            <!-- <div class="form-group">
+              <div style="text-align: center; padding: 15px 0px; font-weight: bold">
+                ~ or ~
+              </div>
+            </div> -->
+    
+    
+            <ion-col>
+              <ion-item style="--border-radius: 5px; margin-bottom: 10px;">
+                <ion-input placeholder="Email" [disabled]="!emailEnabled" type="email" name="email" [(ngModel)]="user.email" required>
+                </ion-input>
+              </ion-item>
+              <ion-item *ngIf="enablePassword" style="--border-radius: 5px; margin-bottom: 10px;">
+                  <ion-input placeholder="Password" type="password" name="password" [(ngModel)]="user.password" required>
+                  </ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+    
+        <ion-row>
+          <ion-col>
+            <ion-button type="submit" color="primary" expand="block" (click)="login()">
+              SIGN IN / REGISTER
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="enablePassword">
+          <ion-col>
+            <ion-button type="button" color="light" expand="block" (click)="passwordReset()">
+              RESET PASSWORD
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <!-- <ion-row *ngIf="errorMessage">
+          <ion-col>
+            <ion-item>
+              {{ errorMessage }}
+            </ion-item>
+          </ion-col>
+        </ion-row> -->
+      
+    
+        <div class="confirm-register" *ngIf="mode === 'verify-code'">
+          <div class="confirm-register-content">
+            <div style="text-align: center;">
+              <div style="font-size: 20px; margin-bottom: 20px;">Please verify your email address</div>
+              Check your
+              <b class="ng-binding">{{ user.email }}</b> email
+              <br>and enter the code below
+            </div>
+            <div layout="row" layout-align="center" class="layout-align-center-stretch layout-row">
+              <div style="padding-top: 20px;">
+                <input id="idCodeA" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeA" (ngModelChange)="codeChange('idCodeA')"
+                  aria-invalid="false">
+                <input id="idCodeB" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeB" (ngModelChange)="codeChange('idCodeB')"
+                  aria-invalid="false">
+                <input id="idCodeC" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeC" (ngModelChange)="codeChange('idCodeC')"
+                  aria-invalid="false">
+                <input id="idCodeD" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeD" (ngModelChange)="codeChange('idCodeD')"
+                  aria-invalid="false">
+                <input id="idCodeE" type="text" class="code-input" [(ngModel)]="codeForVerifyLogin.codeE" (ngModelChange)="codeChange('idCodeE')"
+                  aria-invalid="false">
+              </div>
+            </div>
+          </div>
+          <div class="confirm-register-action">
+            <button>Cancel</button>
+            <button color="primary" (click)="verifyCode()">VERIFY CODE</button>
+          </div>
+        </div>
+        <div class="footer">
+          <ion-row>
+            <ion-col>
+              <div class="terms">
+                By logging in, you agree to our 
+                <a href="https://www.logreps.com/static/privacy-policy.html">Privacy Policy</a> and <a href="https://www.logreps.com/static/terms.html">Terms of Service</a>.
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-tab-bar slot="bottom">
+            <ion-tab-button tab="home">
+              <ion-icon name="home"></ion-icon>
+              <ion-label>Home</ion-label>
+            </ion-tab-button>
+            <!-- <ion-tab-button tab="activities">
+              <ion-icon name="flash"></ion-icon>
+              <ion-label>Activities</ion-label>
+            </ion-tab-button>
+            <ion-tab-button tab="social">
+              <ion-icon name="people"></ion-icon>
+              <ion-label>Social</ion-label>
+            </ion-tab-button>
+            <ion-tab-button tab="challenges">
+                <ion-badge *ngIf="challengeService.showBell" color="danger" style="width: 12px;
+                height: 12px;">&nbsp;</ion-badge>
+                <ion-icon name="trophy"></ion-icon>
+                <ion-label>Challenges</ion-label>
+            </ion-tab-button>
+            <ion-tab-button tab="stats">
+              <ion-icon name="stats"></ion-icon>
+              <ion-label>Stats</ion-label>
+            </ion-tab-button> -->
+            <ion-tab-button tab="supports">
+              <ion-icon name="people"></ion-icon>
+              <ion-label>Supports</ion-label>
+            </ion-tab-button>
+          </ion-tab-bar>
+        </div>
+      
+    
+    </ion-tabs>
 </ion-content>

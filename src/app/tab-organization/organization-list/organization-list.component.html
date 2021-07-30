@@ -1,0 +1,19 @@
+<ion-header class="home-list-header">
+  <ion-toolbar class="top-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button style="color: #fff;"></ion-menu-button>
+    </ion-buttons>
+    <ion-title style="width: 100%; text-align: center;">
+      Organization
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1" class="home-list-content">
+  <div *ngIf="userOrg">
+    {{ userOrg.name }}
+  </div>
+  <ion-list>
+    <ion-item detail="true" *ngFor="let org of organizations" (click)="selectOrg(org)">{{ org.name }}</ion-item>
+  </ion-list>
+</ion-content>

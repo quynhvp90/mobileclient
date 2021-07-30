@@ -37,3 +37,4 @@ export * from './chatroom.service';
 export * from './document-event.service';
 export * from './invite.service';
 export * from './loader.service';
+export * from './organization.service';

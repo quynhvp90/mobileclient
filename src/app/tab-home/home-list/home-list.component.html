@@ -3,12 +3,17 @@
     <ion-buttons slot="start">
       <ion-menu-button style="color: #fff;"></ion-menu-button>
     </ion-buttons>
-    <ion-title style="width: 100%; text-align: center;">
-      Home
+    <ion-title style="width: 100%; text-align: left;">
+      {{ organization.name }}
     </ion-title>
+    <ion-buttons slot="end" (click)="changeOrg()">
+      <ion-button style="color: #fff;">
+        <ion-icon name="stats"></ion-icon>
+        <ion-label>Org</ion-label>
+     </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content style="--background: #e6ebf1" class="home-list-content">
   <div *ngIf="isLoading">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>

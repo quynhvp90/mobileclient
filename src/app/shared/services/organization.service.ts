@@ -32,6 +32,13 @@ export class OrganizationService {
     const $this = this;
   }
 
+  public changeOrganization(organization) {
+    if (organization) {
+      this.organization = organization;
+      this.broadcastService.broadcast('reload-org');
+    }
+  }
+
   public getOrganizations(filter) {
     const $this = this;
     const msgHdr = jsFilename + 'getOrganizations: ';
@@ -64,11 +71,15 @@ export class OrganizationService {
                 return check;
               });
               // console.log('$this.userService.user = ', $this.userService.user);
-              $this.organizations.forEach((org) => {
-                if ($this.userService.user && $this.userService.user.defaultOrganizationId === org._id) {
-                  $this.organization = org;
-                }
-              });
+              if (!$this.organization) {
+                $this.organizations.forEach((org) => {
+                  if ($this.userService.user && $this.userService.user.defaultOrganizationId === org._id) {
+                    $this.organization = org;
+                    this.broadcastService.broadcast('reload-data');
+                  }
+                });  
+              }
+              
             }
           }
           return res;
@@ -77,5 +88,6 @@ export class OrganizationService {
         , share(),
       );
   }
+
 
 }

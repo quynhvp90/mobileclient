@@ -30,6 +30,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public userStats: IJobUserStats[] = [];
   public organization: IOrganizationDocument;
+  public organizationId = null;
 
   public isLoading = true;
 
@@ -52,10 +53,21 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     const $this = this;
-    this.organization = this.organizationService.organization;
+    $this.organization = this.organizationService.organization;
+    $this.organizationId = this.userService.user.defaultOrganizationId;
+    if ($this.organization) {
+      $this.organizationId = this.organization._id;
+    }
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'reload-data') {
         // respond to broadcast here
+      }
+      if (msg.name === 'reload-org') {
+        // respond to broadcast here
+        console.log('set organiztion 1');
+        $this.organization = $this.organizationService.organization;
+        $this.organizationId = $this.organization._id;
+        $this.getData();
       }
     });
     this.subscriptions.push(subscription);
@@ -79,6 +91,9 @@ export class HomeListComponent implements OnInit, OnDestroy {
     $this.getData();
   }
 
+  public backButton() {
+    this.navCtrl.back();
+  }
   public changeOrg() {
     this.router.navigate(['list-org-screen']);
   }
@@ -98,7 +113,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private getData() {
     const $this = this;
     $this.isLoading = true;
-    $this.jobApiService.getStatsByOrganization($this.userService.user.defaultOrganizationId).subscribe((res) => {
+    $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
       $this.isLoading = false;
       console.log('res = ', res);
       $this.userStats = res.userStats;

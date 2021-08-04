@@ -3,17 +3,22 @@
     <ion-buttons slot="start">
       <ion-menu-button style="color: #fff;"></ion-menu-button>
     </ion-buttons>
-    <ion-title style="width: 100%; text-align: center;">
-      Home
+    <ion-title>
+      {{ organization.name }}
     </ion-title>
+    <ion-buttons slot="end" (click)="backButton()">
+      <ion-button style="color: #fff;">
+        <ion-icon name="stats"></ion-icon>
+        <ion-label>Org</ion-label>
+     </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content style="--background: #e6ebf1" class="home-list-content">
   <div *ngIf="isLoading">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
   <ion-list>
-    <ion-item detail="true" *ngFor="let userStat of userStats" (click)="reviewJobApplicants(userStat.jobId)">{{ userStat.title }}</ion-item>
+    <ion-item style="cursor: pointer;" detail="true" *ngFor="let userStat of userStats" (click)="reviewJobApplicants(userStat.jobId)">{{ userStat.title }}</ion-item>
   </ion-list>
 </ion-content>

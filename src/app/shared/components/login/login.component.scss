@@ -1,4 +1,18 @@
 .app-login {
+  ion-tabs {
+    .tabs-inner {
+      display: none;
+    }
+    .button-native {
+      box-shadow: inset 0 0 0px rgb(0 0 0 / 10%), inset 1px -1px 5px rgb(0 0 0 / 5%), 0 0 1px 1px rgb(0 49 47 / 10%) !important;
+    }
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
   .reason {
     color: #ddd;
     font-size: 15px;

@@ -5,7 +5,7 @@ import { NgForm, Validators, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '../../services/auth.service';
 import { LoginService } from '../../services/login.service';
-import { ActivityService, BroadcastService, IonicAlertService, IUpdatePriority, ToastService, UserService, WorkoutService } from '../../services';
+import { ActivityService, BroadcastService, IonicAlertService, IUpdatePriority, OrganizationService, ToastService, UserService, WorkoutService } from '../../services';
 
 import { AlertService } from '../../services/alert.service';
 import { CONFIG } from '../../../config';
@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private ionicAlertService: IonicAlertService,
     private authService: AuthService,
     private loginService: LoginService,
+    private organizationService: OrganizationService,
     private broadcastService: BroadcastService,
     private loadingController: LoadingController,
     private userService: UserService,
@@ -70,7 +71,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'login') {
         console.log('received broadcast login');
-        this.router.navigate(['']);
+        this.organizationService.getOrganizations(null).subscribe((res) => {
+          if (this.organizationService.organization && this.organizationService.organizations && this.organizationService.organizations.length > 1) {
+            this.router.navigate(['list-org-screen']);
+            return;
+          }
+          this.router.navigate(['']);
+        });
       }
     });
     this.subscriptions.push(subscription);

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BroadcastService } from '../../shared/services';
+import { NavController } from '@ionic/angular';
 
 const jsFilename = 'job-applicant-quiz-review: ';
 
@@ -14,6 +15,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
 
   constructor(
     private broadcastService: BroadcastService,
+    private navCtrl: NavController,
   ) {
     const $this = this;
 
@@ -33,6 +35,9 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     const msgHdr = 'ngAfterViewInit: ';
   }
 
+  public backButton() {
+    this.navCtrl.back();
+  }
   private updateData() {
     const $this = this;
 

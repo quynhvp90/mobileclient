@@ -5,15 +5,17 @@ import {
   BroadcastService,
   UserService,
   GlobalService,
+  OrganizationService,
 } from '../../shared/services';
 
 import { LoadingController, NavController } from '@ionic/angular';
 
 import {
-  ActivatedRoute,
+  ActivatedRoute, Router,
 } from '@angular/router';
 import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
 import { IJobUserStats } from 'src/app/job/job-shared/interfaces/job.interface';
+import IOrganizationDocument from 'src/app/shared/models/organization/organization.interface';
 
 
 @Component({
@@ -27,6 +29,8 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private subscriptions = [];
 
   public userStats: IJobUserStats[] = [];
+  public organization: IOrganizationDocument;
+  public organizationId = null;
 
   public isLoading = true;
 
@@ -36,17 +40,34 @@ export class HomeListComponent implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     public globalService: GlobalService,
     private jobApiService: JobApiService,
+    private organizationService: OrganizationService,
     private navCtrl: NavController,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
+
+    // if (!this.organizationService.organization) {
+    //   this.router.navigate(['list-org-screen']);
+    // }
   }
 
   public ngOnInit() {
     const $this = this;
-
+    $this.organization = this.organizationService.organization;
+    $this.organizationId = this.userService.user.defaultOrganizationId;
+    if ($this.organization) {
+      $this.organizationId = this.organization._id;
+    }
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'reload-data') {
         // respond to broadcast here
+      }
+      if (msg.name === 'reload-org') {
+        // respond to broadcast here
+        console.log('set organiztion 1');
+        $this.organization = $this.organizationService.organization;
+        $this.organizationId = $this.organization._id;
+        $this.getData();
       }
     });
     this.subscriptions.push(subscription);
@@ -70,6 +91,13 @@ export class HomeListComponent implements OnInit, OnDestroy {
     $this.getData();
   }
 
+  public backButton() {
+    this.navCtrl.back();
+  }
+  public changeOrg() {
+    this.router.navigate(['list-org-screen']);
+  }
+
   public ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
@@ -85,7 +113,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private getData() {
     const $this = this;
     $this.isLoading = true;
-    $this.jobApiService.getStatsByOrganization($this.userService.user.defaultOrganizationId).subscribe((res) => {
+    $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
       $this.isLoading = false;
       console.log('res = ', res);
       $this.userStats = res.userStats;

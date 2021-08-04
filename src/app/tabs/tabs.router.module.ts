@@ -18,6 +18,15 @@ const routes: Routes = [
         ],
       },
       {
+        path: 'organization',
+        children: [
+          {
+            path: '',
+            loadChildren: '../tab-organization/organization.module#OrganizationModule',
+          },
+        ],
+      },
+      {
         path: 'jobs',
         children: [
           {
@@ -54,6 +63,11 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/tabs/home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'list-org-screen',
+    redirectTo: '/tabs/organization',
     pathMatch: 'full',
   },
 ];

@@ -29,7 +29,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private subscriptions = [];
 
   public userStats: IJobUserStats[] = [];
-  public organization: IOrganizationDocument;
   public organizationId = null;
 
   public isLoading = true;
@@ -40,7 +39,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     public globalService: GlobalService,
     private jobApiService: JobApiService,
-    private organizationService: OrganizationService,
+    public organizationService: OrganizationService,
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private router: Router,
@@ -53,22 +52,21 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     const $this = this;
-    $this.organization = this.organizationService.organization;
     $this.organizationId = this.userService.user.defaultOrganizationId;
-    if ($this.organization) {
-      $this.organizationId = this.organization._id;
+    if ($this.organizationService.organization) {
+      $this.organizationId = $this.organizationService.organization._id;
     }
+
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'reload-data') {
         // respond to broadcast here
       }
-      if (msg.name === 'reload-org') {
-        // respond to broadcast here
-        console.log('set organiztion 1');
-        $this.organization = $this.organizationService.organization;
-        $this.organizationId = $this.organization._id;
-        $this.getData();
-      }
+      // if (msg.name === 'reload-org') {
+      //   // respond to broadcast here
+      //   console.log('set organiztion 1');
+      //   $this.organizationId = $this.organizationService.organization._id;
+      //   $this.getData();
+      // }
     });
     this.subscriptions.push(subscription);
 

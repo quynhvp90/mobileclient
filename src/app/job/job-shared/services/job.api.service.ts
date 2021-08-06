@@ -18,7 +18,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 
 import { Observable } from 'rxjs/Observable';
-import { ApiService, ISetting, IFilter } from '../../../shared/services';
+import { ApiService, ISetting, IFilter, OrganizationService } from '../../../shared/services';
 import { ExceptionService } from '../../../shared/services/exception.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
 import { BroadcastService } from '../../../shared/services/broadcast.service';
@@ -39,6 +39,7 @@ export class JobApiService {
     private broadcastService: BroadcastService,
     private globalService: GlobalService,
     private userService: UserService,
+    public organizationService: OrganizationService,
     private storage: Storage,
     private apiService: ApiService) {
 
@@ -47,6 +48,19 @@ export class JobApiService {
       // this.getChallenges({});
     });
   }
+
+  // public getOrganizationUserId() {
+  //   let organizationUserId = null;
+  //   if (this.organizationService && this.organizationService.organization
+  //     && this.organizationService.organization.users && this.userService.user) {
+  //     this.organizationService.organization.users.forEach((user) => {
+  //       if (user.userId === this.userService.user._id) {
+  //         organizationUserId = user._id;
+  //       }
+  //     })
+  //   }
+  //   return organizationUserId;
+  // }
 
   public getStatsByOrganization(organizationId: string): Observable<{
     allJobs: any[], // TO DO
@@ -69,10 +83,33 @@ export class JobApiService {
         }
       });
     }
+    // const organizationUserId = this.getOrganizationUserId();
 
     const setting: ISetting = {
       resource: 'jobs/job-stats',
       queryString: 'organization-id=' + organizationId,
+    };
+    // if (organizationUserId) {
+    //   setting.queryString += '&organization-user-id=' + organizationUserId;
+    // }
+
+    return this.apiService
+      .get(setting).pipe(
+        map((res) => {
+          const result: any = res;
+          return res;
+        })
+      , catchError(this.exceptionService.catchBadResponse),
+    );
+  }
+
+  public getJob(jobId: string): Observable<IJobUserStats> {
+    const $this = this;
+    const msgHdr = jsFilename + 'get Job: ';
+
+    const setting: ISetting = {
+      resource: 'jobs',
+      id: jobId,
     };
 
     return this.apiService

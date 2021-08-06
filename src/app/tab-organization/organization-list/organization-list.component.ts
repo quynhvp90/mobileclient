@@ -74,9 +74,11 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     const msgHdr = 'selectOrg: ';
     console.log(msgHdr, organization);
     const $this = this;
-    $this.organizationService.changeOrganization(organization);
-    const newUrl = '/tabs/home';
-    $this.navCtrl.navigateForward(newUrl);
+    $this.organizationService.changeOrganization(organization).subscribe(() => {
+      const newUrl = '/tabs/home';
+      $this.navCtrl.navigateForward(newUrl);
+    });
+
   }
 
   private getData() {

@@ -4,7 +4,7 @@
       <ion-menu-button style="color: #fff;"></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      {{ organization.name }}
+      {{ organizationService.organization.name }}
     </ion-title>
     <ion-buttons slot="end" (click)="backButton()">
       <ion-button style="color: #fff;">
@@ -19,6 +19,13 @@
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
   <ion-list>
-    <ion-item style="cursor: pointer;" detail="true" *ngFor="let userStat of userStats" (click)="reviewJobApplicants(userStat.jobId)">{{ userStat.title }}</ion-item>
+    <ion-list-header>
+      Job List
+    </ion-list-header>
+    <ion-item style="cursor: pointer;" detail="true" *ngFor="let userStat of userStats" (click)="reviewJobApplicants(userStat)">
+      <ion-label>{{ userStat.title }}</ion-label>
+      <ion-note slot="end" color="primary" *ngIf="userStat.applicationStats.homework">Homework ({{ userStat.applicationStats.applicantsInHomework }})</ion-note>
+      <ion-note slot="end" color="success" *ngIf="userStat.applicationStats.interview">Interview ({{ userStat.applicationStats.applicantsInInterview }})</ion-note>
+    </ion-item>
   </ion-list>
 </ion-content>

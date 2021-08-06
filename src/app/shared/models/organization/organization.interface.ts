@@ -5,6 +5,7 @@ export interface IOrganization {
   logo?: string;
   website?: string;
   users?: [{
+    _id: string,
     userId: string,
     roles: string[],
   }];

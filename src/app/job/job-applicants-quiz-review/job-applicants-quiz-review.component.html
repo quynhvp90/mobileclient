@@ -5,8 +5,8 @@
         Back
      </ion-button>
     </ion-buttons>
-    <ion-title>
-      ~ Job Title ~
+    <ion-title *ngIf="job">
+      {{ job.title }}
     </ion-title>
   </ion-toolbar>
 </ion-header>

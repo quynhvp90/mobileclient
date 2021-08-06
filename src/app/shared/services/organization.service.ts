@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, map, share } from 'rxjs/operators';
+import { catchError, finalize, map, share } from 'rxjs/operators';
 import { IOrganizationDocument } from '../models/organization/organization.interface';
 import { ApiService, ISetting } from './api.service';
 import { BroadcastService } from './broadcast.service';
@@ -33,10 +33,27 @@ export class OrganizationService {
   }
 
   public changeOrganization(organization) {
-    if (organization) {
-      this.organization = organization;
-      this.broadcastService.broadcast('reload-org');
-    }
+    const $this = this;
+    const msgHdr = jsFilename + 'changeOrganization: ';
+    $this.organization = organization;
+    const setting: ISetting = {
+      resource: 'token',
+      queryString: 'organizationId=' + organization._id,
+    };
+    $this.spinnerService.show();
+    return $this.apiService.get(setting)
+      .pipe(
+        map((res) => {
+          console.log(msgHdr + 'res = ', res);
+          const user = res;
+          $this.userService.login(user);
+          return user;
+        }), catchError((err) => {
+          console.log('err = ', err);
+          return $this.exceptionService.catchBadResponse(err);
+        }), finalize(() =>
+          $this.spinnerService.hide(),
+      ));
   }
 
   public getOrganizations(filter) {

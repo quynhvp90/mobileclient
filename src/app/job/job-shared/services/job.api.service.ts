@@ -49,18 +49,18 @@ export class JobApiService {
     });
   }
 
-  public getOrganizationUserId() {
-    let organizationUserId = null;
-    if (this.organizationService && this.organizationService.organization
-      && this.organizationService.organization.users && this.userService.user) {
-      this.organizationService.organization.users.forEach((user) => {
-        if (user.userId === this.userService.user._id) {
-          organizationUserId = user._id;
-        }
-      })
-    }
-    return organizationUserId;
-  }
+  // public getOrganizationUserId() {
+  //   let organizationUserId = null;
+  //   if (this.organizationService && this.organizationService.organization
+  //     && this.organizationService.organization.users && this.userService.user) {
+  //     this.organizationService.organization.users.forEach((user) => {
+  //       if (user.userId === this.userService.user._id) {
+  //         organizationUserId = user._id;
+  //       }
+  //     })
+  //   }
+  //   return organizationUserId;
+  // }
 
   public getStatsByOrganization(organizationId: string): Observable<{
     allJobs: any[], // TO DO
@@ -83,15 +83,15 @@ export class JobApiService {
         }
       });
     }
-    const organizationUserId = this.getOrganizationUserId();
+    // const organizationUserId = this.getOrganizationUserId();
 
     const setting: ISetting = {
       resource: 'jobs/job-stats',
       queryString: 'organization-id=' + organizationId,
     };
-    if (organizationUserId) {
-      setting.queryString += '&organization-user-id=' + organizationUserId;
-    }
+    // if (organizationUserId) {
+    //   setting.queryString += '&organization-user-id=' + organizationUserId;
+    // }
 
     return this.apiService
       .get(setting).pipe(

@@ -114,14 +114,41 @@ export class HomeListComponent implements OnInit, OnDestroy {
     $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
       $this.isLoading = false;
       console.log('res = ', res);
+      const jobStats = [];
       $this.userStats = res.userStats;
+      $this.userStats.forEach((stats) => {
+        let checked = false;
+        stats.applicationStats.homework = false;
+        stats.applicationStats.interview = false;
+        if (stats.applicationStats.applicantsInHomework > 0) {
+          stats.applicationStats.homework = true;
+          jobStats.push(stats);
+          checked = true;
+        }
+        if (stats.applicationStats.applicantsInInterview > 0) {
+          checked = true;
+          if (!stats.applicationStats.homework) {
+            jobStats.push(stats);
+          } else {
+            const copyStats: IJobUserStats = JSON.parse(JSON.stringify(stats)); // deep clone object
+            copyStats.applicationStats.homework = false;
+            copyStats.applicationStats.interview = true;
+            jobStats.push(copyStats);
+          }
+        }
+        if (!checked) {
+          jobStats.push(stats);
+        }
+      });
+      $this.userStats = jobStats;
     });
   }
 
-  public reviewJobApplicants(jobId) {
+  public reviewJobApplicants(job) {
     const $this = this;
-    const newUrl = '/tabs/jobs/' + jobId + '/homework';
+    const newUrl = '/tabs/jobs/' + job.jobId + '/homework';
     $this.navCtrl.navigateForward(newUrl);
+    // this.router.navigate([newUrl], { queryParams: { job: job } });
   }
 
 }

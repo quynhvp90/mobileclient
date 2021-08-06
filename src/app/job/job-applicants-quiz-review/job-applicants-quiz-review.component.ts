@@ -3,7 +3,7 @@ import { BroadcastService } from '../../shared/services';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { IJobUserStats } from '../job-shared/interfaces/job.interface';
-// import { JobApiService } from '../job-shared/services/job.api.service';
+import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
 
 const jsFilename = 'job-applicant-quiz-review: ';
 
@@ -21,7 +21,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   constructor(
     private broadcastService: BroadcastService,
     private navCtrl: NavController,
-    // private jobApiService: JobApiService,
+    private jobApiService: JobApiService,
     private route: ActivatedRoute,
   ) {
     const $this = this;
@@ -51,11 +51,11 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   public getData() {
     const $this = this;
     $this.isLoading = true;
-    // $this.jobApiService.getJob($this.jobId).subscribe((res) => {
-    //   $this.isLoading = false;
-    //   console.log('res = ', res);
-    //   $this.job = res;
-    // });
+    $this.jobApiService.getJob($this.jobId).subscribe((res) => {
+      $this.isLoading = false;
+      console.log('res = ', res);
+      $this.job = res;
+    });
   }
 
   public ngAfterViewInit(): void {

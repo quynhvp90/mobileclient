@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BroadcastService } from '../../shared/services';
 import { NavController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IJobUserStats } from '../job-shared/interfaces/job.interface';
 import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
+import { ApplicationApiService } from '../job-shared/services/application.api.service';
 
 const jsFilename = 'job-applicant-quiz-review: ';
 
@@ -16,27 +17,38 @@ const jsFilename = 'job-applicant-quiz-review: ';
 export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscriptions = [];
   public isLoading = true;
-  public job: IJobUserStats;
   private jobId = null;
+  public mode = 'stage2';
+
   constructor(
     private broadcastService: BroadcastService,
     private navCtrl: NavController,
-    private jobApiService: JobApiService,
+    public jobApiService: JobApiService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     const $this = this;
     $this.jobId = $this.route.snapshot.paramMap.get('id');
+    console.log('$this.jobId = ', $this.jobId);
+    if ($this.router.url.endsWith('homework')) {
+      $this.mode = 'stage2';
+    } else if ($this.router.url.endsWith('interview')) {
+      console.log('end with interview');
+      $this.mode = 'stage3';
+    } else if ($this.router.url.endsWith('qualified')) {
+      $this.mode = 'qualified';
+    }
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
-
+      // TBD
     });
     this.subscriptions.push(subscription);
 
     subscription = this.route.queryParams
       .subscribe((queryParams) => {
+        console.log('queryParams = ', queryParams);
         if (queryParams['id']) {
           // getdata
           console.log('id =============', queryParams['id']);
-          
         }
       });
     this.subscriptions.push(subscription);
@@ -54,7 +66,6 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     $this.jobApiService.getJob($this.jobId).subscribe((res) => {
       $this.isLoading = false;
       console.log('res = ', res);
-      $this.job = res;
     });
   }
 

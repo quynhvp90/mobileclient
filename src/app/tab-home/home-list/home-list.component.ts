@@ -17,6 +17,12 @@ import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
 import { IJobUserStats } from 'src/app/job/job-shared/interfaces/job.interface';
 import IOrganizationDocument from 'src/app/shared/models/organization/organization.interface';
 
+interface IJobToReview {
+  jobId: string;
+  title: string;
+  count: number;
+  reviewType: string;
+};
 
 @Component({
   selector: 'home-list',
@@ -28,7 +34,8 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private loader: HTMLIonLoadingElement = null;
   private subscriptions = [];
 
-  public userStats: IJobUserStats[] = [];
+  public jobsToReview: IJobToReview[] = [];
+
   public organizationId = null;
 
   public isLoading = true;
@@ -113,40 +120,40 @@ export class HomeListComponent implements OnInit, OnDestroy {
     $this.isLoading = true;
     $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
       $this.isLoading = false;
-      console.log('res = ', res);
-      const jobStats = [];
-      $this.userStats = res.userStats;
-      $this.userStats.forEach((stats) => {
-        let checked = false;
-        stats.applicationStats.homework = false;
-        stats.applicationStats.interview = false;
-        if (stats.applicationStats.applicantsInHomework > 0) {
-          stats.applicationStats.homework = true;
-          jobStats.push(stats);
-          checked = true;
+      this.jobsToReview = [];
+      res.userStats.forEach((stats) => {
+        if (stats.applicationStats.applicantsInHomeworkRequiringAction > 0) {
+          this.jobsToReview.push({
+            jobId: stats.jobId,
+            title: stats.title,
+            count: stats.applicationStats.applicantsInHomeworkRequiringAction,
+            reviewType: 'homework'
+          });
         }
-        if (stats.applicationStats.applicantsInInterview > 0) {
-          checked = true;
-          if (!stats.applicationStats.homework) {
-            jobStats.push(stats);
-          } else {
-            const copyStats: IJobUserStats = JSON.parse(JSON.stringify(stats)); // deep clone object
-            copyStats.applicationStats.homework = false;
-            copyStats.applicationStats.interview = true;
-            jobStats.push(copyStats);
-          }
+        if (stats.applicationStats.applicantsInInterviewRequiringAction > 0) {
+          this.jobsToReview.push({
+            jobId: stats.jobId,
+            title: stats.title,
+            count: stats.applicationStats.applicantsInInterviewRequiringAction,
+            reviewType: 'interview'
+          });
+
         }
-        if (!checked) {
-          jobStats.push(stats);
+        if (stats.applicationStats.applicantsInQualifiedRequiringAction > 0) {
+          this.jobsToReview.push({
+            jobId: stats.jobId,
+            title: stats.title,
+            count: stats.applicationStats.applicantsInQualifiedRequiringAction,
+            reviewType: 'qualified'
+          });
         }
       });
-      $this.userStats = jobStats;
     });
   }
 
-  public reviewJobApplicants(job) {
+  public reviewJobApplicants(jobToReview: IJobToReview) {
     const $this = this;
-    const newUrl = '/tabs/jobs/' + job.jobId + '/homework';
+    const newUrl = '/tabs/jobs/' + jobToReview.jobId + '/' + jobToReview.reviewType;
     $this.navCtrl.navigateForward(newUrl);
     // this.router.navigate([newUrl], { queryParams: { job: job } });
   }

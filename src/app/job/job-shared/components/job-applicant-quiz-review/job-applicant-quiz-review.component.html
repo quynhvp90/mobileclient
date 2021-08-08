@@ -1,21 +1,25 @@
 <div class="job-applicant-quiz-review">
   <ion-toolbar class="top-toolbar">
     <ion-buttons slot="start">
-      <ion-button style="color: #fff;">
+      <ion-button style="color: #fff;" [disabled]="currentApplicationNumber === 1" (click)="previousApplicant()">
         <ion-icon name="arrow-dropleft"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>
-      Applicant 1 of 2
+      Applicant {{ currentApplicationNumber }} of {{ totalApplicationNumber }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button style="color: #fff;">
+      <ion-button style="color: #fff;" [disabled]="currentApplicationNumber === totalApplicationNumber" (click)="nextApplicant()">
         <ion-icon name="arrow-dropright"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+
+  <ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
+
   <ion-list>
-    <ion-item detail="true" (click)="viewHomework()">Homework Question 1</ion-item>
-    <ion-item detail="true" (click)="viewHomework()">Homework Question 2</ion-item>
+    <ion-item *ngFor="let question of jobApiService.foundJob.tests.homework.questions; index as i" detail="true" (click)="viewHomework()">
+      Question #{{ (i + 1) }}: {{ question.question }}
+    </ion-item>
   </ion-list>
 </div>

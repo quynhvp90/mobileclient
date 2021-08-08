@@ -5,12 +5,15 @@
         Back
      </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="job">
-      {{ job.title }}
+    <ion-title>
+      {{ mode }} - {{ jobApiService.foundJob?.title }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content style="--background: #e6ebf1;" class="challenge-list">
-  <app-job-applicant-quiz-review></app-job-applicant-quiz-review>
+  <ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
+  <ng-container *ngIf="!isLoading">
+    <app-job-applicant-quiz-review [mode]="mode"></app-job-applicant-quiz-review>
+  </ng-container>
 </ion-content>

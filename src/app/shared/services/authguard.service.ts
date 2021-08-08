@@ -44,13 +44,25 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
         if (foundUser) {
           isLoggedIn = true;
         }
-        this.organizationService.getOrganizations(null).subscribe((res) => {
-          observer.next(isLoggedIn);
-          observer.complete();
-          if (!isLoggedIn) {
-            this.router.navigate(['/intro'], { queryParams: { redirectTo: state.url } });
-          }
-        });
+
+        observer.next(isLoggedIn);
+        observer.complete();
+
+        if (!isLoggedIn) {
+          this.router.navigate(['/intro'], { queryParams: { redirectTo: state.url } });
+          return false;
+        }
+
+        return true;
+
+        // console.log('calling organizationService.getOrganizations');
+        // this.organizationService.getOrganizations(null).subscribe((res) => {
+        //   observer.next(isLoggedIn);
+        //   observer.complete();
+        //   if (!isLoggedIn) {
+        //     this.router.navigate(['/intro'], { queryParams: { redirectTo: state.url } });
+        //   }
+        // });
       });
     });
   }

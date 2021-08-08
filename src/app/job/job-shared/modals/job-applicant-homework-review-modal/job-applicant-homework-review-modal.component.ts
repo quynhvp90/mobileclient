@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService, BroadcastService, IonicAlertService, IUpdatePriority, ToastService, UserService, WorkoutService, AnimationService } from '../../../../shared/services';
 import { ModalController  } from '@ionic/angular';
+import { ApplicationApiService } from '../../services/application.api.service';
+import { JobApiService } from '../../services/job.api.service';
 
 const jsFilename = 'job-applicant-homework-review: ';
 
@@ -21,6 +23,8 @@ export class JobApplicantHomeworkReviewModalComponent implements OnInit, OnDestr
     private broadcastService: BroadcastService,
     private ionicAlertService: IonicAlertService,
     private activityService: ActivityService,
+    public applicationApiService: ApplicationApiService,
+    public jobApiService: JobApiService,
     private modalController: ModalController,
     private animationService: AnimationService,
   ) {

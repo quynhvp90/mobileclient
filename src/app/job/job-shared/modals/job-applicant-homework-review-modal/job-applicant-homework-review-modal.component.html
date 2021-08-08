@@ -10,7 +10,7 @@
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="save()">
-        Next
+        Save
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -21,6 +21,18 @@
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
   <div *ngIf="!saving">
-    Homework Review Screen
+    Homework/Interview/Qualified Review Screen
+
+    <h1>Job Homework</h1>
+    <pre>
+      {{ jobApiService.foundJob.tests.homework | json}}
+    </pre>
+
+    <h1>Applicant Homework</h1>
+    <pre>
+      {{ applicationApiService.foundApplication.results.homework | json}}
+    </pre>
+
+
   </div>
 </ion-content>

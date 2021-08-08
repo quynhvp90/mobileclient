@@ -25,14 +25,7 @@ export class UserService {
   public isLoggedIn = false;
 
   public user: IUserPublic;
-  private getUserObservable: Observable<boolean>;
-  private confirmObservable: Observable<String | Boolean>;
-  private passwordResetObservable: Observable<boolean>;
   private intercomBooted = false;
-  private getCurrentUserObservable: Observable<IUserDocument>;
-  private addProviderObservable: Observable<boolean>;
-  private removeProviderObservable: Observable<boolean>;
-  private sendNewsletterObservable: Observable<boolean>;
 
   constructor(
     private http: HttpClient,
@@ -48,14 +41,6 @@ export class UserService {
     // private loaderService: LoaderService
   ) {
     const $this = this;
-
-    this.broadcastService.subjectUniversal.subscribe((msg) => {
-      if (msg.name === 'new-recommendation') {
-        $this.user.stats['reks-sent'] += 1;
-      } else if (msg.name === 'new-push-token') {
-        $this.setPushToken(msg.message.token);
-      }
-    });
   }
 
   public auth(): Observable<IUserDocument> {
@@ -74,7 +59,7 @@ export class UserService {
     const $this = this;
     $this.spinnerService.show();
     const url = 'users/' + userId + '/confirm';
-    $this.confirmObservable = <Observable<String | Boolean>> $this.apiService
+    return $this.apiService
       .post({
         resource: url,
         payload: {
@@ -86,7 +71,6 @@ export class UserService {
         , catchError($this.exceptionService.catchBadResponse)
         , finalize(() => $this.spinnerService.hide()),
       );
-    return $this.confirmObservable;
   }
 
   public hasStoredToken(): boolean {
@@ -103,53 +87,12 @@ export class UserService {
     }
   }
 
-  public setPushToken(token: string) {
-    const msgHdr = jsFilename + 'setPushToken: ';
-    console.log(msgHdr + 'token = ', token);
-    const $this = this;
-    let device = 'ios';
-    if ($this.globalService.isAndroid) {
-      device = 'android';
-    }
-
-    if ($this.user && $this.user._id) {
-      const userId = $this.user._id;
-      // $this.updateIntercom();
-
-      return $this.apiService
-        .post({
-          resource: `users/${ userId }/push-tokens`,
-          payload: {
-            device: device,
-            pushToken: token,
-          },
-        }).subscribe((respPostPuskToken) => {
-          console.log('respPostPuskToken = ', respPostPuskToken);
-        });
-    }
-  }
-
-  public setActiveWorkout(workout: IWorkoutDocument) {
-    const $this = this;
-    if ($this.user.activeWorkoutId === workout._id) {
-      return;
-    }
-
-    $this.user.activeWorkoutId = workout._id;
-    $this.patch({
-      action: 'update-activeWorkoutId',
-      activeWorkoutId: workout._id,
-    }).subscribe();
-
-  }
-
   public logout(): void {
     const msgHdr = jsFilename + 'logout: ';
 
     this.isLoggedIn = false;
     this.globalService.isLoggedIn = false;
     this.user = null;
-    this.getUserObservable = null;
     try {
       localStorage.removeItem('token');
       this.storage.remove('token');
@@ -187,7 +130,7 @@ export class UserService {
       email,
     };
 
-    $this.passwordResetObservable = this.apiService
+    return this.apiService
       .post({
         resource: 'users/reset',
         payload: payload,
@@ -198,7 +141,6 @@ export class UserService {
         , catchError(this.exceptionService.catchBadResponse)
         , finalize(() => this.spinnerService.hide()),
       );
-    return $this.passwordResetObservable;
   }
 
   public updateUser(user: any): Observable<boolean> {
@@ -269,7 +211,7 @@ export class UserService {
     const $this = this;
     const userId = $this.user._id;
 
-    this.addProviderObservable = this.apiService
+    return this.apiService
       .post({
         resource: `users/${ userId }/providers`,
         payload: {
@@ -287,14 +229,13 @@ export class UserService {
         , catchError(this.exceptionService.catchBadResponse)
         , finalize(() => this.spinnerService.hide()),
       );
-    return this.addProviderObservable;
   }
 
   public removeProvider(provider: string) {
     const $this = this;
     const userId = $this.user._id;
 
-    this.removeProviderObservable = this.apiService
+    this.apiService
       .delete({
         resource: `users/${ userId }/providers/${ provider }`,
       }).pipe(
@@ -304,68 +245,6 @@ export class UserService {
       , catchError(this.exceptionService.catchBadResponse)
       , finalize(() => this.spinnerService.hide()),
     );
-    return this.removeProviderObservable;
-  }
-
-  public sendNewsLetter() {
-    const $this = this;
-    const userId = $this.user._id;
-
-    this.sendNewsletterObservable = this.apiService
-      .post({
-        resource: `users/${ userId }/subscriptions`,
-        payload: {},
-      }).pipe(
-        map((res: Response) => {
-          let validResponse = false;
-          if (res && res.status === 204) {
-            validResponse = true;
-          }
-          return validResponse;
-        })
-        , catchError(this.exceptionService.catchBadResponse)
-        , finalize(() => this.spinnerService.hide()),
-      );
-    return this.sendNewsletterObservable;
-  }
-
-  public createInvitationLink() {
-    const $this = this;
-    const userId = $this.user._id;
-
-    return this.apiService
-      .post({
-        resource: 'users/invitations',
-        payload: {},
-      }).pipe(
-        map((res: Response) => {
-          if (!res) {
-            return;
-          }
-          return res;
-        })
-        , catchError(this.exceptionService.catchBadResponse)
-        , finalize(() => this.spinnerService.hide()),
-      );
-  }
-
-  public getInvitation(invitationId: string) {
-    const $this = this;
-    const userId = $this.user._id;
-
-    return this.apiService
-      .get({
-        resource: 'users/invitations/' + invitationId,
-      }).pipe(
-        map((res: Response) => {
-          if (!res) {
-            return;
-          }
-          return res;
-        })
-        , catchError(this.exceptionService.catchBadResponse)
-        , finalize(() => this.spinnerService.hide()),
-      );
   }
 
   // public updateIntercom() {
@@ -425,7 +304,7 @@ export class UserService {
 
     console.log(msgHdr);
 
-    $this.getCurrentUserObservable = $this.apiService
+    return $this.apiService
       .get({
         resource: 'users/me?timezoneoffset=' + timezoneOffset,
       }).pipe(
@@ -438,7 +317,6 @@ export class UserService {
         , catchError(this.exceptionService.catchBadResponse)
         , share(),
       );
-    return $this.getCurrentUserObservable;
   }
 
   private initAfterLogin() {
@@ -491,59 +369,5 @@ export class UserService {
         })
       , catchError(this.exceptionService.catchBadResponse),
     );
-  }
-
-  public getTagLine(lastActivityDetail: IUserLastActivityDetail) {
-    if (!lastActivityDetail) {
-      return '';
-    }
-    const tagLine = 'Last did ' + lastActivityDetail.count + ' ' + lastActivityDetail.logLabel + ', ' + moment(lastActivityDetail.date).fromNow();
-    return tagLine;
-  }
-
-  public promptName(options: {
-    title?: string,
-    subject?: string,
-  }): Promise<string> {
-    const $this = this;
-
-    const title = options.title || 'Please type in your name';
-    const subject = options.subject || 'Feel free to name yourself something simple and fun <span class="mr-5">😋</span> as long as your friends know who you are 😊';
-
-    return new Promise((resolve, reject) => {
-      this.ionicAlertService.presentAlertPrompt(title, subject, 'name', '', (res) => {
-        if (!res) {
-          return reject({
-            action: 'cancel',
-          });
-        }
-
-        if (!res.name || res.name.length < 3) {
-          $this.ionicAlertService.presentAlert('Sorry', 'Please enter at least 3 characters');
-          return reject({
-            action: 'validation',
-          });
-        }
-
-        $this.patch({
-          action: 'update-misc',
-          publicName: res.name,
-        }).subscribe((result) => {
-          if (result) {
-            $this.user.publicName = res.name;
-            return resolve(res.name);
-          }
-          return reject({
-            action: 'server',
-          });
-        }, (err) => {
-          return reject({
-            action: 'server',
-            err: err,
-          });
-        });
-      });
-    });
-
   }
 }

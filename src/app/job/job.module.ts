@@ -15,6 +15,7 @@ const components: any[] = [
 const routes: Routes = [
   { path: ':id/homework', component: JobApplicantsQuizReviewComponent },
   { path: ':id/interview', component: JobApplicantsQuizReviewComponent },
+  { path: ':id/qualified', component: JobApplicantsQuizReviewComponent },
 ];
 
 @NgModule({

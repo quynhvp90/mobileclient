@@ -2,6 +2,8 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation }
 import { ModalController } from '@ionic/angular';
 import { BroadcastService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
+import { ApplicationApiService } from '../../services/application.api.service';
+import { JobApiService } from '../../services/job.api.service';
 
 const jsFilename = 'job-applicant-quiz-review: ';
 
@@ -12,11 +14,21 @@ const jsFilename = 'job-applicant-quiz-review: ';
   encapsulation: ViewEncapsulation.None,
 })
 export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, AfterViewInit {
+  @Input() public mode = 'stage2';
+
   private subscriptions = [];
+
+  public isLoading = true;
+
+  public currentApplicationNumber: number = 1;
+  public totalApplicationNumber: number;
+  public foundApplications: any[];
 
   constructor(
     private broadcastService: BroadcastService,
     private modalController: ModalController,
+    public jobApiService: JobApiService,
+    private applicationApiService: ApplicationApiService,
   ) {
     const $this = this;
 
@@ -29,11 +41,35 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public ngOnInit(): void {
     const $this = this;
     const msgHdr = jsFilename + 'onInit: ';
+
+    $this.getData();
   }
 
   public ngAfterViewInit(): void {
     const $this = this;
     const msgHdr = 'ngAfterViewInit: ';
+  }
+
+  private getData() {
+    const $this = this;
+
+    $this.currentApplicationNumber = 1;
+    $this.isLoading = true;
+    $this.applicationApiService.getApplicationsToReview($this.jobApiService.foundJob._id, this.mode).subscribe((result) => {
+      console.log('result = ', result);
+      $this.isLoading = false;
+      $this.totalApplicationNumber = result.count;
+      $this.foundApplications = result.items;
+      $this.getCurrentApplication();
+    });
+  }
+
+  private getCurrentApplication() {
+    const $this = this;
+    // @Quynh - if $this.currentApplicationNumber > $this.foundApplications.length, then you need to get next set of applications
+    $this.applicationApiService.getApplication($this.foundApplications[$this.currentApplicationNumber - 1]._id).subscribe((foundApplication) => {
+      console.log('foundApplication = ', foundApplication);
+    });
   }
 
   private updateData() {
@@ -45,6 +81,17 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  public nextApplicant() {
+    this.currentApplicationNumber += 1;
+    this.getCurrentApplication();
+  }
+
+
+  public previousApplicant() {
+    this.currentApplicationNumber -= 1;
+    this.getCurrentApplication();
   }
 
   public async viewHomework() {

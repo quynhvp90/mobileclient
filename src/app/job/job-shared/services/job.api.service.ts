@@ -33,6 +33,8 @@ const jsFilename = 'ChallengeService: ';
 @Injectable()
 export class JobApiService {
 
+  public foundJob: any;
+
   constructor(
     private exceptionService: ExceptionService,
     private spinnerService: SpinnerService,
@@ -116,6 +118,7 @@ export class JobApiService {
       .get(setting).pipe(
         map((res) => {
           const result: any = res;
+          $this.foundJob = res;
           return res;
         })
       , catchError(this.exceptionService.catchBadResponse),

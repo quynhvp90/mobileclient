@@ -43,30 +43,30 @@ export class InviteService {
   }
 
   public inviteViaText() {
-    this.userService.createInvitationLink().subscribe((link) => {
-      console.log('link = ', link);
-      if (!link) {
-        return; // was error;
-      }
+    // this.userService.createInvitationLink().subscribe((link) => {
+    //   console.log('link = ', link);
+    //   if (!link) {
+    //     return; // was error;
+    //   }
 
-      this.shareService.showSharePopup({
-        text: 'Join me on LogReps, a super easy mobile app to help you get in shape',
-        url: link,
-        dialogTitle: link,
-        clipboardValue: link,
-        clipboardConfirmText: 'The link has been copied to your clipboard',
-      });
-    });
+    //   this.shareService.showSharePopup({
+    //     text: 'Join me on LogReps, a super easy mobile app to help you get in shape',
+    //     url: link,
+    //     dialogTitle: link,
+    //     clipboardValue: link,
+    //     clipboardConfirmText: 'The link has been copied to your clipboard',
+    //   });
+    // });
   }
 
   public showActionsheet() {
     const $this = this;
     if (this.userService.user.publicName.toLowerCase() === 'someone') {
-      this.userService.promptName({
-        title: 'Your friends will want to know who this is from.  Time to name yourself on LogReps!',
-      }).then((res) => {
-        $this.showActionsheetContinue();
-      });
+      // this.userService.promptName({
+      //   title: 'Your friends will want to know who this is from.  Time to name yourself on LogReps!',
+      // }).then((res) => {
+      //   $this.showActionsheetContinue();
+      // });
 
       return;
     }

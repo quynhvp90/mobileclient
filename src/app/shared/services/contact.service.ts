@@ -315,7 +315,7 @@ export class ContactService {
         tagLine = 'You have not yet accepted this invitation sent ' + moment(foundContact.created).fromNow();
       } else if (cleanContact.lastActivityDetail && cleanContact.lastActivityDetail.count) {
         const lastActivityDetail = cleanContact.lastActivityDetail;
-        tagLine = this.userService.getTagLine(lastActivityDetail);
+        // tagLine = this.userService.getTagLine(lastActivityDetail);
       }
 
       cleanContact.lookups = {

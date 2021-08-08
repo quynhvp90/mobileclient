@@ -39,7 +39,7 @@ export class WorkoutService {
   public setActiveWorkout(activeWorkout: IWorkoutDocument) {
     const $this = this;
     const msgHdr = jsFilename + 'setActiveWorkout: ';
-    $this.userService.setActiveWorkout(activeWorkout);
+    // $this.userService.setActiveWorkout(activeWorkout);
     $this.activeWorkout = activeWorkout;
   }
 

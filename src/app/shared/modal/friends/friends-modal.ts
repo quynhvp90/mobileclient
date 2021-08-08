@@ -126,20 +126,20 @@ export class FriendsModal implements OnInit, OnDestroy {
   }
 
   public addViaText() {
-    this.userService.createInvitationLink().subscribe((link) => {
-      console.log('link = ', link);
-      if (!link) {
-        return; // was error;
-      }
+    // this.userService.createInvitationLink().subscribe((link) => {
+    //   console.log('link = ', link);
+    //   if (!link) {
+    //     return; // was error;
+    //   }
 
-      this.shareService.showSharePopup({
-        text: 'Join me on LogReps, a super easy mobile app to help you get in shape',
-        url: link,
-        dialogTitle: link,
-        clipboardValue: link,
-        clipboardConfirmText: 'The link has been copied to your clipboard',
-      });
-    });
+    //   this.shareService.showSharePopup({
+    //     text: 'Join me on LogReps, a super easy mobile app to help you get in shape',
+    //     url: link,
+    //     dialogTitle: link,
+    //     clipboardValue: link,
+    //     clipboardConfirmText: 'The link has been copied to your clipboard',
+    //   });
+    // });
   }
 
   public async addViaEmail() {

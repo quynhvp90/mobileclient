@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import IApplicationDocument from 'src/app/shared/models/application/application.interface';
 import { BroadcastService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
 import { ApplicationApiService } from '../../services/application.api.service';
@@ -22,7 +23,9 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   public currentApplicationNumber: number = 1;
   public totalApplicationNumber: number;
-  public foundApplications: any[];
+  public currentApplication: IApplicationDocument;
+  public foundApplications: IApplicationDocument[];
+  public questions: any = {};
 
   constructor(
     private broadcastService: BroadcastService,
@@ -66,10 +69,54 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   private getCurrentApplication() {
     const $this = this;
-    // @Quynh - if $this.currentApplicationNumber > $this.foundApplications.length, then you need to get next set of applications
-    $this.applicationApiService.getApplication($this.foundApplications[$this.currentApplicationNumber - 1]._id).subscribe((foundApplication) => {
-      console.log('foundApplication = ', foundApplication);
-    });
+    if ($this.foundApplications[$this.currentApplicationNumber - 1]) {
+      $this.applicationApiService.getApplication($this.foundApplications[$this.currentApplicationNumber - 1]._id).subscribe((foundApplication) => {
+        console.log('foundApplication = ', foundApplication);
+        $this.currentApplication = foundApplication;
+        if (foundApplication && foundApplication.results) {
+          // home work
+          if (foundApplication.results.homework && foundApplication.results.homework.length > 0) {
+            foundApplication.results.homework.forEach((hw) => {
+              if (!$this.questions[hw.questionId]) {
+                $this.questions[hw.questionId] = {}
+              }
+              $this.questions[hw.questionId].response = hw.response;
+              $this.questions[hw.questionId].dateSubmitted = hw.dateSubmitted;
+            });
+            if (foundApplication.results.ratings && foundApplication.results.ratings.homework
+              && foundApplication.results.ratings.homework.questions) {
+              foundApplication.results.ratings.homework.questions.forEach((question) => {
+                if (!$this.questions[question.questionId]) {
+                  $this.questions[question.questionId] = {}
+                }
+                $this.questions[question.questionId].rate = question.rating;
+              });
+            }
+          }
+
+          // interview
+          if (foundApplication.results.interview && foundApplication.results.interview.length > 0) {
+            foundApplication.results.interview.forEach((int) => {
+              if (!$this.questions[int.questionId]) {
+                $this.questions[int.questionId] = {}
+              }
+              $this.questions[int.questionId].response = int.response;
+              $this.questions[int.questionId].dateSubmitted = int.dateSubmitted;
+            });
+            if (foundApplication.results.ratings && foundApplication.results.ratings.interview
+              && foundApplication.results.ratings.interview.questions) {
+              foundApplication.results.ratings.interview.questions.forEach((question) => {
+                if (!$this.questions[question.questionId]) {
+                  $this.questions[question.questionId] = {}
+                }
+                $this.questions[question.questionId].rate = question.rating;
+              });
+            }
+          }
+          
+        }
+      });
+    }
   }
 
   private updateData() {
@@ -84,14 +131,19 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   }
 
   public nextApplicant() {
-    this.currentApplicationNumber += 1;
-    this.getCurrentApplication();
+    if ((this.currentApplicationNumber + 1) <= this.foundApplications.length) {
+      this.currentApplicationNumber += 1;
+      this.getCurrentApplication();
+    }
   }
 
 
   public previousApplicant() {
-    this.currentApplicationNumber -= 1;
-    this.getCurrentApplication();
+    if (this.currentApplicationNumber > 1) {
+      this.currentApplicationNumber -= 1;
+      this.getCurrentApplication();
+    }
+
   }
 
   public async viewHomework() {

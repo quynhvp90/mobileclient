@@ -46,7 +46,7 @@ export class OrganizationService {
         map((res) => {
           console.log(msgHdr + 'res = ', res);
           const user = res;
-          $this.userService.login(user);
+          $this.userService.updateToken(user);
           return user;
         }), catchError((err) => {
           console.log('err = ', err);

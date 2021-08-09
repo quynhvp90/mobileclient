@@ -1,3 +1,19 @@
 .job-applicant-quiz-review {
-
+  ion-item {
+    .item-label {
+      .question-answer {
+        font-weight: bold;
+      }
+      .answer {
+        padding-left: 5px;
+      }
+      h2 {
+        font-weight: bold;
+      }
+      h3 {
+        padding-left: 5px;
+        color: gray;
+      }
+    }
+  }
 }

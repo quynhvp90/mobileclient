@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Back
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #e6ebf1">
+  <div *ngIf="saving">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!saving">
+    Homework/Interview/Qualified Review Screen
+
+    <h1>Job Homework</h1>
+    <pre>
+      {{ jobApiService.foundJob.tests.homework | json}}
+    </pre>
+
+    <h1>Applicant Homework</h1>
+    <pre>
+      {{ applicationApiService.foundApplication.results.homework | json}}
+    </pre>
+
+
+  </div>
+</ion-content>

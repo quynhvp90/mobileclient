@@ -6,10 +6,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { JobApplicantQuizReviewComponent } from './components/job-applicant-quiz-review/job-applicant-quiz-review.component';
 import { IonicModule } from '@ionic/angular';
 import { JobApplicantHomeworkReviewModalComponent } from './modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
+import { JobApplicantReviewModalComponent } from './modals/job-applicant-review-modal/job-applicant-review-modal.component';
 
 const components: any[] = [
   JobApplicantQuizReviewComponent,
   JobApplicantHomeworkReviewModalComponent,
+  JobApplicantReviewModalComponent,
+  StarRatingComponent,
 ];
 
 

@@ -18,30 +18,17 @@
   <ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
 
   <ion-list>
-    <ion-item *ngFor="let question of jobApiService.foundJob.tests.homework.questions; index as i" detail="true" (click)="viewHomework()">
+    <ion-item *ngFor="let question of jobApiService.foundJob.tests.homework.questions; index as i" detail="true" (click)="viewHomework(question)">
       <ion-label class="item-label">
         <h2>Question #{{ (i + 1) }}</h2>
         <h3>{{ question.question }}</h3>
         <p class="question-answer">Answer: </p>
         <p class="answer" *ngIf="questions[question._id]">{{ questions[question._id].response }}</p>
         <h4 style="font-weight: bold;">You Rated</h4>
-        <!-- <bar-rating rate="3" max="4" theme="'movie'" showText="true"></bar-rating> -->
-        <!-- <ionic4-star-rating
-          readonly="false"
-          rating="3"
-          fontSize = "32px">
-        </ionic4-star-rating> -->
+        <ng-container *ngIf="questions[question._id]">
+          <star-rating [rate]="questions[question._id].rate"></star-rating>
+        </ng-container>
       </ion-label>
-      <!-- <ion-card>
-        <ion-card-header>
-          <ion-card-title>Question #{{ (i + 1) }}</ion-card-title>
-          <ion-card-subtitle>{{ question.question }}</ion-card-subtitle>
-        </ion-card-header>
-      
-        <ion-card-content>
-          {{ questions[question._id].response }}
-        </ion-card-content>
-      </ion-card> -->
     </ion-item>
   </ion-list>
 </div>

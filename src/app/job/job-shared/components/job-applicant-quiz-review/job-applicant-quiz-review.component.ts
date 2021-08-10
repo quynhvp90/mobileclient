@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
 import { BroadcastService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
+import { JobApplicantReviewModalComponent } from '../../modals/job-applicant-review-modal/job-applicant-review-modal.component';
 import { ApplicationApiService } from '../../services/application.api.service';
 import { JobApiService } from '../../services/job.api.service';
 
@@ -115,6 +116,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           }
           
         }
+        console.log('$this.questions = ', $this.questions);
       });
     }
   }
@@ -146,14 +148,19 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   }
 
-  public async viewHomework() {
+  public async viewHomework(question) {
     const msgHdr = jsFilename + 'viewHomework: ';
     const $this = this;
+    const questionApplicant = {
+      question: question,
+      application: $this.currentApplication
+    }
     const modal: HTMLIonModalElement =
       await $this.modalController.create({
-        component: JobApplicantHomeworkReviewModalComponent,
+        component: JobApplicantReviewModalComponent,
         componentProps: {
           autoStart: false,
+          appQuestion: questionApplicant,
         },
       });
 

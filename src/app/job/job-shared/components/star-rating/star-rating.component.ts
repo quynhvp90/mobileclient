@@ -42,7 +42,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
       $this.isApplicable = false;
       return;
     }
-    if ($this.rate === 0) {
+    if (!$this.rate || $this.rate === 0) {
       $this.hasResults = false;
       return;
     }

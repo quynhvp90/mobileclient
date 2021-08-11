@@ -1,8 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { BroadcastService } from '../../../../shared/services';
-import { ApplicationApiService } from '../../services/application.api.service';
-import { JobApiService } from '../../services/job.api.service';
+import { BroadcastService } from '../../services';
 
 const jsFilename = 'star-rating: ';
 
@@ -13,18 +10,15 @@ const jsFilename = 'star-rating: ';
   encapsulation: ViewEncapsulation.None,
 })
 export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() 
-  public rate = 0;
+  @Input() public rate = 0;
+  @Input() public displayWords = false;
+  @Input() public action = false;
   public isApplicable = true;
-  public displayWords = false;
-  public hasResults = true;
+  // public hasResults = true;
   private subscriptions = [];
   private positives = [];
   constructor(
     private broadcastService: BroadcastService,
-    private modalController: ModalController,
-    public jobApiService: JobApiService,
-    private applicationApiService: ApplicationApiService,
   ) {
     const $this = this;
 
@@ -42,10 +36,10 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
       $this.isApplicable = false;
       return;
     }
-    if (!$this.rate || $this.rate === 0) {
-      $this.hasResults = false;
-      return;
-    }
+    // if (!$this.rate || $this.rate === 0) {
+    //   $this.hasResults = false;
+    //   return;
+    // }
     $this.positives = $this.computeStars($this.rate, 5);
   }
 
@@ -62,6 +56,9 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public computeStars(rate, max?) {
     let maxRate = 5;
+    if (!rate) {
+      rate = 0;
+    }
     if (max) {
       maxRate = max;
     }

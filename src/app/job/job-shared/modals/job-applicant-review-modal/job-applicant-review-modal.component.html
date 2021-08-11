@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>
-      
+      {{ (index + 1) }} of {{ total }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="save()">
@@ -16,23 +16,65 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="--background: #e6ebf1">
+<ion-content class="job-applicant-review-modal">
   <div *ngIf="saving">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
-  <div *ngIf="!saving">
-    Homework/Interview/Qualified Review Screen
-
-    <h1>Job Homework</h1>
-    <pre>
-      {{ jobApiService.foundJob.tests.homework | json}}
-    </pre>
-
-    <h1>Applicant Homework</h1>
-    <pre>
-      {{ applicationApiService.foundApplication.results.homework | json}}
-    </pre>
-
-
+  <div *ngIf="!saving && question" class="content-modal">
+    <ion-row class="row-question-title">
+      <div>Question #{{ (index + 1) }} of {{ total }} </div>
+      <p>Choose to either record of type your question (or do both)</p>
+    </ion-row>
+    <ion-row class="row-question-question">
+      <div>{{ question.question }}</div>
+    </ion-row>
+    <ion-row>
+      <div *ngIf="question.explanation" class="alert alert-info" style="width: 100%; padding: 5px; margin-right: 10px; margin-left: 10px;">
+        <b style="font-size: 10px;">Explanation:</b>
+        <div style="overflow-y: auto;">
+          {{ question.explanation }}
+        </div>
+      </div>
+    </ion-row>
+    <ion-row class="row-quesiton-content">
+      <ion-col>
+        <ion-row class="answer-header">
+          <p class="answer-header-title">Answer #{{ currentAnswerIndex + 1 }} of {{ answers.length }}</p>
+          <div class="answer-header-button">
+            <ion-buttons style="float: left;">
+              <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === 0" (click)="previousApplicant()">
+                <ion-icon name="arrow-dropleft"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-buttons>
+              <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === (answers.length - 1)" (click)="nextApplicant()">
+                <ion-icon name="arrow-dropright"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+          
+        </ion-row>
+        <ion-row class="answer-content">
+          <p>{{ question.question }}</p>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row style="position: fixed; bottom: 10px; left: 10px; right: 10px;">
+      <ion-col size="12" style="padding: 0;">
+        <ion-row class="row-question-rate">
+          <ion-col size="12" class="rating-title">Rate this answer</ion-col>
+          <ion-col size="12">
+            <ng-container>
+              <star-rating [rate]="3"></star-rating>
+            </ng-container>
+          </ion-col>
+    
+        </ion-row>
+        <ion-row class="row-question-comment">
+          <ion-textarea placeholder="Comments"></ion-textarea>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    
   </div>
 </ion-content>

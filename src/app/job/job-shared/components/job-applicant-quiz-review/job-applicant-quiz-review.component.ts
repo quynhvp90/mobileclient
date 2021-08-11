@@ -21,6 +21,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   private subscriptions = [];
 
   public isLoading = true;
+  public jobQuestions: any[] = [];
 
   public currentApplicationNumber: number = 1;
   public totalApplicationNumber: number;
@@ -45,7 +46,13 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public ngOnInit(): void {
     const $this = this;
     const msgHdr = jsFilename + 'onInit: ';
-
+    if ($this.mode === 'stage2') {
+      $this.jobQuestions = $this.jobApiService.foundJob.tests.homework.questions;
+    } else if ($this.mode === 'stage3') {
+      $this.jobQuestions = $this.jobApiService.foundJob.tests.interview.questions;
+    } else if ($this.mode === 'qualified') {
+      $this.jobQuestions = $this.jobApiService.foundJob.tests.applicant.questions;
+    }
     $this.getData();
   }
 
@@ -56,7 +63,6 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   private getData() {
     const $this = this;
-
     $this.currentApplicationNumber = 1;
     $this.isLoading = true;
     $this.applicationApiService.getApplicationsToReview($this.jobApiService.foundJob._id, this.mode).subscribe((result) => {
@@ -148,19 +154,26 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   }
 
-  public async viewHomework(question) {
+  public async viewHomework(question, questionIndex) {
     const msgHdr = jsFilename + 'viewHomework: ';
     const $this = this;
-    const questionApplicant = {
-      question: question,
-      application: $this.currentApplication
+    let dataType = '';
+    if ($this.mode === 'stage2') {
+      dataType = 'homework';
+    } else if ($this.mode === 'stage3') {
+      dataType = 'interview';
+    } else if ($this.mode === 'qualified') {
+      dataType = 'applicant';
     }
     const modal: HTMLIonModalElement =
       await $this.modalController.create({
         component: JobApplicantReviewModalComponent,
         componentProps: {
-          autoStart: false,
-          appQuestion: questionApplicant,
+          application: $this.currentApplication,
+          question: question,
+          index: questionIndex,
+          total: $this.jobQuestions.length,
+          mode: dataType,
         },
       });
 

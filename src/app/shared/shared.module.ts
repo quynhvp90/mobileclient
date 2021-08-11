@@ -57,6 +57,7 @@ import { FormsModule } from '@angular/forms';
 import { Ng2OdometerModule } from 'ng2-odometer';
 import { GroupByPipe } from './pipes/group-by.pipe';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
 
 @NgModule({
   imports: [
@@ -103,6 +104,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     BannerAdComponent,
     PasswordResetComponent,
     ConfirmComponent,
+    StarRatingComponent,
     LogRepsIntroComponent,
     GroupByPipe,
     TimeAgoPipe,
@@ -153,6 +155,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     BannerAdComponent,
     PasswordResetComponent,
     ConfirmComponent,
+    StarRatingComponent,
     LogRepsIntroComponent,
     GroupByPipe,
     TimeAgoPipe,

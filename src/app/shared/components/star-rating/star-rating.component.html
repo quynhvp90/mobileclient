@@ -1,6 +1,6 @@
 <div class="star-rating">
   <div *ngIf="isApplicable">
-    <div class="stars" *ngIf="hasResults">
+    <div class="stars">
       <ion-icon class="star-icon" name="{{ positive.display }}" *ngFor="let positive of positives"></ion-icon>
       <div class="label" *ngIf="displayWords">
         <span *ngIf="rate === '1'">Very Poor</span>
@@ -10,9 +10,9 @@
         <span *ngIf="rate === '5'">Very Good</span>
       </div>
     </div>
-    <div class="cp-stars" *ngIf="!hasResults">
+    <!-- <div class="cp-stars" *ngIf="!hasResults">
       No Ratings
-    </div>
+    </div> -->
   </div>
   <div *ngIf="!isApplicable">
     <!-- <div class="not-applicable">

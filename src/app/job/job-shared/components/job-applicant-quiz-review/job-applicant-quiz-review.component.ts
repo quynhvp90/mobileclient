@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
-import { BroadcastService } from '../../../../shared/services';
+import { BroadcastService, MessageService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
 import { JobApplicantReviewModalComponent } from '../../modals/job-applicant-review-modal/job-applicant-review-modal.component';
 import { ApplicationApiService } from '../../services/application.api.service';
@@ -28,6 +28,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public currentApplication: IApplicationDocument;
   public foundApplications: IApplicationDocument[];
   public questions: any = {};
+  public quizType = 'homework';
 
   constructor(
     private broadcastService: BroadcastService,
@@ -38,7 +39,18 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     const $this = this;
 
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
-
+      if (msg.name === 'update-rating') {
+        if (msg.message && $this.currentApplication && msg.message.applicationId === $this.currentApplication._id) {
+          if ($this.currentApplication.results && $this.currentApplication.results.ratings
+            && $this.currentApplication.results.ratings[$this.quizType] && $this.currentApplication.results.ratings[$this.quizType].questions) {
+            $this.currentApplication.results.ratings[$this.quizType].questions.forEach((question) => {
+              if (question.questionId === msg.message.questionId) {
+                question.rating = msg.message.rate;
+              }
+            });
+          }
+        }
+      }
     });
     this.subscriptions.push(subscription);
   }
@@ -47,9 +59,12 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     const $this = this;
     const msgHdr = jsFilename + 'onInit: ';
     if ($this.mode === 'stage2') {
+      $this.quizType = 'homework';
       $this.jobQuestions = $this.jobApiService.foundJob.tests.homework.questions;
     } else if ($this.mode === 'stage3') {
+      $this.quizType = 'interview';
       $this.jobQuestions = $this.jobApiService.foundJob.tests.interview.questions;
+      $this.quizType = 'applicant';
     } else if ($this.mode === 'qualified') {
       $this.jobQuestions = $this.jobApiService.foundJob.tests.applicant.questions;
     }
@@ -72,6 +87,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       $this.foundApplications = result.items;
       $this.getCurrentApplication();
     });
+    // get comments 
   }
 
   private getCurrentApplication() {
@@ -157,14 +173,6 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public async viewHomework(question, questionIndex) {
     const msgHdr = jsFilename + 'viewHomework: ';
     const $this = this;
-    let dataType = '';
-    if ($this.mode === 'stage2') {
-      dataType = 'homework';
-    } else if ($this.mode === 'stage3') {
-      dataType = 'interview';
-    } else if ($this.mode === 'qualified') {
-      dataType = 'applicant';
-    }
     const modal: HTMLIonModalElement =
       await $this.modalController.create({
         component: JobApplicantReviewModalComponent,
@@ -173,7 +181,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           question: question,
           index: questionIndex,
           total: $this.jobQuestions.length,
-          mode: dataType,
+          mode: $this.quizType,
         },
       });
 

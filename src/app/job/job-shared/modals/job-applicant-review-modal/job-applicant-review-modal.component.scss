@@ -19,6 +19,7 @@
     .row-question-question {
       padding: 5px;
     }
+
     .row-quesiton-content {
       border-top: 1px solid #cdcdcd;
       .answer-header-title {
@@ -28,11 +29,9 @@
         color: #6f6f6f;
       }
     }
-    .row-question-rate {
-      .rating-title {
-        font-size: 15px;
-        font-weight: bold;
-      }
+    .rating-title {
+      font-size: 15px;
+      font-weight: bold;
     }
     .row-question-comment {
       ion-textarea {

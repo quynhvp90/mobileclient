@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { BroadcastService } from '../../services';
+import { BroadcastService, MessageService } from '../../services';
 
 const jsFilename = 'star-rating: ';
 
@@ -12,18 +12,25 @@ const jsFilename = 'star-rating: ';
 export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public rate = 0;
   @Input() public displayWords = false;
-  @Input() public action = false;
+  @Input() public questionId = null;
+  @Input() public applicationId = null;
+  @Input() public type = null;
   public isApplicable = true;
   // public hasResults = true;
   private subscriptions = [];
   private positives = [];
   constructor(
     private broadcastService: BroadcastService,
+    private messageService: MessageService,
   ) {
     const $this = this;
 
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
-
+      if (msg.name === 'update-rating') {
+        if (msg.message && msg.message.questionId === $this.questionId) {
+          $this.positives = $this.computeStars(msg.message.rate, 5);
+        }
+      }
     });
     this.subscriptions.push(subscription);
   }
@@ -46,6 +53,18 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngAfterViewInit(): void {
     const $this = this;
     const msgHdr = 'ngAfterViewInit: ';
+  }
+
+  public rating(star) {
+    const $this = this;
+    if ($this.questionId && $this.applicationId && $this.type) {
+      $this.messageService.rateQuestion({
+        applicationId: $this.applicationId,
+        questionId: $this.questionId,
+        questionType: $this.type,
+        rating: star,
+      });
+    }
   }
 
   public ngOnDestroy() {

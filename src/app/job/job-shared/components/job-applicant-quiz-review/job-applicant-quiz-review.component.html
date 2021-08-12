@@ -18,17 +18,21 @@
   <ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
 
   <ion-list>
-    <ion-item *ngFor="let question of jobQuestions; index as i" detail="true" (click)="viewHomework(question, i)">
-      <ion-label *ngIf="question" class="item-label">
-        <h2>Question #{{ (i + 1) }}</h2>
-        <h3>{{ question.question }}</h3>
-        <p class="question-answer">Answer: </p>
-        <p class="answer" *ngIf="questions[question._id]">{{ questions[question._id].response }}</p>
-        <h4 style="font-weight: bold;">You Rated</h4>
-        <ng-container *ngIf="questions[question._id]">
-          <star-rating [rate]="questions[question._id].rate"></star-rating>
-        </ng-container>
-      </ion-label>
+    <ion-item *ngFor="let question of jobQuestions; index as i" detail="true">
+      <ion-col>
+        <ion-label *ngIf="question" class="item-label" (click)="viewHomework(question, i)">
+          <h2>Question #{{ (i + 1) }}</h2>
+          <h3>{{ question.question }}</h3>
+          <p class="question-answer">Answer: </p>
+          <p class="answer" *ngIf="questions[question._id]">{{ questions[question._id].response }}</p>
+        </ion-label>
+        <ion-label class="item-label" style="margin-top: 5px;">
+          <h4 style="font-weight: bold;">You Rated</h4>
+          <ng-container *ngIf="question && questions[question._id]">
+            <star-rating [rate]="questions[question._id].rate" [type]="quizType" [applicationId]="currentApplication._id" [questionId]="question._id"></star-rating>
+          </ng-container>
+        </ion-label>
+      </ion-col>
     </ion-item>
   </ion-list>
 </div>

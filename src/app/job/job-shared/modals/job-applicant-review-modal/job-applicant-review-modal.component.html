@@ -42,12 +42,12 @@
           <p class="answer-header-title">Answer #{{ currentAnswerIndex + 1 }} of {{ answers.length }}</p>
           <div class="answer-header-button">
             <ion-buttons style="float: left;">
-              <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === 0" (click)="previousApplicant()">
+              <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === 0" (click)="previousAnswer()">
                 <ion-icon name="arrow-dropleft"></ion-icon>
               </ion-button>
             </ion-buttons>
             <ion-buttons>
-              <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === (answers.length - 1)" (click)="nextApplicant()">
+              <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === (answers.length - 1)" (click)="nextAnswer()">
                 <ion-icon name="arrow-dropright"></ion-icon>
               </ion-button>
             </ion-buttons>
@@ -55,23 +55,32 @@
           
         </ion-row>
         <ion-row class="answer-content">
-          <p>{{ question.question }}</p>
+          <div *ngIf="answers.length > 1 && (currentAnswerIndex === answers.length - 1)" class="alert alert-danger">
+              Applicant was reset, this is the latest submission
+          </div>
+          <div *ngIf="(answers.length > 1) && (currentAnswerIndex < (answers.length - 1))" style="padding-top: 10px;" class="alert alert-danger">
+            <ion-icon name="information-circle-outline"></ion-icon> This is an old version of the applicant's answer
+          </div>
+          <p>{{ currentAnswer.response }}</p>
         </ion-row>
       </ion-col>
     </ion-row>
-    <ion-row style="position: fixed; bottom: 10px; left: 10px; right: 10px;">
+    <ion-row class="row-question-rate">
+      <ion-col size="12" class="rating-title">Rate this answer</ion-col>
+      <ion-col size="12">
+        <ng-container>
+          <star-rating [rate]="question.rating" [type]="mode" [applicationId]="application._id" [questionId]="question._id"></star-rating>
+        </ng-container>
+      </ion-col>
+    </ion-row>
+    <ion-row>
       <ion-col size="12" style="padding: 0;">
-        <ion-row class="row-question-rate">
-          <ion-col size="12" class="rating-title">Rate this answer</ion-col>
-          <ion-col size="12">
-            <ng-container>
-              <star-rating [rate]="3"></star-rating>
-            </ng-container>
-          </ion-col>
-    
+        <ion-row>
+          <ion-col size="12" class="rating-title">Comments</ion-col>
         </ion-row>
         <ion-row class="row-question-comment">
           <ion-textarea placeholder="Comments"></ion-textarea>
+          <ion-button color="primary" (click)="commentAdd('application-comment')">Comment</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>

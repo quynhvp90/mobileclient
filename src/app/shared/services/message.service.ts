@@ -164,7 +164,10 @@ export class MessageService {
     });
   }
 
-  public getMessages(filter?: any): Observable<IMessageDocument[]> {
+  public getMessages(filter?: any): Observable<{ 
+    count?: any,
+    items?: any[],
+  }> {
     const $this = this;
     const query = 'filter=' + encodeURIComponent(JSON.stringify(filter));
     const setting: ISetting = {
@@ -188,8 +191,9 @@ export class MessageService {
     const subject = 'Rated this question: ';
     const payload: IMessage = {
       messageType: 'application-rating', // ['notification', 'application-comment', 'application-rating']
-      applicationId: vm.applicationId,
+      applicationId: vm.application._id,
       questionId: vm.questionId,
+      jobId: vm.application.jobId,
       distributionType: ['employer'],
       questionType: vm.questionType,
       message: {

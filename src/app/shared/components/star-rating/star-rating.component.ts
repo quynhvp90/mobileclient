@@ -12,8 +12,9 @@ const jsFilename = 'star-rating: ';
 export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public rate = 0;
   @Input() public displayWords = false;
+  @Input() public name = null;
   @Input() public questionId = null;
-  @Input() public applicationId = null;
+  @Input() public application = null;
   @Input() public type = null;
   public isApplicable = true;
   // public hasResults = true;
@@ -57,12 +58,22 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public rating(star) {
     const $this = this;
-    if ($this.questionId && $this.applicationId && $this.type) {
+    $this.positives = $this.computeStars(star, 5);
+    if ($this.questionId && $this.application && $this.type) {
       $this.messageService.rateQuestion({
-        applicationId: $this.applicationId,
+        applicationId: $this.application._id,
         questionId: $this.questionId,
+        jobId: $this.application.jobId,
         questionType: $this.type,
         rating: star,
+      });
+    } else {
+      let model = 'rating-star-result';
+      if ($this.name) {
+        model += ('-' + $this.name);
+      }
+      $this.broadcastService.broadcast(model, {
+        rate: star,
       });
     }
   }

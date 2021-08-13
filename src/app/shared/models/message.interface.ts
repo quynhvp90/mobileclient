@@ -6,6 +6,7 @@ export interface IMessage {
   dbModel?: string;
   dbModelId?: string;
   applicationId?: string;
+  jobId?: string;
   questionId?: string;
   organizationId?: string;
   distributionList?: string[]; // userIds

@@ -5,6 +5,7 @@ import { ModalController  } from '@ionic/angular';
 import { ApplicationApiService } from '../../services/application.api.service';
 import { JobApiService } from '../../services/job.api.service';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
+import { IMessage, IMessageDocument } from 'src/app/shared/models/message.interface';
 
 const jsFilename = 'job-applicant-review: ';
 
@@ -26,6 +27,8 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   private currentAnswer = {};
   private currentAnswerIndex = -1;
   public saving = false;
+  public comments = [];
+  public star = null;
   public messageText = '';
 
   constructor(
@@ -83,6 +86,9 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
           }
         }
       }
+      if (msg.name === 'rating-star-result-' + $this.question._id) {
+        $this.star = msg.message.rate;
+      }
     });
     this.subscriptions.push(subscription);
     this.getMessageComment();
@@ -98,7 +104,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         distributionType: 'employer',
         questionType: $this.mode,
         messageType: {
-          $in: ['application-comment', 'application-rating'],
+          $in: ['application-comment'],
         },
         jobId: $this.application.jobId,
         applicationId: $this.application._id,
@@ -107,10 +113,23 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         // created: {
         //   $gt: lastViewedMessage[ENV.loginType]
         // }
-      }
+      },
     };
     $this.messageService.getMessages(query).subscribe((res) => {
       console.log('data = ', res);
+      if (res && res.items && res.items.length > 0) {
+        $this.comments = [];
+        res.items.forEach((item) => {
+          if (item.questionId === $this.question._id && item.message.data.body) {
+            $this.comments.push({
+              questionId: item.questionId,
+              user: item.lookups.users[0],
+              message: item.message.data,
+              created: item.created,
+            });
+          }
+        });
+      }
     });
   }
 
@@ -141,16 +160,19 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   async cancel() {
     await this.modalController.dismiss();
   }
-  public commentAdd(messageType) {
+  public saveComment(messageType?: string) {
     const $this = this;
     const msgHdr = 'commentAdd: ';
 
+    if (!$this.messageText || ($this.messageText && $this.messageText.length === 0)) {
+      return;
+    }
     let distributionType = ['applicant', 'employer'];
     if (!messageType) {
       messageType = 'application-comment';
       distributionType = ['employer'];
     }
-    var payload = {
+    const payload = {
       messageType: messageType, // ['notification', 'application-comment', 'application-rating', 'application-chat']
       applicationId: $this.application._id,
       applicantId: $this.application.applicantId,
@@ -166,12 +188,45 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     };
 
     $this.messageService.createMessage(payload)
-    .subscribe(function(resp) {
+    .subscribe((resp) => {
       console.log(msgHdr + 'resp = ', resp);
-      // scrollToBottomMessage();
+      $this.messageText = null;
+      $this.getMessageComment();
     });
   }
   public save () {
     const $this = this;
+    // save comment
+    $this.saveComment();
+    // save rating
+    const subject = 'Rated this question: ';
+    if (!$this.star) {
+      return;
+    }
+    const payloadRating: IMessage = {
+      messageType: 'application-rating', // ['notification', 'application-comment', 'application-rating']
+      applicationId: $this.application._id,
+      questionId: $this.question._id,
+      jobId: $this.application.jobId,
+      distributionType: ['employer'],
+      questionType: $this.mode,
+      message: {
+        data: {
+          subject: subject,
+          body: $this.star.toString(),
+        },
+      },
+    };
+
+    $this.messageService.createMessage(payloadRating).subscribe((result) => {
+      console.log('result = ', result);
+      this.broadcastService.broadcast('update-rating', {
+        questionId: $this.question._id,
+        applicationId: $this.application._id,
+        questionType: $this.mode,
+        rate: $this.star,
+      });
+      return result;
+    });
   }
 }

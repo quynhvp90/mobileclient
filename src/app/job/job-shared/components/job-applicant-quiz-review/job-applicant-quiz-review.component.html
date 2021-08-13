@@ -29,7 +29,7 @@
         <ion-label class="item-label" style="margin-top: 5px;">
           <h4 style="font-weight: bold;">You Rated</h4>
           <ng-container *ngIf="question && questions[question._id]">
-            <star-rating [rate]="questions[question._id].rate" [type]="quizType" [applicationId]="currentApplication._id" [questionId]="question._id"></star-rating>
+            <star-rating [rate]="questions[question._id].rate" [type]="quizType" [application]="currentApplication" [questionId]="question._id"></star-rating>
           </ng-container>
         </ion-label>
       </ion-col>

@@ -20,8 +20,10 @@ import IOrganizationDocument from 'src/app/shared/models/organization/organizati
 interface IJobToReview {
   jobId: string;
   title: string;
-  count: number;
-  reviewType: string;
+  countHomework?: number;
+  countInterview?: number;
+  countQualifield?: number;
+  // reviewType: string;
 };
 
 @Component({
@@ -67,6 +69,10 @@ export class HomeListComponent implements OnInit, OnDestroy {
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'reload-data') {
         // respond to broadcast here
+        if ($this.organizationService.organization) {
+          $this.organizationId = $this.organizationService.organization._id;
+        }
+        $this.getData();
       }
       // if (msg.name === 'reload-org') {
       //   // respond to broadcast here
@@ -96,13 +102,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
     $this.getData();
   }
 
-  public backButton() {
-    this.navCtrl.back();
-  }
-  public changeOrg() {
-    this.router.navigate(['list-org-screen']);
-  }
-
   public ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
@@ -122,38 +121,21 @@ export class HomeListComponent implements OnInit, OnDestroy {
       $this.isLoading = false;
       this.jobsToReview = [];
       res.userStats.forEach((stats) => {
-        if (stats.applicationStats.applicantsInHomeworkRequiringAction > 0) {
-          this.jobsToReview.push({
-            jobId: stats.jobId,
-            title: stats.title,
-            count: stats.applicationStats.applicantsInHomeworkRequiringAction,
-            reviewType: 'homework'
-          });
-        }
-        if (stats.applicationStats.applicantsInInterviewRequiringAction > 0) {
-          this.jobsToReview.push({
-            jobId: stats.jobId,
-            title: stats.title,
-            count: stats.applicationStats.applicantsInInterviewRequiringAction,
-            reviewType: 'interview'
-          });
-
-        }
-        if (stats.applicationStats.applicantsInQualifiedRequiringAction > 0) {
-          this.jobsToReview.push({
-            jobId: stats.jobId,
-            title: stats.title,
-            count: stats.applicationStats.applicantsInQualifiedRequiringAction,
-            reviewType: 'qualified'
-          });
-        }
+        this.jobsToReview.push({
+          jobId: stats.jobId,
+          title: stats.title,
+          countHomework: stats.applicationStats.applicantsInHomeworkRequiringAction,
+          countInterview: stats.applicationStats.applicantsInInterviewRequiringAction,
+          countQualifield: stats.applicationStats.applicantsInQualifiedRequiringAction,
+          // reviewType: 'homework'
+        });
       });
     });
   }
 
-  public reviewJobApplicants(jobToReview: IJobToReview) {
+  public reviewJobApplicants(jobToReview: IJobToReview, type) {
     const $this = this;
-    const newUrl = '/tabs/jobs/' + jobToReview.jobId + '/' + jobToReview.reviewType;
+    const newUrl = '/tabs/jobs/' + jobToReview.jobId + '/' + type;
     $this.navCtrl.navigateForward(newUrl);
     // this.router.navigate([newUrl], { queryParams: { job: job } });
   }

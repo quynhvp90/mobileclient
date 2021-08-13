@@ -6,12 +6,6 @@
     <ion-title>
       {{ organizationService?.organization?.name }}
     </ion-title>
-    <ion-buttons slot="end" (click)="backButton()">
-      <ion-button style="color: #fff;">
-        <ion-icon name="stats"></ion-icon>
-        <ion-label>Org</ion-label>
-     </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content style="--background: #e6ebf1" class="home-list-content">
@@ -19,9 +13,26 @@
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
   <ion-list>
-    <ion-item style="cursor: pointer;" detail="true" *ngFor="let jobToReview of jobsToReview" (click)="reviewJobApplicants(jobToReview)">
-      <ion-label>{{ jobToReview.title }}</ion-label>
-      <ion-note slot="end" color="primary" *ngIf="jobToReview.reviewType === 'homework'">
+    <ion-item detail="true" *ngFor="let jobToReview of jobsToReview">
+      <ion-label>
+        {{ jobToReview.title }}
+        <ion-row>
+          <ion-chip (click)="reviewJobApplicants(jobToReview, 'homework')" style="height: 25px; background: #57a230; color: #fff;" *ngIf="jobToReview.countHomework > 0">
+            <ion-label>Homework ({{ jobToReview.countHomework }})</ion-label>
+          </ion-chip>
+        </ion-row>
+        <ion-row>
+          <ion-chip (click)="reviewJobApplicants(jobToReview, 'interview')" style="height: 25px; background: #068fee; color: #fff;" *ngIf="jobToReview.countInterview > 0">
+            <ion-label>Interview ({{ jobToReview.countInterview }})</ion-label>
+          </ion-chip>
+        </ion-row>
+        <ion-row>
+          <ion-chip (click)="reviewJobApplicants(jobToReview, 'qualified')" style="height: 25px; background: #7e53c3; color: #fff;" *ngIf="jobToReview.countQualifield > 0">
+            <ion-label>Qualified ({{ jobToReview.countQualifield }})</ion-label>
+          </ion-chip>
+        </ion-row>
+      </ion-label>
+      <!-- <ion-note slot="end" color="primary" *ngIf="jobToReview.reviewType === 'homework'">
         <ion-chip style="background: #57a230; color: #fff;">
           <ion-label>Homework ({{ jobToReview.count }})</ion-label>
         </ion-chip>
@@ -35,7 +46,7 @@
         <ion-chip style="background: #7e53c3; color: #fff;">
           <ion-label>Qualified ({{ jobToReview.count }})</ion-label>
         </ion-chip>
-      </ion-note>
+      </ion-note> -->
     </ion-item>
   </ion-list>
 </ion-content>

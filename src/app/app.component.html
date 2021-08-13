@@ -13,7 +13,9 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        Menu Items here....
+        <ion-item (click)="changeOrg()">
+          <ion-label>Organization list</ion-label>
+        </ion-item>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main"></ion-router-outlet>

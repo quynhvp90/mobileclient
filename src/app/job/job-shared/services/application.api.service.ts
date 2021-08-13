@@ -12,13 +12,14 @@ import { GlobalService } from '../../../shared/services/global.service';
 import { UserService } from '../../../shared/services/user.service';
 import { IJobUserStats } from '../interfaces/job.interface';
 import { of } from 'rxjs';
+import IApplicationDocument from 'src/app/shared/models/application/application.interface';
 
 const jsFilename = 'ChallengeService: ';
 
 @Injectable()
 export class ApplicationApiService {
 
-  public foundApplication: any; // @Quynh - need to provide interface
+  public foundApplication: IApplicationDocument;
 
   constructor(
     private exceptionService: ExceptionService,
@@ -51,6 +52,8 @@ export class ApplicationApiService {
     } else if (stage === 'stage3') {
       status.push('stage3-submitted');
       status.push('stage3-review');
+    } else if (stage === 'qualified') {
+      status.push('revealed');
     } else {
       console.error('showing alerting not yet configured');
       this.alertService.error('not yet configured');
@@ -94,10 +97,7 @@ export class ApplicationApiService {
     );
   }
 
-  public getApplication(applicationId: string): Observable<{
-    count: number,
-    items: any[]
-  }> {
+  public getApplication(applicationId: string): Observable<IApplicationDocument> {
     const $this = this;
     const msgHdr = jsFilename + 'getApplication: ';
 
@@ -109,7 +109,7 @@ export class ApplicationApiService {
       .get(setting).pipe(
         map((res) => {
           const result: any = res;
-          $this.foundApplication = res;
+          $this.foundApplication = <IApplicationDocument> res;
           return res;
         })
       , catchError(this.exceptionService.catchBadResponse),

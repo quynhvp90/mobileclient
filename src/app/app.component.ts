@@ -15,6 +15,8 @@ import {
   Plugins,
 } from '@capacitor/core';
 import { PushNotificationService } from './shared/services/push-notification.service';
+import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 const { App } = Plugins;
 
@@ -33,6 +35,7 @@ export class AppComponent {
 
   constructor(
     private platform: Platform,
+    private menu: MenuController,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private broadcastService: BroadcastService,
@@ -40,6 +43,7 @@ export class AppComponent {
     private userService: UserService,
     private navCtrl: NavController,
     private zone: NgZone,
+    private router: Router,
     private storage: Storage,
     private deeplinkService: DeepLinkService,
     private notificationService: NotificationService,
@@ -174,7 +178,10 @@ export class AppComponent {
       }
     });
   }
-
+  public changeOrg() {
+    this.router.navigate(['list-org-screen']);
+    this.menu.close();
+  }
   public closeMenu() {
     // this.ionMenu.close();
   }

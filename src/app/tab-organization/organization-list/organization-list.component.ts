@@ -94,6 +94,10 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
           });
         }
       });
+    } else {
+      $this.organizationService.getOrganizations(null).subscribe((res) => {
+
+      });
     }
 
   }

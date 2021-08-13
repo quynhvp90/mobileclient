@@ -19,6 +19,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   public isLoading = true;
   private jobId = null;
   public mode = 'stage2';
+  public titleMode = '';
 
   constructor(
     private broadcastService: BroadcastService,
@@ -32,11 +33,14 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     console.log('$this.jobId = ', $this.jobId);
     if ($this.router.url.endsWith('homework')) {
       $this.mode = 'stage2';
+      $this.titleMode = 'Home work';
     } else if ($this.router.url.endsWith('interview')) {
       console.log('end with interview');
       $this.mode = 'stage3';
+      $this.titleMode = 'Interview';
     } else if ($this.router.url.endsWith('qualified')) {
       $this.mode = 'qualified';
+      $this.titleMode = 'Qualified';
     }
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       // TBD

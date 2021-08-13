@@ -124,6 +124,18 @@ export class UserService {
     this.initAfterLogin();
   }
 
+  public updateToken(user: any): void {
+    const msgHdr = jsFilename + 'updateToken: ';
+    this.user = user;
+    this.globalService.token = user.token;
+    try {
+      console.log('setting token = ', user.token);
+      this.storage.set('token', user.token);
+    } catch (e) {
+      console.error(msgHdr + 'error trying to set token, I may be in incognito mode');
+    }
+  }
+
   public passwordReset(email: string) {
     const $this = this;
     const payload = {

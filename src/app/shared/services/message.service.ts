@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ApiService, ISetting } from './api.service';
 import { ExceptionService } from './exception.service';
 import { map, catchError } from 'rxjs/operators';
+import { BroadcastService } from './broadcast.service';
 
 const jsFilename = 'messageService: ';
 
@@ -37,6 +38,7 @@ export class MessageService {
   constructor(
     private apiService: ApiService,
     private exceptionService: ExceptionService,
+    private broadcastService: BroadcastService,
   ) {
   }
 
@@ -159,6 +161,58 @@ export class MessageService {
     }), catchError((err) => {
       $this.loading = false;
       return $this.exceptionService.catchBadResponse(err);
+    });
+  }
+
+  public getMessages(filter?: any): Observable<{ 
+    count?: any,
+    items?: any[],
+  }> {
+    const $this = this;
+    const query = 'filter=' + encodeURIComponent(JSON.stringify(filter));
+    const setting: ISetting = {
+      resource: 'messages',
+      queryString: query,
+    };
+
+    
+
+    return this.apiService
+      .get(setting).pipe(
+        map((res) => {
+          const result: any = res;
+          return <IMessageDocument[]> result;
+        })
+      , catchError(this.exceptionService.catchBadResponse),
+    );
+  }
+
+  public rateQuestion(vm) {
+    const subject = 'Rated this question: ';
+    const payload: IMessage = {
+      messageType: 'application-rating', // ['notification', 'application-comment', 'application-rating']
+      applicationId: vm.application._id,
+      questionId: vm.questionId,
+      jobId: vm.application.jobId,
+      distributionType: ['employer'],
+      questionType: vm.questionType,
+      message: {
+        data: {
+          subject: subject,
+          body: vm.rating,
+        },
+      },
+    };
+
+    this.createMessage(payload).subscribe((result) => {
+      console.log('result = ', result);
+      this.broadcastService.broadcast('update-rating', {
+        questionId: vm.questionId,
+        applicationId: vm.application._id,
+        questionType: vm.questionType,
+        rate: vm.rating,
+      });
+      return result;
     });
   }
 

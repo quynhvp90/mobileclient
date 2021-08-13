@@ -5,10 +5,15 @@ export interface IMessage {
   messageType?: string;    // ['challenge-broadcast']
   dbModel?: string;
   dbModelId?: string;
+  applicationId?: string;
+  jobId?: string;
+  questionId?: string;
   organizationId?: string;
   distributionList?: string[]; // userIds
+  distributionType?: string[];
   dismissedDistributionList?: string[];
   fromUserId?: string;
+  questionType?: string;
   message?: INotificationMessage;
   draft?: { // flag if draft (for application-notes)
     inEditMode?: boolean,

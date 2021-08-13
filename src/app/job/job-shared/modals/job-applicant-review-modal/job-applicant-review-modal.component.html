@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (index + 1) }} of {{ total }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="job-applicant-review-modal">
+  <div *ngIf="saving">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+  <div *ngIf="!saving && question" class="content-modal">
+    <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
+      <ion-card-header>
+        <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
+        <ion-card-title>Question #{{ (index + 1) }} of {{ total }}</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <div [innerHtml]="question.question"></div>
+      </ion-card-content>
+    </ion-card>
+
+
+    <!-- Answers -->
+    <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
+      <div *ngIf="currentAnswer.videoId">
+        <!-- <video-player id="video{{ currentAnswer.videoId }}"
+        height="324"
+        video-id="currentAnswer.videoId">
+      </video-player> -->
+      </div>
+      <ion-card-header>
+        <ion-card-title>Answers</ion-card-title>
+        <ion-card-subtitle>
+          <ion-row class="answer-header">
+            <p class="answer-header-title">Answer #{{ currentAnswerIndex + 1 }} of {{ answers.length }}</p>
+            <div class="answer-header-button">
+              <ion-buttons style="float: left;">
+                <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === 0" (click)="previousAnswer()">
+                  <ion-icon name="arrow-dropleft"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+              <ion-buttons>
+                <ion-button style="color: #6f6f6f;" [disabled]="currentAnswerIndex === (answers.length - 1)" (click)="nextAnswer()">
+                  <ion-icon name="arrow-dropright"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+          </ion-row>
+        </ion-card-subtitle>
+        
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-row class="answer-content">
+          <div *ngIf="answers.length > 1 && (currentAnswerIndex === answers.length - 1)" class="alert alert-danger">
+              Applicant was reset, this is the latest submission
+          </div>
+          <div *ngIf="(answers.length > 1) && (currentAnswerIndex < (answers.length - 1))" style="padding-top: 10px;" class="alert alert-danger">
+            <ion-icon name="alert"></ion-icon> This is an old version of the applicant's answer
+          </div>
+          <div [innerHtml]="currentAnswer.response"></div>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+
+    <!-- Rate answer -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Rate this answer</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ng-container>
+          <star-rating [rate]="question.rating" [displayWords]="true" [name]="question._id"></star-rating>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+
+
+    <!-- Comments -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Comments</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-textarea style="border: 1px solid #c6c6c6; border-radius: 5px; margin-bottom: 10px;" [(ngModel)]="messageText" rows="4" placeholder="Comments"></ion-textarea>
+        </ion-item>
+        <ion-item style="cursor: pointer;" detail="true" *ngFor="let comment of comments">
+          <ion-label>{{ comment.message.body }}</ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    
+  </div>
+</ion-content>

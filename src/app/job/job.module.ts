@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { JobApplicantsQuizReviewComponent } from './job-applicants-quiz-review/job-applicants-quiz-review.component';
 import { JobSharedModule } from './job-shared/job-shared.module';
 import { IonicModule } from '@ionic/angular';
+// import { StarRatingModule } from 'ionic4-star-rating';
 import { JobsServicesModule } from './job-shared/job-services.module';
 
 const components: any[] = [
@@ -26,6 +27,7 @@ const routes: Routes = [
     RouterModule,
     SharedModule,
     JobSharedModule,
+    // StarRatingModule,
     JobsServicesModule,
     RouterModule.forChild(routes),
   ],

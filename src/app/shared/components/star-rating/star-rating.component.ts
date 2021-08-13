@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { rawListeners } from 'process';
 import { BroadcastService, MessageService } from '../../services';
 
 const jsFilename = 'star-rating: ';
@@ -20,6 +21,9 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   // public hasResults = true;
   private subscriptions = [];
   private positives = [];
+  private model = 'rating-star-result';
+  private selectRating = this.rate;
+  private positiveSources = [];
   constructor(
     private broadcastService: BroadcastService,
     private messageService: MessageService,
@@ -39,6 +43,13 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit(): void {
     const $this = this;
     const msgHdr = jsFilename + 'onInit: ';
+    if ($this.name) {
+      $this.model += ('-' + $this.name);
+    }
+    // tslint:disable-next-line: no-increment-decrement
+    for (let index = 0; index < 6; index++) {
+      $this.positiveSources.push($this.computeStars(index));
+    }
     console.log('$this.rate ==== ', $this.rate);
     if ($this.rate && $this.rate.toString() === '-1') {
       $this.isApplicable = false;
@@ -51,6 +62,16 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     $this.positives = $this.computeStars($this.rate, 5);
   }
 
+  public ratingChange() {
+    const $this = this;
+    if (!$this.name) {
+      return;
+    }
+    $this.positives = $this.computeStars($this.rate, 5);
+    $this.broadcastService.broadcast($this.model, {
+      rate: $this.rate,
+    });
+  }
   public ngAfterViewInit(): void {
     const $this = this;
     const msgHdr = 'ngAfterViewInit: ';
@@ -61,18 +82,14 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     $this.positives = $this.computeStars(star, 5);
     if ($this.questionId && $this.application && $this.type) {
       $this.messageService.rateQuestion({
-        applicationId: $this.application._id,
+        application: $this.application,
         questionId: $this.questionId,
         jobId: $this.application.jobId,
         questionType: $this.type,
         rating: star,
       });
     } else {
-      let model = 'rating-star-result';
-      if ($this.name) {
-        model += ('-' + $this.name);
-      }
-      $this.broadcastService.broadcast(model, {
+      $this.broadcastService.broadcast($this.model, {
         rate: star,
       });
     }
@@ -93,8 +110,9 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
       maxRate = max;
     }
     const positives = [];
+    // tslint:disable-next-line: no-increment-decrement
     for (let index = 1; index <= maxRate; index++) {
-      if ((rate -index ) > 0 && (rate - index) < 1) {
+      if ((rate - index) > 0 && (rate - index) < 1) {
         positives.push({
           display: 'star-half',
         });

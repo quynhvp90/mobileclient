@@ -1,48 +1,12 @@
 .job-applicant-review-modal {
   --background: #e6ebf1;
+  ion-textarea {
+    textarea {
+      padding-left: 10px;
+    }
+  }
   .content-modal {
     padding: 10px;
-    .row-question-title {
-      background: #c9c9c9;
-      border-radius: 5px;
-      padding: 5px;
-      div {
-        font-weight: bold;
-        font-size: 15px;
-      }
-      p {
-        margin: 0;
-        font-size: 12px;
-        color: #d99500;
-      }
-    }
-    .row-question-question {
-      padding: 5px;
-    }
-
-    .row-quesiton-content {
-      border-top: 1px solid #cdcdcd;
-      .answer-header-title {
-        margin: 8px 0;
-        font-size: 15px;
-        font-weight: bold;
-        color: #6f6f6f;
-      }
-    }
-    .rating-title {
-      font-size: 15px;
-      font-weight: bold;
-    }
-    .comment-list {
-      .item-native {
-        background: #e6ebf1 !important;
-      }
-    }
-    .row-question-comment {
-      ion-textarea {
-        border: 1px solid #c6c6c6;
-        border-radius: 5px;
-      }
-    }
+    background-color: #fff;
   }
 }

@@ -40,15 +40,39 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'update-rating') {
-        if (msg.message && $this.currentApplication && msg.message.applicationId === $this.currentApplication._id) {
-          if ($this.currentApplication.results && $this.currentApplication.results.ratings
-            && $this.currentApplication.results.ratings[$this.quizType] && $this.currentApplication.results.ratings[$this.quizType].questions) {
-            $this.currentApplication.results.ratings[$this.quizType].questions.forEach((question) => {
-              if (question.questionId === msg.message.questionId) {
-                question.rating = msg.message.rate;
+        if ($this.foundApplications && $this.foundApplications.length > 0 && msg.message && msg.message.applicationId) {
+          $this.foundApplications.forEach((app) => {
+            if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
+              if ($this.quizType === 'homework' || $this.quizType === 'interview') {
+                if (app.results.ratings[$this.quizType].questions) {
+                  app.results.ratings[$this.quizType].questions.forEach((question) => {
+                    if (question.questionId === msg.message.questionId) {
+                      question.rating = msg.message.rate;
+                      if (!$this.questions[app._id + '-' + question.questionId]) {
+                        $this.questions[app._id + '-' + question.questionId] = {};
+                      }
+                      $this.questions[app._id + '-' + question.questionId].rate = msg.message.rate;
+                    }
+                  });
+                }
+              } else if (app.results.ratings.applicant.ratings && msg.message.applicationId === app._id) {
+                app.results.ratings.applicant.ratings.forEach((rating) => {
+                  if (rating._id === msg.message.questionId) {
+                    rating.rating = msg.message.rate;
+                    if (!$this.questions[app._id + '-' + rating._id]) {
+                      $this.questions[app._id + '-' + rating._id] = {};
+                    }
+                    $this.questions[app._id + '-' + rating._id].rate = msg.message.rate;
+                  }
+                });
+                $this.jobQuestions = app.results.ratings.applicant.ratings;
               }
-            });
-          }
+
+            }
+            if ($this.currentApplication._id === app._id) {
+              $this.currentApplication = app;
+            }
+          });
         }
       }
     });
@@ -64,9 +88,9 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     } else if ($this.mode === 'stage3') {
       $this.quizType = 'interview';
       $this.jobQuestions = $this.jobApiService.foundJob.tests.interview.questions;
-      $this.quizType = 'applicant';
     } else if ($this.mode === 'qualified') {
-      $this.jobQuestions = $this.jobApiService.foundJob.tests.applicant.questions;
+      $this.quizType = 'applicant';
+      $this.jobQuestions = [];
     }
     $this.getData();
   }
@@ -96,23 +120,26 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       $this.applicationApiService.getApplication($this.foundApplications[$this.currentApplicationNumber - 1]._id).subscribe((foundApplication) => {
         console.log('foundApplication = ', foundApplication);
         $this.currentApplication = foundApplication;
+        if ($this.mode === 'qualified' && foundApplication.results && foundApplication.results.ratings && foundApplication.results.ratings.applicant) {
+          $this.jobQuestions = foundApplication.results.ratings.applicant.ratings;
+        }
         if (foundApplication && foundApplication.results) {
           // home work
           if (foundApplication.results.homework && foundApplication.results.homework.length > 0) {
             foundApplication.results.homework.forEach((hw) => {
-              if (!$this.questions[hw.questionId]) {
-                $this.questions[hw.questionId] = {}
+              if (!$this.questions[foundApplication._id + '-' + hw.questionId]) {
+                $this.questions[foundApplication._id + '-' + hw.questionId] = {}
               }
-              $this.questions[hw.questionId].response = hw.response;
-              $this.questions[hw.questionId].dateSubmitted = hw.dateSubmitted;
+              $this.questions[foundApplication._id + '-' + hw.questionId].response = hw.response;
+              $this.questions[foundApplication._id + '-' + hw.questionId].dateSubmitted = hw.dateSubmitted;
             });
             if (foundApplication.results.ratings && foundApplication.results.ratings.homework
               && foundApplication.results.ratings.homework.questions) {
               foundApplication.results.ratings.homework.questions.forEach((question) => {
-                if (!$this.questions[question.questionId]) {
-                  $this.questions[question.questionId] = {}
+                if (!$this.questions[foundApplication._id + '-' + question.questionId]) {
+                  $this.questions[foundApplication._id + '-' + question.questionId] = {}
                 }
-                $this.questions[question.questionId].rate = question.rating;
+                $this.questions[foundApplication._id + '-' + question.questionId].rate = question.rating;
               });
             }
           }
@@ -120,25 +147,44 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           // interview
           if (foundApplication.results.interview && foundApplication.results.interview.length > 0) {
             foundApplication.results.interview.forEach((int) => {
-              if (!$this.questions[int.questionId]) {
-                $this.questions[int.questionId] = {}
+              if (!$this.questions[foundApplication._id + '-' + int.questionId]) {
+                $this.questions[foundApplication._id + '-' + int.questionId] = {}
               }
-              $this.questions[int.questionId].response = int.response;
-              $this.questions[int.questionId].dateSubmitted = int.dateSubmitted;
+              $this.questions[foundApplication._id + '-' + int.questionId].response = int.response;
+              $this.questions[foundApplication._id + '-' + int.questionId].dateSubmitted = int.dateSubmitted;
             });
             if (foundApplication.results.ratings && foundApplication.results.ratings.interview
               && foundApplication.results.ratings.interview.questions) {
               foundApplication.results.ratings.interview.questions.forEach((question) => {
-                if (!$this.questions[question.questionId]) {
-                  $this.questions[question.questionId] = {}
+                if (!$this.questions[foundApplication._id + '-' + question.questionId]) {
+                  $this.questions[foundApplication._id + '-' + question.questionId] = {}
                 }
-                $this.questions[question.questionId].rate = question.rating;
+                $this.questions[foundApplication._id + '-' + question.questionId].rate = question.rating;
               });
             }
           }
-          
+          // applicant
+          if (foundApplication.results.ratings && foundApplication.results.ratings.applicant
+            && foundApplication.results.ratings.applicant.ratings && foundApplication.results.ratings.applicant.ratings.length > 0) {
+            foundApplication.results.ratings.applicant.ratings.forEach((rating) => {
+              if (!$this.questions[foundApplication._id + '-' + rating._id]) {
+                $this.questions[foundApplication._id + '-' + rating._id] = {};
+              }
+              $this.questions[foundApplication._id + '-' + rating._id].rate = rating.rating;
+            });
+          }
         }
         console.log('$this.questions = ', $this.questions);
+        console.log('$this.questions1 = ', $this.currentApplication._id);
+        // reload star rating
+        if ($this.jobQuestions && $this.jobQuestions.length > 0 && $this.questions && $this.currentApplication) {
+          $this.jobQuestions.forEach((jobQ) => {
+            this.broadcastService.broadcast('update-rating', {
+              questionId: jobQ._id,
+              rate: $this.questions[$this.currentApplication._id + '-' + jobQ._id] ? $this.questions[$this.currentApplication._id + '-' + jobQ._id].rate : 0,
+            });
+          });
+        }
       });
     }
   }

@@ -208,7 +208,7 @@ export class MessageService {
       console.log('result = ', result);
       this.broadcastService.broadcast('update-rating', {
         questionId: vm.questionId,
-        applicationId: vm.applicationId,
+        applicationId: vm.application._id,
         questionType: vm.questionType,
         rate: vm.rating,
       });

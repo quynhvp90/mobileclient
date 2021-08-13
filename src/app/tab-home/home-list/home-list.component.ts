@@ -69,6 +69,10 @@ export class HomeListComponent implements OnInit, OnDestroy {
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'reload-data') {
         // respond to broadcast here
+        if ($this.organizationService.organization) {
+          $this.organizationId = $this.organizationService.organization._id;
+        }
+        $this.getData();
       }
       // if (msg.name === 'reload-org') {
       //   // respond to broadcast here
@@ -96,13 +100,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
     });
 
     $this.getData();
-  }
-
-  public backButton() {
-    this.navCtrl.back();
-  }
-  public changeOrg() {
-    this.router.navigate(['list-org-screen']);
   }
 
   public ngOnDestroy() {

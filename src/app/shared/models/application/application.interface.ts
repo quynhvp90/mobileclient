@@ -128,6 +128,7 @@ export interface IApplication {
           userId: string,
           archived: boolean,
           rating: number,
+          _id: string,
         }],
       },
     }

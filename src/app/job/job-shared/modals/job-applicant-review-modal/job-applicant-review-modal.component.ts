@@ -194,13 +194,14 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       $this.getMessageComment();
     });
   }
-  public save () {
+  async save () {
     const $this = this;
     // save comment
     $this.saveComment();
     // save rating
     const subject = 'Rated this question: ';
     if (!$this.star) {
+      await this.modalController.dismiss();
       return;
     }
     const payloadRating: IMessage = {
@@ -213,12 +214,12 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       message: {
         data: {
           subject: subject,
-          body: $this.star.toString(),
+          body: $this.star ? $this.star.toString() : 0,
         },
       },
     };
 
-    $this.messageService.createMessage(payloadRating).subscribe((result) => {
+    $this.messageService.createMessage(payloadRating).subscribe(async (result) => {
       console.log('result = ', result);
       this.broadcastService.broadcast('update-rating', {
         questionId: $this.question._id,
@@ -226,7 +227,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         questionType: $this.mode,
         rate: $this.star,
       });
-      return result;
+      await this.modalController.dismiss();
     });
   }
 }

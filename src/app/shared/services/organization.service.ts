@@ -47,6 +47,7 @@ export class OrganizationService {
           console.log(msgHdr + 'res = ', res);
           const user = res;
           $this.userService.updateToken(user);
+          this.broadcastService.broadcast('reload-data');
           return user;
         }), catchError((err) => {
           console.log('err = ', err);
@@ -94,9 +95,8 @@ export class OrganizationService {
                     $this.organization = org;
                     this.broadcastService.broadcast('reload-data');
                   }
-                });  
+                });
               }
-              
             }
           }
           return res;

@@ -16,15 +16,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="job-applicant-review-modal">
+<ion-content class="job-applicant-review-modal" style="--background: #efefef">
   <div *ngIf="saving">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
   <div *ngIf="!saving && question" class="content-modal">
     <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
       <ion-card-header>
-        <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
-        <ion-card-title>Question #{{ (index + 1) }} of {{ total }}</ion-card-title>
+        <!-- <ion-card-title>Question #{{ (index + 1) }} of {{ total }}</ion-card-title> -->
+        <ion-card-title>Question</ion-card-title>
       </ion-card-header>
     
       <ion-card-content>
@@ -42,7 +42,7 @@
       </video-player> -->
       </div>
       <ion-card-header>
-        <ion-card-title>Answers</ion-card-title>
+        <ion-card-title>Answer</ion-card-title>
         <ion-card-subtitle>
           <ion-row class="answer-header">
             <p class="answer-header-title">Answer #{{ currentAnswerIndex + 1 }} of {{ answers.length }}</p>

@@ -11,42 +11,43 @@
 <ion-content style="--background: #e6ebf1" class="home-list-content">
   <div *ngIf="isLoading">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
-  </div>
+  <!-- </div>
   <ion-list>
     <ion-item detail="true" *ngFor="let jobToReview of jobsToReview">
       <ion-label>
         {{ jobToReview.title }}
         <ion-row>
-          <ion-chip (click)="reviewJobApplicants(jobToReview, 'homework')" style="height: 25px; background: #57a230; color: #fff;" *ngIf="jobToReview.countHomework > 0">
+          <ion-chip (click)="reviewJobApplicants(jobToReview, 'homework')"
+            style="height: 25px; background: #57a230; color: #fff;" *ngIf="jobToReview.countHomework > 0">
             <ion-label>Homework ({{ jobToReview.countHomework }})</ion-label>
           </ion-chip>
         </ion-row>
         <ion-row>
-          <ion-chip (click)="reviewJobApplicants(jobToReview, 'interview')" style="height: 25px; background: #068fee; color: #fff;" *ngIf="jobToReview.countInterview > 0">
+          <ion-chip (click)="reviewJobApplicants(jobToReview, 'interview')"
+            style="height: 25px; background: #068fee; color: #fff;" *ngIf="jobToReview.countInterview > 0">
             <ion-label>Interview ({{ jobToReview.countInterview }})</ion-label>
           </ion-chip>
         </ion-row>
         <ion-row>
-          <ion-chip (click)="reviewJobApplicants(jobToReview, 'qualified')" style="height: 25px; background: #7e53c3; color: #fff;" *ngIf="jobToReview.countQualifield > 0">
+          <ion-chip (click)="reviewJobApplicants(jobToReview, 'qualified')"
+            style="height: 25px; background: #7e53c3; color: #fff;" *ngIf="jobToReview.countQualifield > 0">
             <ion-label>Qualified ({{ jobToReview.countQualifield }})</ion-label>
           </ion-chip>
         </ion-row>
       </ion-label>
-      <!-- <ion-note slot="end" color="primary" *ngIf="jobToReview.reviewType === 'homework'">
-        <ion-chip style="background: #57a230; color: #fff;">
-          <ion-label>Homework ({{ jobToReview.count }})</ion-label>
-        </ion-chip>
-      </ion-note>
-      <ion-note slot="end" color="success" *ngIf="jobToReview.reviewType === 'interview'">
-        <ion-chip style="background: #068fee; color: #fff;">
-          <ion-label>Interview ({{ jobToReview.count }})</ion-label>
-        </ion-chip>
-      </ion-note>
-      <ion-note slot="end" color="success" *ngIf="jobToReview.reviewType === 'qualified'">
-        <ion-chip style="background: #7e53c3; color: #fff;">
-          <ion-label>Qualified ({{ jobToReview.count }})</ion-label>
-        </ion-chip>
-      </ion-note> -->
     </ion-item>
-  </ion-list>
+  </ion-list> -->
+
+  <ion-card *ngFor="let jobToReview of jobsToReview" style="--background: #ffffff;">
+    <ion-card-header>
+      <ion-card-title>{{ jobToReview.title }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding-top: 0px;">
+      <ion-list detail>
+        <ion-item detail (click)="reviewJobApplicants(jobToReview, 'homework')" *ngIf="jobToReview.countHomework" style="color: #57a230;">Review Homework ({{ jobToReview.countHomework }})</ion-item>
+        <ion-item detail (click)="reviewJobApplicants(jobToReview, 'interview')" *ngIf="jobToReview.countInterview" style="color: #068fee;">Review Interview ({{ jobToReview.countInterview }})</ion-item>
+        <ion-item detail (click)="reviewJobApplicants(jobToReview, 'qualified')" *ngIf="jobToReview.countQualifield" style="color: #7e53c3;">Review Qualified ({{ jobToReview.countQualifield }})</ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

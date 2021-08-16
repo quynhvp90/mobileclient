@@ -1,12 +1,14 @@
 .job-applicant-review-modal {
-  --background: #e6ebf1;
   ion-textarea {
     textarea {
       padding-left: 10px;
     }
   }
   .content-modal {
-    padding: 10px;
-    background-color: #fff;
+    // padding: 10px;
+    ion-card {
+      background: #ffffff;
+
+    }
   }
 }

@@ -46,7 +46,7 @@
       <ion-list detail>
         <ion-item detail (click)="reviewJobApplicants(jobToReview, 'homework')" *ngIf="jobToReview.countHomework" style="color: #57a230;">Review Homework ({{ jobToReview.countHomework }})</ion-item>
         <ion-item detail (click)="reviewJobApplicants(jobToReview, 'interview')" *ngIf="jobToReview.countInterview" style="color: #068fee;">Review Interview ({{ jobToReview.countInterview }})</ion-item>
-        <ion-item detail (click)="reviewJobApplicants(jobToReview, 'qualified')" *ngIf="jobToReview.countQualifield" style="color: #7e53c3;">Review Qualified ({{ jobToReview.countQualifield }})</ion-item>
+        <!-- <ion-item detail (click)="reviewJobApplicants(jobToReview, 'qualified')" *ngIf="jobToReview.countQualifield" style="color: #7e53c3;">Review Qualified ({{ jobToReview.countQualifield }})</ion-item> -->
       </ion-list>
     </ion-card-content>
   </ion-card>

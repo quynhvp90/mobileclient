@@ -1,32 +1,27 @@
 <div class="star-rating">
-  <div *ngIf="isApplicable">
-    <div class="stars">
-      <div *ngIf="!displayWords">
-        <!-- <ion-icon class="star-icon" name="{{ positive.display }}" (click)="rating(i+1)" *ngFor="let positive of positives; index as i"></ion-icon> -->
+
+  <div class="stars">
+    <!-- rate = {{ rate }} -->
+    <div *ngIf="!displayWords">
+      <!-- <ion-icon class="star-icon" name="{{ positive.display }}" (click)="rating(i+1)" *ngFor="let positive of positives; index as i"></ion-icon> -->
+      <p style="padding-left: 5px; color: #fcd100;" *ngIf="rate <= 0">You have not yet rated this answer</p>
+      <div *ngIf="rate > 0">
         <ion-icon class="star-icon" name="{{ positive.display }}" *ngFor="let positive of positives; index as i"></ion-icon>
       </div>
-      <ion-item *ngIf="displayWords">
-        <ion-label>
-          <ion-icon class="star-icon" name="{{ pos.display }}" *ngFor="let pos of positives; index as i"></ion-icon>
-        </ion-label>
-        <ion-select interface="popover" (ionChange)="ratingChange($event)" [(ngModel)]="rate">
-          <ion-select-option value="0">Not Applicable</ion-select-option>
-          <ion-select-option value="1">Very Poor</ion-select-option>
-          <ion-select-option value="2">Poor</ion-select-option>
-          <ion-select-option value="3">OK</ion-select-option>
-          <ion-select-option value="4">Good</ion-select-option>
-          <ion-select-option value="5">Very Good</ion-select-option>
-        </ion-select>
-      </ion-item>
     </div>
-    <!-- <div class="cp-stars" *ngIf="!hasResults">
-      No Ratings
-    </div> -->
+    <ion-item *ngIf="displayWords">
+      <ion-label>
+        <ion-icon class="star-icon" name="{{ pos.display }}" *ngFor="let pos of positives; index as i"></ion-icon>
+      </ion-label>
+      <ion-select interface="popover" (ionChange)="ratingChange($event)" [(ngModel)]="rate">
+        <ion-select-option value="0">Not Applicable</ion-select-option>
+        <ion-select-option value="1">Very Poor</ion-select-option>
+        <ion-select-option value="2">Poor</ion-select-option>
+        <ion-select-option value="3">OK</ion-select-option>
+        <ion-select-option value="4">Good</ion-select-option>
+        <ion-select-option value="5">Very Good</ion-select-option>
+      </ion-select>
+    </ion-item>
   </div>
-  <div *ngIf="!isApplicable">
-    <!-- <div class="not-applicable">
-      -- N/A --
-    </div> -->
-    <div class="label-na">Not Applicable</div>
-  </div>
+
 </div>

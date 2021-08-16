@@ -234,6 +234,25 @@ export class MessageService {
       );
   }
 
+  public updateMessage(messageId, body) {
+    const $this = this;
+    const setting: ISetting = {
+      resource: 'messages',
+      id: messageId,
+      payload: {
+        body: body,
+      },
+    };
+    return $this.apiService.put(setting)
+      .pipe(
+        map((res) => {
+          return res;
+        }), catchError((err) => {
+          return $this.exceptionService.catchBadResponse(err);
+        }),
+      );
+  }
+
   public postSocial(foundMessage: IMessageDocument, socialData: {
     emote?: string,
     comment?: string,

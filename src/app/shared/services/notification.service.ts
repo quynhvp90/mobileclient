@@ -61,7 +61,7 @@ export class NotificationService {
     }
     this.bellInterval = setInterval(() => {
       this.getBell();
-    }, 10000);
+    }, 1000);
     this.getBell();
   }
 

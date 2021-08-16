@@ -29,6 +29,17 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public foundApplications: IApplicationDocument[];
   public questions: any = {};
   public quizType = 'homework';
+  public queryObj = {
+    sortField: "stageXsubmitted",
+    sortFieldTable: "stageXsubmitted",
+    sortOrder: "asc",
+    limit: 3,
+    page: 1,
+    skip: 0,
+    fields: {
+      results: 0,
+    },
+  };
 
   constructor(
     private broadcastService: BroadcastService,
@@ -92,6 +103,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       $this.quizType = 'applicant';
       $this.jobQuestions = [];
     }
+    $this.currentApplicationNumber = 1;
     $this.getData();
   }
 
@@ -102,13 +114,17 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   private getData() {
     const $this = this;
-    $this.currentApplicationNumber = 1;
     $this.isLoading = true;
-    $this.applicationApiService.getApplicationsToReview($this.jobApiService.foundJob._id, this.mode).subscribe((result) => {
+    $this.applicationApiService.getApplicationsToReview($this.jobApiService.foundJob._id, this.mode, this.queryObj).subscribe((result) => {
       console.log('result = ', result);
       $this.isLoading = false;
       $this.totalApplicationNumber = result.count;
-      $this.foundApplications = result.items;
+      if (!$this.foundApplications) {
+        $this.foundApplications = <IApplicationDocument[]>result.items;
+      } else {
+        $this.foundApplications = $this.foundApplications.concat(<IApplicationDocument[]>result.items);
+      }
+
       $this.getCurrentApplication();
     });
     // get comments 
@@ -117,8 +133,10 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   private getCurrentApplication() {
     const $this = this;
     if ($this.foundApplications[$this.currentApplicationNumber - 1]) {
+      $this.isLoading = true;
       $this.applicationApiService.getApplication($this.foundApplications[$this.currentApplicationNumber - 1]._id).subscribe((foundApplication) => {
         console.log('foundApplication = ', foundApplication);
+        $this.isLoading = false;
         $this.currentApplication = foundApplication;
         if ($this.mode === 'qualified' && foundApplication.results && foundApplication.results.ratings && foundApplication.results.ratings.applicant) {
           $this.jobQuestions = foundApplication.results.ratings.applicant.ratings;
@@ -175,10 +193,11 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           }
         }
         console.log('$this.questions = ', $this.questions);
-        console.log('$this.questions1 = ', $this.currentApplication._id);
+        console.log('$this.currentApplicationId = ', $this.currentApplication._id);
         // reload star rating
         if ($this.jobQuestions && $this.jobQuestions.length > 0 && $this.questions && $this.currentApplication) {
           $this.jobQuestions.forEach((jobQ) => {
+            console.log('reload star question = ', jobQ._id);
             this.broadcastService.broadcast('update-rating', {
               questionId: jobQ._id,
               rate: $this.questions[$this.currentApplication._id + '-' + jobQ._id] ? $this.questions[$this.currentApplication._id + '-' + jobQ._id].rate : 0,
@@ -186,7 +205,9 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           });
         }
       });
+      return;
     }
+    $this.isLoading = false;
   }
 
   private updateData() {
@@ -201,16 +222,21 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   }
 
   public nextApplicant() {
-    if ((this.currentApplicationNumber + 1) <= this.foundApplications.length) {
+    if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
       this.currentApplicationNumber += 1;
+      if (this.currentApplicationNumber > this.foundApplications.length) {
+        this.queryObj.page += 1;
+        this.getData();
+        return;
+      }
       this.getCurrentApplication();
     }
   }
 
-
   public previousApplicant() {
     if (this.currentApplicationNumber > 1) {
       this.currentApplicationNumber -= 1;
+      this.isLoading = true;
       this.getCurrentApplication();
     }
 

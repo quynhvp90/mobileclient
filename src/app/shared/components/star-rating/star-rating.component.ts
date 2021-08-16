@@ -17,12 +17,10 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public questionId = null;
   @Input() public application = null;
   @Input() public type = null;
-  public isApplicable = true;
   // public hasResults = true;
   private subscriptions = [];
   private positives = [];
   private model = 'rating-star-result';
-  private selectRating = this.rate;
   private positiveSources = [];
   constructor(
     private broadcastService: BroadcastService,
@@ -33,6 +31,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'update-rating') {
         if (msg.message && msg.message.questionId === $this.questionId) {
+          $this.rate = msg.message.rate;
           $this.positives = $this.computeStars(msg.message.rate, 5);
         }
       }
@@ -47,14 +46,13 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
       $this.model += ('-' + $this.name);
     }
     // tslint:disable-next-line: no-increment-decrement
-    for (let index = 0; index < 6; index++) {
-      $this.positiveSources.push($this.computeStars(index));
+    // for (let index = 0; index < 6; index++) {
+    //   $this.positiveSources.push($this.computeStars(index));
+    // }
+    if (!$this.rate) {
+      $this.rate = 0;
     }
     console.log('$this.rate ==== ', $this.rate);
-    if ($this.rate && $this.rate.toString() === '-1') {
-      $this.isApplicable = false;
-      return;
-    }
     // if (!$this.rate || $this.rate === 0) {
     //   $this.hasResults = false;
     //   return;
@@ -79,6 +77,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public rating(star) {
     const $this = this;
+    $this.rate = star;
     $this.positives = $this.computeStars(star, 5);
     if ($this.questionId && $this.application && $this.type) {
       $this.messageService.rateQuestion({
@@ -120,7 +119,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
         positives.push({
           display: 'star',
         });
-      } else if (rate -index < 0) {
+      } else if (rate - index < 0) {
         positives.push({
           display: 'star-outline',
         });

@@ -28,8 +28,15 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   private currentAnswerIndex = -1;
   public saving = false;
   public comments = [];
+  public currentMessage: {
+    _id?: string,
+    questionId?: string,
+    user?: any,
+    messageText?: string,
+  } = {
+    messageText: '',
+  };
   public star = null;
-  public messageText = '';
 
   constructor(
     private workoutService: WorkoutService,
@@ -98,8 +105,8 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     const $this = this;
     const query = {
       sortField: 'created',
-      sortOrder: 'ASC',
-      limit: 1000,
+      sortOrder: 'desc',
+      limit: 1,
       where: {
         distributionType: 'employer',
         questionType: $this.mode,
@@ -119,16 +126,22 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       console.log('data = ', res);
       if (res && res.items && res.items.length > 0) {
         $this.comments = [];
-        res.items.forEach((item) => {
-          if (item.questionId === $this.question._id && item.message.data.body) {
-            $this.comments.push({
-              questionId: item.questionId,
-              user: item.lookups.users[0],
-              message: item.message.data,
-              created: item.created,
-            });
-          }
-        });
+        $this.currentMessage = {
+          _id: res.items[0]._id,
+          questionId: res.items[0].questionId,
+          user: res.items[0].lookups.users[0],
+          messageText: res.items[0].message.data.body,
+        };
+        // res.items.forEach((item) => {
+        //   if (item.questionId === $this.question._id && item.message.data.body) {
+        //     $this.comments.push({
+        //       questionId: item.questionId,
+        //       user: item.lookups.users[0],
+        //       message: item.message.data,
+        //       created: item.created,
+        //     });
+        //   }
+        // });
       }
     });
   }
@@ -164,7 +177,11 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     const $this = this;
     const msgHdr = 'commentAdd: ';
 
-    if (!$this.messageText || ($this.messageText && $this.messageText.length === 0)) {
+    if ($this.currentMessage && $this.currentMessage._id) {
+      this.updateComment();
+      return;
+    }
+    if (!$this.currentMessage.messageText || ($this.currentMessage.messageText && $this.currentMessage.messageText.length === 0)) {
       return;
     }
     let distributionType = ['applicant', 'employer'];
@@ -182,7 +199,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       distributionType: distributionType,
       message: {
         data: {
-          body: $this.messageText,
+          body: $this.currentMessage.messageText,
         },
       },
     };
@@ -190,7 +207,22 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     $this.messageService.createMessage(payload)
     .subscribe((resp) => {
       console.log(msgHdr + 'resp = ', resp);
-      $this.messageText = null;
+      $this.currentMessage.messageText = null;
+      $this.getMessageComment();
+    });
+  }
+
+  public updateComment() {
+    const $this = this;
+    const msgHdr = 'commentAdd: ';
+
+    if (!this.currentMessage || ($this.currentMessage && !$this.currentMessage._id)) {
+      return;
+    }
+    $this.messageService.updateMessage($this.currentMessage._id, $this.currentMessage.messageText)
+    .subscribe((resp) => {
+      console.log(msgHdr + 'resp = ', resp);
+      $this.currentMessage.messageText = null;
       $this.getMessageComment();
     });
   }

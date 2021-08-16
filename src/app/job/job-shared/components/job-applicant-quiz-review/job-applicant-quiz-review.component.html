@@ -1,7 +1,7 @@
 <div class="job-applicant-quiz-review">
   <ion-toolbar class="top-toolbar">
     <ion-buttons slot="start">
-      <ion-button style="color: #fff;" [disabled]="currentApplicationNumber === 1" (click)="previousApplicant()">
+      <ion-button style="color: #fff;" [disabled]="currentApplicationNumber === 1 || isLoading" (click)="previousApplicant()">
         <ion-icon name="arrow-dropleft"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -9,7 +9,7 @@
       Applicant {{ currentApplicationNumber }} of {{ totalApplicationNumber }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button style="color: #fff;" [disabled]="currentApplicationNumber === totalApplicationNumber" (click)="nextApplicant()">
+      <ion-button style="color: #fff;" [disabled]="currentApplicationNumber === totalApplicationNumber || isLoading" (click)="nextApplicant()">
         <ion-icon name="arrow-dropright"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -26,8 +26,11 @@
           <p *ngIf="quizType === 'homework' || quizType === 'interview'" class="question-answer">Answer: </p>
           <p class="answer" *ngIf="(quizType === 'homework' || quizType === 'interview') && questions[(currentApplication._id + '-' + question._id)]">{{ questions[(currentApplication._id + '-' + question._id)].response }}</p>
         </ion-label>
+        <!-- {{ question._id }} -->
         <ion-label class="item-label" style="margin-top: 5px;">
           <h4 style="font-weight: bold;">You Rated</h4>
+          <!-- {{ currentApplication._id }} -->
+          
           <ng-container *ngIf="question && questions[(currentApplication._id + '-' + question._id)]">
             <star-rating [rate]="questions[(currentApplication._id + '-' + question._id)].rate" [questionId]="question._id"></star-rating>
           </ng-container>

@@ -27,7 +27,6 @@ const routes: Routes = [
     RouterModule,
     SharedModule,
     JobSharedModule,
-    // StarRatingModule,
     JobsServicesModule,
     RouterModule.forChild(routes),
   ],

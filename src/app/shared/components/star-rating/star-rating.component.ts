@@ -31,7 +31,6 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'update-rating') {
         if (msg.message && msg.message.questionId === $this.questionId) {
-          $this.rate = msg.message.rate;
           $this.positives = $this.computeStars(msg.message.rate, 5);
         }
       }
@@ -77,7 +76,6 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public rating(star) {
     const $this = this;
-    $this.rate = star;
     $this.positives = $this.computeStars(star, 5);
     if ($this.questionId && $this.application && $this.type) {
       $this.messageService.rateQuestion({
@@ -105,6 +103,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!rate) {
       rate = 0;
     }
+    this.rate = rate;
     if (max) {
       maxRate = max;
     }

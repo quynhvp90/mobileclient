@@ -103,6 +103,11 @@ export class LicenseModal implements OnDestroy, OnInit {
     });
 
     this.stripe = this.stripeFactory.create(this.customWindow.appkeys.stripe.key);
+    if (this.customWindow.appkeys && this.customWindow.appkeys.ziggeo) {
+      const user = this.userService.user;
+      user.apiVideoToken = this.customWindow.appkeys.ziggeo.applicationkey;
+    }
+
     this.buildForm();
     this.stripe.elements(this.elementsOptions)
       .subscribe((elements) => {

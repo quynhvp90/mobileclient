@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService, BroadcastService, IonicAlertService, IUpdatePriority, ToastService, UserService, WorkoutService, AnimationService, MessageService } from '../../../../shared/services';
 import { ModalController  } from '@ionic/angular';
@@ -6,6 +6,7 @@ import { ApplicationApiService } from '../../services/application.api.service';
 import { JobApiService } from '../../services/job.api.service';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
 import { IMessage, IMessageDocument } from 'src/app/shared/models/message.interface';
+// import { ZiggeoPlayerDirective } from 'angular-ziggeo';
 
 const jsFilename = 'job-applicant-review: ';
 
@@ -21,6 +22,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   @Input() public index = 0;
   @Input() public total = 0;
   @Input() public mode = '';
+  // @ViewChild('ziggeoplayer', { static: false }) ziggeoplayer: ZiggeoPlayerDirective;
   private subscriptions = [];
 
   private answers = [];
@@ -45,6 +47,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     private activityService: ActivityService,
     public applicationApiService: ApplicationApiService,
     public jobApiService: JobApiService,
+    public userService: UserService,
     public messageService: MessageService,
     private modalController: ModalController,
     private animationService: AnimationService,

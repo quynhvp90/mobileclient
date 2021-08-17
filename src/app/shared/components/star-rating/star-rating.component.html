@@ -4,8 +4,8 @@
     <!-- rate = {{ rate }} -->
     <div *ngIf="!displayWords">
       <!-- <ion-icon class="star-icon" name="{{ positive.display }}" (click)="rating(i+1)" *ngFor="let positive of positives; index as i"></ion-icon> -->
-      <p style="padding-left: 5px; color: #fcd100;" *ngIf="rate <= 0">You have not yet rated this answer</p>
-      <div *ngIf="rate > 0">
+      <p style="padding-left: 5px; color: #fcd100;" *ngIf="!rate || rate === 0">You have not yet rated this answer</p>
+      <div *ngIf="rate && rate > 0">
         <ion-icon class="star-icon" name="{{ positive.display }}" *ngFor="let positive of positives; index as i"></ion-icon>
       </div>
     </div>

@@ -36,12 +36,21 @@
     <!-- Answers -->
     <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
       <!-- {{ currentAnswer.videoId }} -->
-      <!-- <div>
-        <video-player id="video{{ currentAnswer.videoId }}"
-          height="324"
-          video-id="currentAnswer.videoId">
-        </video-player>
-      </div> -->
+      <div>
+        <!-- <ziggeoplayer
+          ziggeo-video="currentAnswer.videoId"
+          ziggeo-width=320
+          ziggeo-height=240>
+        </ziggeoplayer> -->
+        <!-- <ziggeoplayer
+          ziggeo-video="1021105adec146e79d72a0bd790462d6"
+          ziggeo-width=320
+          ziggeo-height=240>
+        </ziggeoplayer> -->
+        <!-- <ziggeoplayer
+          [options]="{video: currentAnswer.videoId, width: 320, height: 180}"
+        ></ziggeoplayer> -->
+      </div>
       <ion-card-header>
         <ion-card-title>Answer</ion-card-title>
         <ion-card-subtitle>

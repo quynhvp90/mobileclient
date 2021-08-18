@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
-import { BroadcastService, MessageService } from '../../../../shared/services';
+import { BroadcastService, IonicAlertService, MessageService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
 import { JobApplicantReviewModalComponent } from '../../modals/job-applicant-review-modal/job-applicant-review-modal.component';
 import { ApplicationApiService } from '../../services/application.api.service';
@@ -33,7 +33,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     sortField: "stageXsubmitted",
     sortFieldTable: "stageXsubmitted",
     sortOrder: "asc",
-    limit: 3,
+    limit: 20,
     page: 1,
     skip: 0,
     fields: {
@@ -45,6 +45,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     private broadcastService: BroadcastService,
     private modalController: ModalController,
     public jobApiService: JobApiService,
+    private ionicAlertService: IonicAlertService,
     private applicationApiService: ApplicationApiService,
   ) {
     const $this = this;
@@ -222,6 +223,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   }
 
   public nextApplicant() {
+    this.checkDoneAllQuestion();
     if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
       this.currentApplicationNumber += 1;
       if (this.currentApplicationNumber > this.foundApplications.length) {
@@ -240,6 +242,25 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       this.getCurrentApplication();
     }
 
+  }
+
+  public checkDoneAllQuestion() {
+    const $this = this;
+    let ratingComplete = true;
+    if ($this.jobQuestions) {
+      $this.jobQuestions.forEach((jQuestion) => {
+        const questionRate = $this.questions[$this.currentApplication._id + '-' + jQuestion._id];
+        if (questionRate && questionRate.rate && questionRate.rate > 0) {
+          ratingComplete = false;
+        }
+      });
+    }
+    if (!ratingComplete) {
+      $this.ionicAlertService.presentAlertConfirm('You don\'t complete rating, Are you sure next to applicant?', null)
+      .then((res) => {
+        console.log(res);
+      });
+    }
   }
 
   public async viewHomework(question, questionIndex) {

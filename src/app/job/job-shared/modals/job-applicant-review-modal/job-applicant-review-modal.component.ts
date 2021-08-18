@@ -1,3 +1,4 @@
+// declare const ziggeoplayer: any;
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService, BroadcastService, IonicAlertService, IUpdatePriority, ToastService, UserService, WorkoutService, AnimationService, MessageService } from '../../../../shared/services';
@@ -22,7 +23,8 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   @Input() public index = 0;
   @Input() public total = 0;
   @Input() public mode = '';
-  // @ViewChild('ziggeoplayer', { static: false }) ziggeoplayer: ZiggeoPlayerDirective;
+  player: any;
+  @ViewChild('ziggeoplayer', null) ziggeoplayer: any;
   private subscriptions = [];
 
   private answers = [];
@@ -103,6 +105,22 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     this.subscriptions.push(subscription);
     this.getMessageComment();
   }
+
+  // ngAfterViewInit () {
+  //   this.player = this.ziggeoplayer.playerInstance;
+
+  //   this.player.on('attached', () => {
+  //     console.log('Attached');
+  //   });
+
+  //   this.player.on('playing', () => {
+  //     console.log('Playing your action here');
+  //   });
+
+  //   this.player.on('paused', () => {
+  //     console.log('Paused, your action here');
+  //   });
+  // }
 
   public getMessageComment() {
     const $this = this;

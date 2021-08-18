@@ -67,7 +67,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
     }
 
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
-      if (msg.name === 'reload-data') {
+      if (msg.name === 'reload-data' && $this.organizationId) {
         // respond to broadcast here
         if ($this.organizationService.organization) {
           $this.organizationId = $this.organizationService.organization._id;

@@ -35,16 +35,26 @@
 
     <!-- Answers -->
     <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
-      <div *ngIf="currentAnswer.videoId">
-        <!-- <video-player id="video{{ currentAnswer.videoId }}"
-        height="324"
-        video-id="currentAnswer.videoId">
-      </video-player> -->
+      <!-- {{ currentAnswer.videoId }} -->
+      <div>
+        <!-- <ziggeoplayer
+          ziggeo-video="currentAnswer.videoId"
+          ziggeo-width=320
+          ziggeo-height=240>
+        </ziggeoplayer> -->
+        <!-- <ziggeoplayer
+          ziggeo-video="1021105adec146e79d72a0bd790462d6"
+          ziggeo-width=320
+          ziggeo-height=240>
+        </ziggeoplayer> -->
+        <!-- <ziggeoplayer
+          [options]="{video: currentAnswer.videoId, width: 320, height: 180}"
+        ></ziggeoplayer> -->
       </div>
       <ion-card-header>
         <ion-card-title>Answer</ion-card-title>
         <ion-card-subtitle>
-          <ion-row class="answer-header">
+          <ion-row *ngIf="answers.length > 1" class="answer-header">
             <p class="answer-header-title">Answer #{{ currentAnswerIndex + 1 }} of {{ answers.length }}</p>
             <div class="answer-header-button">
               <ion-buttons style="float: left;">
@@ -99,11 +109,11 @@
 
       <ion-card-content>
         <ion-item>
-          <ion-textarea style="border: 1px solid #c6c6c6; border-radius: 5px; margin-bottom: 10px;" [(ngModel)]="messageText" rows="4" placeholder="Comments"></ion-textarea>
+          <ion-textarea style="border: 1px solid #c6c6c6; border-radius: 5px; margin-bottom: 10px;" [(ngModel)]="currentMessage.messageText" rows="4" placeholder="Comments"></ion-textarea>
         </ion-item>
-        <ion-item style="cursor: pointer;" detail="true" *ngFor="let comment of comments">
+        <!-- <ion-item style="cursor: pointer;" detail="true" *ngFor="let comment of comments">
           <ion-label>{{ comment.message.body }}</ion-label>
-        </ion-item>
+        </ion-item> -->
       </ion-card-content>
     </ion-card>
     

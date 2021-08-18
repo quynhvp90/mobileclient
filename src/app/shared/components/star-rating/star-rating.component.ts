@@ -17,12 +17,10 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public questionId = null;
   @Input() public application = null;
   @Input() public type = null;
-  public isApplicable = true;
   // public hasResults = true;
   private subscriptions = [];
   private positives = [];
   private model = 'rating-star-result';
-  private selectRating = this.rate;
   private positiveSources = [];
   constructor(
     private broadcastService: BroadcastService,
@@ -47,14 +45,13 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
       $this.model += ('-' + $this.name);
     }
     // tslint:disable-next-line: no-increment-decrement
-    for (let index = 0; index < 6; index++) {
-      $this.positiveSources.push($this.computeStars(index));
+    // for (let index = 0; index < 6; index++) {
+    //   $this.positiveSources.push($this.computeStars(index));
+    // }
+    if (!$this.rate) {
+      $this.rate = 0;
     }
     console.log('$this.rate ==== ', $this.rate);
-    if ($this.rate && $this.rate.toString() === '-1') {
-      $this.isApplicable = false;
-      return;
-    }
     // if (!$this.rate || $this.rate === 0) {
     //   $this.hasResults = false;
     //   return;
@@ -106,6 +103,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!rate) {
       rate = 0;
     }
+    this.rate = rate;
     if (max) {
       maxRate = max;
     }
@@ -120,7 +118,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
         positives.push({
           display: 'star',
         });
-      } else if (rate -index < 0) {
+      } else if (rate - index < 0) {
         positives.push({
           display: 'star-outline',
         });

@@ -38,14 +38,14 @@ export class ApplicationApiService {
     });
   }
 
-  public getApplicationsToReview(jobId: string, stage: string,): Observable<{
+  public getApplicationsToReview(jobId: string, stage: string, queryObj: any): Observable<{
     count: number,
     items: any[]
   }> {
     const $this = this;
     const msgHdr = jsFilename + 'getApplications: ';
 
-    const status: string[] = []; 
+    const status: string[] = [];
     if (stage === 'stage2') {
       status.push('stage2-submitted');
       status.push('stage2-review');
@@ -63,24 +63,14 @@ export class ApplicationApiService {
       });
     }
 
-    console.log('$this.organizationService.organization = ', $this.organizationService.organization);
-
-    const queryObj = {
-      sortField: "stageXsubmitted",
-      sortFieldTable: "stageXsubmitted",
-      sortOrder: "asc",
-      limit: 20,
-      page: 1,
-      skip: 0,
-      fields: {
-        results: 0
-      },
-      where: {
-        organizationId: $this.userService.user.defaultOrganizationId,
-        jobId: jobId,
-        status: status
-      }
+    if (!queryObj.where) {
+      queryObj.where = {};
     }
+    queryObj.where.organizationId = $this.userService.user.defaultOrganizationId;
+    queryObj.where.jobId = jobId;
+    queryObj.where.status = status;
+
+    console.log('$this.organizationService.organization = ', $this.organizationService.organization);
 
     const setting: ISetting = {
       resource: 'applications',

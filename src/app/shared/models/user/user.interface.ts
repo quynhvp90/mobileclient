@@ -28,6 +28,7 @@ export interface IUser extends IPerson {
   activeWorkoutId?: string;
   license?: any;
   stripe?: any;
+  apiVideoToken?: string,
   avatar?: string;
   publicName?: string;
   publicId?: string;

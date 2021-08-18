@@ -14,6 +14,17 @@
   <!-- <meta http-equiv="Content-Security-Policy" content="default-src gap: https://accounts.google.com file://* *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *"> -->
   <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
 
+  <!-- <link rel="stylesheet" href="//assets-cdn.ziggeo.com/v1-r36/ziggeo.css" />
+  <script src="//assets-cdn.ziggeo.com/v1-r36/ziggeo.js"></script> -->
+
+  <link rel="stylesheet" href="https://assets-cdn.ziggeo.com/v2-stable/ziggeo.css" />
+  <script src="https://assets-cdn.ziggeo.com/v2-stable/ziggeo.js"></script>
+  <script>
+    var ziggeoApp = new ZiggeoApi.V2.Application({
+        token: "b97406bd924a56aed066dc7b141077a7",
+      });
+  </script>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.7.0/introjs.min.css">
 
   <!-- add to homescreen for ios -->
@@ -22,25 +33,36 @@
 
   <script>
     var hostname = location.hostname;
+    var DEBUG_MODE = false;
     console.log('hostname = ', hostname);
     window.apiServer = 'https://mobile.career.place';
     window.apiServer = 'http://localhost:4000';
-
+    console.log('apiServerVideo = ', ZiggeoApi);
     var request = new XMLHttpRequest();
     request.open('GET', window.apiServer + '/api/settings/keys', true);
     request.setRequestHeader('Accept', 'application/json');
-
     request.onload = function () {
       if (request.status >= 200 && request.status < 400) {
         // Success!
         data = JSON.parse(request.responseText);
         window.appkeys = data;
+        console.log('window.appkeys.ziggeo.applicationkey = ', window.appkeys.ziggeo.applicationkey);
         console.log('window.keys = ', window.appkeys);
+        // ZiggeoApi.token = window.appkeys.ziggeo.applicationkey;
+
+        // var ziggeoApplication = new ZiggeoApi.V2.Application({
+        //   token: window.appkeys.ziggeo.applicationkey,
+        //   webrtc_streaming_if_necessary: true,
+        //   webrtc_on_mobile: true,
+        // });
+        // ziggeoApplication.on('ready', function() {
+        //   console.log('ZiggeoApi.token = ', ZiggeoApi.token);
+        //   window.ziggeoReady = true;
+        // });
       } else {
         console.error('error loading keys = ', request.responseTest)
       }
     };
-
     request.onerror = function () {
       console.error('error loading keys')
     };

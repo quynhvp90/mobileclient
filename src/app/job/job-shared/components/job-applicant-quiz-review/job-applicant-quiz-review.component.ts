@@ -87,8 +87,46 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           });
         }
       }
+      if (msg.name === 'applicant-done-review') {
+        $this.checkAllApplicationRating();
+      }
     });
     this.subscriptions.push(subscription);
+  }
+
+  public checkAllApplicationRating() {
+    const $this = this;
+    let ratingAllApplications = true;
+    if ($this.foundApplications && $this.foundApplications.length > 0) {
+      $this.foundApplications.forEach((app) => {
+        if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
+          if ($this.quizType === 'homework' || $this.quizType === 'interview') {
+            if (app.results.ratings[$this.quizType].questions) {
+              app.results.ratings[$this.quizType].questions.forEach((question) => {
+                if (!question.rating || (question.rating && question.rating <= 0)) {
+                  ratingAllApplications = false;
+                }
+              });
+            }
+          } else if (app.results.ratings.applicant.ratings) {
+            app.results.ratings.applicant.ratings.forEach((rating) => {
+              if (!rating.rating || (rating.rating && rating.rating <= 0)) {
+                ratingAllApplications = false;
+              }
+            });
+          }
+        }
+      });
+      if (ratingAllApplications) {
+        const title = 'Congratulations';
+        const message = 'You have completed rating all applicants in this section.';
+        $this.ionicAlertService.presentAlertConfirmPrompt(title, message, {
+          labelConfirm: 'Done'
+        }, (res) => {
+          console.log('review applicant done.');
+        });
+      }
+    }
   }
 
   public ngOnInit(): void {
@@ -223,44 +261,54 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   }
 
   public nextApplicant() {
-    this.checkDoneAllQuestion();
-    if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
-      this.currentApplicationNumber += 1;
-      if (this.currentApplicationNumber > this.foundApplications.length) {
-        this.queryObj.page += 1;
-        this.getData();
-        return;
-      }
-      this.getCurrentApplication();
-    }
+    this.checkDoneAllQuestion(true);
   }
 
   public previousApplicant() {
-    if (this.currentApplicationNumber > 1) {
-      this.currentApplicationNumber -= 1;
-      this.isLoading = true;
-      this.getCurrentApplication();
-    }
-
+    this.checkDoneAllQuestion();
   }
 
-  public checkDoneAllQuestion() {
+  public checkDoneAllQuestion(next?: boolean) {
     const $this = this;
     let ratingComplete = true;
     if ($this.jobQuestions) {
       $this.jobQuestions.forEach((jQuestion) => {
         const questionRate = $this.questions[$this.currentApplication._id + '-' + jQuestion._id];
-        if (questionRate && questionRate.rate && questionRate.rate > 0) {
+        if (questionRate && (!questionRate.rate || (questionRate.rate && questionRate.rate === 0))) {
           ratingComplete = false;
         }
       });
     }
+    let title = 'You complete rating this applicant';
     if (!ratingComplete) {
-      $this.ionicAlertService.presentAlertConfirm('You don\'t complete rating, Are you sure next to applicant?', null)
-      .then((res) => {
-        console.log(res);
-      });
+      title = 'You don\'t complete rating';
     }
+    let message = 'Do you want to go to the next applicant?';
+    if (!next) {
+      message = 'Do you want to go to the previous applicant?'
+    }
+    $this.ionicAlertService.presentAlertConfirmPrompt(title, message, null, (res) => {
+      console.log('switch applicant');
+      // next applicant
+      if (next) {
+        if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
+          this.currentApplicationNumber += 1;
+          if (this.currentApplicationNumber > this.foundApplications.length) {
+            this.queryObj.page += 1;
+            this.getData();
+            return;
+          }
+          this.getCurrentApplication();
+          return;
+        }
+      }
+      // previous applicant
+      if (this.currentApplicationNumber > 1) {
+        this.currentApplicationNumber -= 1;
+        this.isLoading = true;
+        this.getCurrentApplication();
+      }
+    });
   }
 
   public async viewHomework(question, questionIndex) {

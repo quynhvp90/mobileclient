@@ -54,6 +54,32 @@ export class IonicAlertService {
     await alert.present();
   }
 
+  public async presentAlertConfirmPrompt(header: string, message: string, button?: {
+    labelCancel?: string,
+    labelConfirm?: string,
+  }, handlerFunction?) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: button && button.labelCancel ? button.labelCancel : 'Cancel' ,
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          },
+        }, {
+          text: button && button.labelConfirm ? button.labelConfirm :'Okay',
+          handler: handlerFunction,
+        },
+      ],
+      backdropDismiss: false,
+    });
+
+    await alert.present();
+  }
+
   async presentAlertPrompt(header: string, message: string, inputName: string, inputPlaceholder: string, handlerFunction) {
     const alert = await this.alertController.create({
       header: header,

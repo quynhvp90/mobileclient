@@ -192,68 +192,84 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   }
 
   async cancel() {
+    this.broadcastService.broadcast('applicant-done-review');
     await this.modalController.dismiss();
   }
   public saveComment(messageType?: string) {
-    const $this = this;
-    const msgHdr = 'commentAdd: ';
+    return new Promise((resolve, reject) => {
+      const $this = this;
+      const msgHdr = 'commentAdd: ';
 
-    if ($this.currentMessage && $this.currentMessage._id) {
-      this.updateComment();
-      return;
-    }
-    if (!$this.currentMessage.messageText || ($this.currentMessage.messageText && $this.currentMessage.messageText.length === 0)) {
-      return;
-    }
-    let distributionType = ['applicant', 'employer'];
-    if (!messageType) {
-      messageType = 'application-comment';
-      distributionType = ['employer'];
-    }
-    const payload = {
-      messageType: messageType, // ['notification', 'application-comment', 'application-rating', 'application-chat']
-      applicationId: $this.application._id,
-      applicantId: $this.application.applicantId,
-      jobId: $this.application.jobId,
-      questionId: $this.question._id,
-      questionType: $this.mode,
-      distributionType: distributionType,
-      message: {
-        data: {
-          body: $this.currentMessage.messageText,
+      if ($this.currentMessage && $this.currentMessage._id) {
+        this.updateComment().then((resUpdate) => {
+          resolve('update Done');
+        });
+        return;
+      }
+      if (!$this.currentMessage.messageText || ($this.currentMessage.messageText && $this.currentMessage.messageText.length === 0)) {
+        reject('messageText empty')
+        return;
+      }
+      let distributionType = ['applicant', 'employer'];
+      if (!messageType) {
+        messageType = 'application-comment';
+        distributionType = ['employer'];
+      }
+      const payload = {
+        messageType: messageType, // ['notification', 'application-comment', 'application-rating', 'application-chat']
+        applicationId: $this.application._id,
+        applicantId: $this.application.applicantId,
+        jobId: $this.application.jobId,
+        questionId: $this.question._id,
+        questionType: $this.mode,
+        distributionType: distributionType,
+        message: {
+          data: {
+            body: $this.currentMessage.messageText,
+          },
         },
-      },
-    };
+      };
 
-    $this.messageService.createMessage(payload)
-    .subscribe((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-      $this.currentMessage.messageText = null;
-      $this.getMessageComment();
+      $this.messageService.createMessage(payload)
+      .subscribe((resp) => {
+        console.log(msgHdr + 'resp = ', resp);
+        $this.currentMessage.messageText = null;
+        resolve('not-configured');
+      }, (errCreateMessage) => {
+        console.log(Date.now() + ':errCreateMessage ' + JSON.stringify(errCreateMessage, null, 4));
+        reject('Error syncing - check logs');
+      }, () => {
+        console.log(Date.now() + ':complete');
+      });
     });
+    
   }
 
   public updateComment() {
-    const $this = this;
-    const msgHdr = 'commentAdd: ';
+    return new Promise((resolve, reject) => {
+      const $this = this;
+      const msgHdr = 'commentAdd: ';
 
-    if (!this.currentMessage || ($this.currentMessage && !$this.currentMessage._id)) {
-      return;
-    }
-    $this.messageService.updateMessage($this.currentMessage._id, $this.currentMessage.messageText)
-    .subscribe((resp) => {
-      console.log(msgHdr + 'resp = ', resp);
-      $this.currentMessage.messageText = null;
-      $this.getMessageComment();
+      if (!this.currentMessage || ($this.currentMessage && !$this.currentMessage._id)) {
+        return;
+      }
+      $this.messageService.updateMessage($this.currentMessage._id, $this.currentMessage.messageText)
+      .subscribe((resp) => {
+        console.log(msgHdr + 'resp = ', resp);
+        $this.currentMessage.messageText = null;
+        resolve(resp)
+      }, (errUpdate) => {
+        reject(errUpdate);
+      });
     });
   }
   async save () {
     const $this = this;
-    // save comment
-    $this.saveComment();
+
     // save rating
     const subject = 'Rated this question: ';
     if (!$this.star) {
+      this.broadcastService.broadcast('applicant-done-review');
       await this.modalController.dismiss();
       return;
     }
@@ -272,7 +288,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       },
     };
 
-    $this.messageService.createMessage(payloadRating).subscribe(async (result) => {
+    $this.messageService.createMessage(payloadRating).subscribe((result) => {
       console.log('result = ', result);
       this.broadcastService.broadcast('update-rating', {
         questionId: $this.question._id,
@@ -280,7 +296,11 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         questionType: $this.mode,
         rate: $this.star,
       });
-      await this.modalController.dismiss();
+      // save comment
+      $this.saveComment().then(async (respSaveComment) => {
+        this.broadcastService.broadcast('applicant-done-review');
+        await this.modalController.dismiss();
+      });
     });
   }
 }

@@ -103,6 +103,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!rate) {
       rate = 0;
     }
+    rate = parseInt(rate)
     this.rate = rate;
     if (max) {
       maxRate = max;

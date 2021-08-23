@@ -98,45 +98,54 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public checkAllApplicationRating() {
     const $this = this;
     let ratingAllApplications = false;
-    if ($this.foundApplications && $this.foundApplications.length > 0) {
-      let countAppRating = 0;
-      $this.foundApplications.forEach((app) => {
-        if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
-          if ($this.quizType === 'homework' || $this.quizType === 'interview') {
-            const questionsRating = app.results.ratings[$this.quizType].questions;
-            if (questionsRating && questionsRating.length > 0
-              && questionsRating.length >= this.jobQuestions.length) {
-              let ratingComplete = 0;
-              $this.jobQuestions.forEach((jobQ) => {
-                app.results.ratings[$this.quizType].questions.forEach((question) => {
-                  if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
-                    ratingComplete += 1;
-                  }
-                });    
-              });
-              if (ratingComplete === $this.jobQuestions.length) {
-                countAppRating += 1;
+    $this.isLoading = true;
+    $this.applicationApiService.getApplicationsToReview($this.jobApiService.foundJob._id, this.mode, this.queryObj).subscribe((result) => {
+      console.log('result = ', result);
+      $this.isLoading = false;
+      $this.totalApplicationNumber = result.count;
+      $this.foundApplications = <IApplicationDocument[]>result.items;
+      if ($this.foundApplications && $this.foundApplications.length > 0) {
+        let countAppRating = 0;
+        $this.foundApplications.forEach((app) => {
+          if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
+            if ($this.quizType === 'homework' || $this.quizType === 'interview') {
+              const questionsRating = app.results.ratings[$this.quizType].questions;
+              if (questionsRating && questionsRating.length > 0
+                && questionsRating.length >= this.jobQuestions.length) {
+                let ratingComplete = 0;
+                $this.jobQuestions.forEach((jobQ) => {
+                  app.results.ratings[$this.quizType].questions.forEach((question) => {
+                    if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
+                      ratingComplete += 1;
+                    }
+                  });    
+                });
+                if (ratingComplete === $this.jobQuestions.length) {
+                  countAppRating += 1;
+                }
               }
+            } else if (app.results.ratings.applicant.ratings) {
+              // to do applicant
+              // ratingAllApplications = true;
             }
-          } else if (app.results.ratings.applicant.ratings) {
-            // to do applicant
-            // ratingAllApplications = true;
           }
-        }
-      });
-      ratingAllApplications = countAppRating === $this.foundApplications.length;
-      if (ratingAllApplications) {
-        const title = 'Congratulations';
-        const message = 'You have completed rating all applicants in this section.';
-        $this.ionicAlertService.presentAlertConfirmPrompt(title, message, {
-          labelConfirm: 'Done'
-        }, (res) => {
-          console.log('review applicant done.');
-          const newUrl = '/tabs/home';
-          $this.navCtrl.navigateForward(newUrl);
         });
+        ratingAllApplications = countAppRating === $this.foundApplications.length;
+        if (ratingAllApplications) {
+          const title = 'Congratulations';
+          const message = 'You have completed rating all applicants in this section.';
+          $this.ionicAlertService.presentAlertConfirmPrompt(title, message, {
+            labelConfirm: 'Done'
+          }, (res) => {
+            console.log('review applicant done.');
+            const newUrl = '/tabs/home';
+            $this.navCtrl.navigateForward(newUrl);
+            $this.broadcastService.broadcast('reload-home-list');
+          });
+        }
       }
-    }
+    });
+
   }
 
   public ngOnInit(): void {

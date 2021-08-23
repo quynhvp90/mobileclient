@@ -74,6 +74,9 @@ export class HomeListComponent implements OnInit, OnDestroy {
         }
         $this.getData();
       }
+      if (msg.name === 'reload-home-list' && $this.organizationId) {
+        $this.getData();
+      }
       // if (msg.name === 'reload-org') {
       //   // respond to broadcast here
       //   console.log('set organiztion 1');

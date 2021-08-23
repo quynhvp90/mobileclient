@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
 import { BroadcastService, IonicAlertService, MessageService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
@@ -47,6 +47,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     public jobApiService: JobApiService,
     private ionicAlertService: IonicAlertService,
     private applicationApiService: ApplicationApiService,
+    private navCtrl: NavController,
   ) {
     const $this = this;
 
@@ -96,27 +97,34 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   public checkAllApplicationRating() {
     const $this = this;
-    let ratingAllApplications = true;
+    let ratingAllApplications = false;
     if ($this.foundApplications && $this.foundApplications.length > 0) {
+      let countAppRating = 0;
       $this.foundApplications.forEach((app) => {
         if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
           if ($this.quizType === 'homework' || $this.quizType === 'interview') {
-            if (app.results.ratings[$this.quizType].questions) {
-              app.results.ratings[$this.quizType].questions.forEach((question) => {
-                if (!question.rating || (question.rating && question.rating <= 0)) {
-                  ratingAllApplications = false;
-                }
+            const questionsRating = app.results.ratings[$this.quizType].questions;
+            if (questionsRating && questionsRating.length > 0
+              && questionsRating.length >= this.jobQuestions.length) {
+              let ratingComplete = 0;
+              $this.jobQuestions.forEach((jobQ) => {
+                app.results.ratings[$this.quizType].questions.forEach((question) => {
+                  if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
+                    ratingComplete += 1;
+                  }
+                });    
               });
+              if (ratingComplete === $this.jobQuestions.length) {
+                countAppRating += 1;
+              }
             }
           } else if (app.results.ratings.applicant.ratings) {
-            app.results.ratings.applicant.ratings.forEach((rating) => {
-              if (!rating.rating || (rating.rating && rating.rating <= 0)) {
-                ratingAllApplications = false;
-              }
-            });
+            // to do applicant
+            // ratingAllApplications = true;
           }
         }
       });
+      ratingAllApplications = countAppRating === $this.foundApplications.length;
       if (ratingAllApplications) {
         const title = 'Congratulations';
         const message = 'You have completed rating all applicants in this section.';
@@ -124,6 +132,8 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           labelConfirm: 'Done'
         }, (res) => {
           console.log('review applicant done.');
+          const newUrl = '/tabs/home';
+          $this.navCtrl.navigateForward(newUrl);
         });
       }
     }

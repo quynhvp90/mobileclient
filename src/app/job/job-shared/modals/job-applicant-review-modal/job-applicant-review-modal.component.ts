@@ -71,6 +71,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       $this.getCurrentAnswer();
     }
     console.log('currentQuestion === ', $this.question);
+    $this.question.rating = 0;
     if ($this.application && $this.question && $this.application.results && $this.application.results.ratings
       && $this.application.results.ratings[$this.mode] && $this.application.results.ratings[$this.mode].questions) {
       $this.application.results.ratings[$this.mode].questions.forEach((question) => {
@@ -99,7 +100,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         }
       }
       if (msg.name === 'rating-star-result-' + $this.question._id) {
-        $this.star = msg.message.rate;
+        $this.question.rating = msg.message.rate;
       }
     });
     this.subscriptions.push(subscription);
@@ -207,7 +208,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         return;
       }
       if (!$this.currentMessage.messageText || ($this.currentMessage.messageText && $this.currentMessage.messageText.length === 0)) {
-        reject('messageText empty')
+        resolve(false)
         return;
       }
       let distributionType = ['applicant', 'employer'];
@@ -237,7 +238,8 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         resolve('not-configured');
       }, (errCreateMessage) => {
         console.log(Date.now() + ':errCreateMessage ' + JSON.stringify(errCreateMessage, null, 4));
-        reject('Error syncing - check logs');
+        console.log('Error syncing - check logs');
+        resolve(false);
       }, () => {
         console.log(Date.now() + ':complete');
       });
@@ -259,7 +261,8 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         $this.currentMessage.messageText = null;
         resolve(resp)
       }, (errUpdate) => {
-        reject(errUpdate);
+        console.log(msgHdr + 'errUpdate = ', errUpdate);
+        resolve(false);
       });
     });
   }
@@ -268,11 +271,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
 
     // save rating
     const subject = 'Rated this question: ';
-    if (!$this.star) {
-      this.broadcastService.broadcast('applicant-done-review');
-      await this.modalController.dismiss();
-      return;
-    }
+
     const payloadRating: IMessage = {
       messageType: 'application-rating', // ['notification', 'application-comment', 'application-rating']
       applicationId: $this.application._id,
@@ -283,7 +282,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       message: {
         data: {
           subject: subject,
-          body: $this.star ? $this.star.toString() : 0,
+          body: $this.question.rating,
         },
       },
     };
@@ -294,7 +293,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         questionId: $this.question._id,
         applicationId: $this.application._id,
         questionType: $this.mode,
-        rate: $this.star,
+        rate: $this.question.rating,
       });
       // save comment
       $this.saveComment().then(async (respSaveComment) => {

@@ -51,7 +51,7 @@ export class StarRatingComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!$this.rate) {
       $this.rate = 0;
     }
-    console.log('$this.rate ==== ', $this.rate);
+    console.log(msgHdr+ '$this.rate ==== ', $this.rate);
     // if (!$this.rate || $this.rate === 0) {
     //   $this.hasResults = false;
     //   return;

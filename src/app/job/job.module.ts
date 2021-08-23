@@ -8,6 +8,7 @@ import { JobSharedModule } from './job-shared/job-shared.module';
 import { IonicModule } from '@ionic/angular';
 // import { StarRatingModule } from 'ionic4-star-rating';
 import { JobsServicesModule } from './job-shared/job-services.module';
+import { ZiggeoModule } from 'angular-ziggeo';
 
 const components: any[] = [
   JobApplicantsQuizReviewComponent
@@ -26,6 +27,7 @@ const routes: Routes = [
     FormsModule,
     RouterModule,
     SharedModule,
+    ZiggeoModule,
     JobSharedModule,
     JobsServicesModule,
     RouterModule.forChild(routes),

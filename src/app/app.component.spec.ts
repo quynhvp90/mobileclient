@@ -4,9 +4,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
 import { AppComponent } from './app.component';
-import { ZiggeoPlayerComponent } from'angular-ziggeo';
 
 describe('AppComponent', () => {
 
@@ -19,7 +17,7 @@ describe('AppComponent', () => {
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
 
     TestBed.configureTestingModule({
-      declarations: [AppComponent, ZiggeoPlayerComponent],
+      declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       providers: [
         { provide: StatusBar, useValue: statusBarSpy },

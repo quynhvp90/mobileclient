@@ -35,7 +35,7 @@
 
     <!-- Answers -->
     <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
-      <!-- {{ currentAnswer.videoId }} -->
+      {{ currentAnswer.videoId }}
       <div>
         <!-- <ziggeoplayer
           ziggeo-video="currentAnswer.videoId"
@@ -43,13 +43,22 @@
           ziggeo-height=240>
         </ziggeoplayer> -->
         <!-- <ziggeoplayer
-          ziggeo-video="1021105adec146e79d72a0bd790462d6"
+          ziggeo-video=currentAnswer.videoId
           ziggeo-width=320
           ziggeo-height=240>
         </ziggeoplayer> -->
         <!-- <ziggeoplayer
           [options]="{video: currentAnswer.videoId, width: 320, height: 180}"
         ></ziggeoplayer> -->
+        <!-- <ziggeo-player #ziggeoplayer
+          [apiKey]="'51f804c5adeb1c720e8d4838c38813f5'"
+          [options]="{video: currentAnswer.videoId, width: 520, height: 380, l10n: 'de'}"
+        ></ziggeo-player> -->
+        <!-- <ziggeo-player
+          [apiKey]="'51f804c5adeb1c720e8d4838c38813f5'"
+          [options]="{video: currentAnswer.videoId, width: 320, height: 180}"
+        ></ziggeo-player> -->
+        <!-- <app-player></app-player> -->
       </div>
       <ion-card-header>
         <ion-card-title>Answer</ion-card-title>

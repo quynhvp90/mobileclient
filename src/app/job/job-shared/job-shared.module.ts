@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ZiggeoPlayerComponent } from'angular-ziggeo';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { JobApplicantQuizReviewComponent } from './components/job-applicant-quiz-review/job-applicant-quiz-review.component';
 import { IonicModule } from '@ionic/angular';
@@ -13,9 +12,7 @@ const components: any[] = [
   JobApplicantQuizReviewComponent,
   JobApplicantHomeworkReviewModalComponent,
   JobApplicantReviewModalComponent,
-  ZiggeoPlayerComponent,
 ];
-
 
 @NgModule({
   imports: [

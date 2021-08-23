@@ -119,16 +119,21 @@ export class HomeListComponent implements OnInit, OnDestroy {
     $this.isLoading = true;
     $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
       $this.isLoading = false;
-      this.jobsToReview = [];
+      $this.jobsToReview = [];
       res.userStats.forEach((stats) => {
-        this.jobsToReview.push({
-          jobId: stats.jobId,
-          title: stats.title,
-          countHomework: stats.applicationStats.applicantsInHomeworkRequiringAction,
-          countInterview: stats.applicationStats.applicantsInInterviewRequiringAction,
-          countQualifield: stats.applicationStats.applicantsInQualifiedRequiringAction,
-          // reviewType: 'homework'
-        });
+        stats.countQualifield = stats.applicationStats.applicantsInQualifiedRequiringAction;
+        if ((stats.jobCountHomework && stats.jobCountHomework > 0)
+          || (stats.jobCountInterview && stats.jobCountInterview > 0)) {
+            $this.jobsToReview.push(stats);
+          }
+        // this.jobsToReview.push({
+        //   jobId: stats.jobId,
+        //   title: stats.title,
+        //   countHomework: stats.applicationStats.applicantsInHomeworkRequiringAction,
+        //   countInterview: stats.applicationStats.applicantsInInterviewRequiringAction,
+        //   countQualifield: stats.applicationStats.applicantsInQualifiedRequiringAction,
+        //   // reviewType: 'homework'
+        // });
       });
     });
   }

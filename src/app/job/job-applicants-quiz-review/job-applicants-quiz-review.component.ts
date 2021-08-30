@@ -79,7 +79,11 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   }
 
   public backButton() {
-    this.navCtrl.back();
+    console.log('review applicant done.');
+    const newUrl = '/tabs/home';
+    this.navCtrl.navigateForward(newUrl);
+    this.broadcastService.broadcast('reload-home-list');
+    // this.navCtrl.back();
   }
   private updateData() {
     const $this = this;

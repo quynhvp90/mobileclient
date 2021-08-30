@@ -55,97 +55,64 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       if (msg.name === 'update-rating') {
         if ($this.foundApplications && $this.foundApplications.length > 0 && msg.message && msg.message.applicationId) {
           $this.foundApplications.forEach((app) => {
-            if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
-              if ($this.quizType === 'homework' || $this.quizType === 'interview') {
-                if (app.results.ratings[$this.quizType].questions) {
-                  app.results.ratings[$this.quizType].questions.forEach((question) => {
-                    if (question.questionId === msg.message.questionId) {
-                      question.rating = msg.message.rate;
-                      if (!$this.questions[app._id + '-' + question.questionId]) {
-                        $this.questions[app._id + '-' + question.questionId] = {};
+            if (app._id === msg.message.applicationId) {
+              if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
+                if ($this.quizType === 'homework' || $this.quizType === 'interview') {
+                  let appQuestions = app.results.ratings[$this.quizType].questions;
+                  if (appQuestions) {
+                    const validateQ = appQuestions.filter((result) => {
+                      return result.questionId === msg.message.questionId;
+                    });
+                    if (!validateQ || validateQ.length === 0) {
+                      appQuestions.push({
+                        archived: false,
+                        questionId: msg.message.questionId,
+                        rating: msg.message.rate,
+                        userId: '',
+                      });
+                    }
+                    appQuestions.forEach((question) => {
+                      if (question.questionId === msg.message.questionId) {
+                        question.rating = msg.message.rate;
+                        if (!$this.questions[app._id + '-' + question.questionId]) {
+                          $this.questions[app._id + '-' + question.questionId] = {};
+                        }
+                        $this.questions[app._id + '-' + question.questionId].rate = msg.message.rate;
                       }
-                      $this.questions[app._id + '-' + question.questionId].rate = msg.message.rate;
+                    });
+                  }
+                } else if (app.results.ratings.applicant.ratings && msg.message.applicationId === app._id) {
+                  app.results.ratings.applicant.ratings.forEach((rating) => {
+                    if (rating._id === msg.message.questionId) {
+                      rating.rating = msg.message.rate;
+                      if (!$this.questions[app._id + '-' + rating._id]) {
+                        $this.questions[app._id + '-' + rating._id] = {};
+                      }
+                      $this.questions[app._id + '-' + rating._id].rate = msg.message.rate;
                     }
                   });
+                  $this.jobQuestions = app.results.ratings.applicant.ratings;
                 }
-              } else if (app.results.ratings.applicant.ratings && msg.message.applicationId === app._id) {
-                app.results.ratings.applicant.ratings.forEach((rating) => {
-                  if (rating._id === msg.message.questionId) {
-                    rating.rating = msg.message.rate;
-                    if (!$this.questions[app._id + '-' + rating._id]) {
-                      $this.questions[app._id + '-' + rating._id] = {};
-                    }
-                    $this.questions[app._id + '-' + rating._id].rate = msg.message.rate;
-                  }
-                });
-                $this.jobQuestions = app.results.ratings.applicant.ratings;
-              }
 
-            }
-            if ($this.currentApplication._id === app._id) {
-              $this.currentApplication = app;
+              }
+              if ($this.currentApplication._id === app._id) {
+                $this.currentApplication = app;
+              }
             }
           });
         }
       }
       if (msg.name === 'applicant-done-review') {
-        $this.checkAllApplicationRating();
+        $this.checkAllApplicationRating().then((resp) => {
+          if (resp) {
+            $this.showConfirmModel({ doneApplications: true });
+          } else if ($this.checkDoneAllQuestion() && $this.currentApplicationNumber < $this.totalApplicationNumber) {
+            $this.showConfirmModel({ nextApplicant: { ratingComplete: true } });
+          }
+        });
       }
     });
     this.subscriptions.push(subscription);
-  }
-
-  public checkAllApplicationRating() {
-    const $this = this;
-    let ratingAllApplications = false;
-    $this.isLoading = true;
-    $this.applicationApiService.getApplicationsToReview($this.jobApiService.foundJob._id, this.mode, this.queryObj).subscribe((result) => {
-      console.log('result = ', result);
-      $this.isLoading = false;
-      $this.totalApplicationNumber = result.count;
-      $this.foundApplications = <IApplicationDocument[]>result.items;
-      if ($this.foundApplications && $this.foundApplications.length > 0) {
-        let countAppRating = 0;
-        $this.foundApplications.forEach((app) => {
-          if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
-            if ($this.quizType === 'homework' || $this.quizType === 'interview') {
-              const questionsRating = app.results.ratings[$this.quizType].questions;
-              if (questionsRating && questionsRating.length > 0
-                && questionsRating.length >= this.jobQuestions.length) {
-                let ratingComplete = 0;
-                $this.jobQuestions.forEach((jobQ) => {
-                  app.results.ratings[$this.quizType].questions.forEach((question) => {
-                    if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
-                      ratingComplete += 1;
-                    }
-                  });    
-                });
-                if (ratingComplete === $this.jobQuestions.length) {
-                  countAppRating += 1;
-                }
-              }
-            } else if (app.results.ratings.applicant.ratings) {
-              // to do applicant
-              // ratingAllApplications = true;
-            }
-          }
-        });
-        ratingAllApplications = countAppRating === $this.foundApplications.length;
-        if (ratingAllApplications) {
-          const title = 'Congratulations';
-          const message = 'You have completed rating all applicants in this section.';
-          $this.ionicAlertService.presentAlertConfirmPrompt(title, message, {
-            labelConfirm: 'Done'
-          }, (res) => {
-            console.log('review applicant done.');
-            const newUrl = '/tabs/home';
-            $this.navCtrl.navigateForward(newUrl);
-            $this.broadcastService.broadcast('reload-home-list');
-          });
-        }
-      }
-    });
-
   }
 
   public ngOnInit(): void {
@@ -262,10 +229,22 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
             });
           });
         }
+        // check done all question
+        if ($this.checkDoneAllQuestion()) {
+          if ($this.currentApplicationNumber < $this.totalApplicationNumber) {
+            $this.showConfirmModel({ nextApplicant: { ratingComplete: true }});
+          } else if ($this.currentApplicationNumber === $this.totalApplicationNumber) {
+            $this.checkAllApplicationRating().then((resp) => {
+              if (resp) {
+                $this.showConfirmModel({ doneApplications: true });
+              }
+            });
+          }
+        }
       });
       return;
     }
-    $this.isLoading = false;
+    // $this.isLoading = false;
   }
 
   private updateData() {
@@ -280,36 +259,80 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   }
 
   public nextApplicant() {
-    this.checkDoneAllQuestion(true);
+    if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
+      this.currentApplicationNumber += 1;
+      if (this.currentApplicationNumber > this.foundApplications.length) {
+        this.queryObj.page += 1;
+        this.getData();
+        return;
+      }
+      this.getCurrentApplication();
+      return;
+    }
   }
 
   public previousApplicant() {
-    this.checkDoneAllQuestion();
+    this.currentApplicationNumber -= 1;
+    this.getCurrentApplication();
   }
 
-  public checkDoneAllQuestion(next?: boolean) {
+  public checkAllApplicationRating() {
     const $this = this;
-    let ratingComplete = true;
-    if ($this.jobQuestions) {
-      $this.jobQuestions.forEach((jQuestion) => {
-        const questionRate = $this.questions[$this.currentApplication._id + '-' + jQuestion._id];
-        if (questionRate && (!questionRate.rate || (questionRate.rate && questionRate.rate === 0))) {
-          ratingComplete = false;
-        }
-      });
+    return new Promise((resolve, reject) => {
+      let ratingAllApplications = false;
+      if ($this.foundApplications && $this.foundApplications.length > 0 && $this.foundApplications.length === $this.totalApplicationNumber) {
+        let countAppRating = 0;
+        $this.foundApplications.forEach((app) => {
+          if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
+            if ($this.quizType === 'homework' || $this.quizType === 'interview') {
+              const questionsRating = app.results.ratings[$this.quizType].questions;
+              if (questionsRating && questionsRating.length > 0
+                && questionsRating.length >= this.jobQuestions.length) {
+                let ratingComplete = 0;
+                $this.jobQuestions.forEach((jobQ) => {
+                  app.results.ratings[$this.quizType].questions.forEach((question) => {
+                    if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
+                      ratingComplete += 1;
+                    }
+                  });    
+                });
+                if (ratingComplete === $this.jobQuestions.length) {
+                  countAppRating += 1;
+                }
+              }
+            } else if (app.results.ratings.applicant.ratings) {
+              // to do applicant
+              // ratingAllApplications = true;
+            }
+          }
+        });
+        ratingAllApplications = countAppRating === $this.foundApplications.length;
+        resolve(ratingAllApplications);
+        return;
+      }
+      resolve(ratingAllApplications);
+    });
+    
+
+  }
+
+  public showConfirmModel(options?: {
+    nextApplicant?: {
+      ratingComplete?: boolean
+    },
+    doneApplications?: boolean,
+  }) {
+    const $this = this;
+    if (!options) {
+      return;
     }
-    let title = 'You complete rating this applicant';
-    if (!ratingComplete) {
-      title = 'You don\'t complete rating';
-    }
-    let message = 'Do you want to go to the next applicant?';
-    if (!next) {
-      message = 'Do you want to go to the previous applicant?'
-    }
-    $this.ionicAlertService.presentAlertConfirmPrompt(title, message, null, (res) => {
-      console.log('switch applicant');
-      // next applicant
-      if (next) {
+    if (options.nextApplicant) {
+      let title = 'You complete rating this applicant';
+      if (!options.nextApplicant.ratingComplete) {
+        title = 'You don\'t complete rating';
+      }
+      const message = 'Do you want to go to the next applicant?';
+      $this.ionicAlertService.presentAlertConfirmPrompt(title, message, null, (res) => {
         if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
           this.currentApplicationNumber += 1;
           if (this.currentApplicationNumber > this.foundApplications.length) {
@@ -320,14 +343,36 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           this.getCurrentApplication();
           return;
         }
-      }
-      // previous applicant
-      if (this.currentApplicationNumber > 1) {
-        this.currentApplicationNumber -= 1;
-        this.isLoading = true;
-        this.getCurrentApplication();
+      });
+      return;
+    }
+
+    if (options.doneApplications) {
+      const title = 'Congratulations';
+      const message = 'You have completed rating all applicants in this section.';
+      $this.ionicAlertService.presentAlertConfirmPrompt(title, message, {
+        labelConfirm: 'Done'
+      }, () => {
+        console.log('review applicant done.');
+        const newUrl = '/tabs/home';
+        $this.navCtrl.navigateForward(newUrl);
+        $this.broadcastService.broadcast('reload-home-list');
+      });
+    }
+  }
+  public checkDoneAllQuestion() {
+    const $this = this;
+    if (!$this.jobQuestions || $this.jobQuestions.length === 0) {
+      return false;
+    }
+    let ratingComplete = true;
+    $this.jobQuestions.forEach((jQuestion) => {
+      const questionRate = $this.questions[$this.currentApplication._id + '-' + jQuestion._id];
+      if (questionRate && (!questionRate.rate || (questionRate.rate && questionRate.rate === 0))) {
+        ratingComplete = false;
       }
     });
+    return ratingComplete;
   }
 
   public async viewHomework(question, questionIndex) {

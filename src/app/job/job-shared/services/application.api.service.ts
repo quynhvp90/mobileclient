@@ -63,6 +63,7 @@ export class ApplicationApiService {
       });
     }
 
+    queryObj.mobile = true;
     if (!queryObj.where) {
       queryObj.where = {};
     }

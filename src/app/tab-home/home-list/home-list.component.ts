@@ -144,7 +144,12 @@ export class HomeListComponent implements OnInit, OnDestroy {
   public reviewJobApplicants(jobToReview: IJobToReview, type) {
     const $this = this;
     const newUrl = '/tabs/jobs/' + jobToReview.jobId + '/' + type;
-    $this.navCtrl.navigateForward(newUrl);
+    $this.navCtrl.navigateForward(newUrl, {
+      queryParams: {
+        id: jobToReview.jobId,
+      },
+    });
+    // $this.navCtrl.navigateForward(newUrl);
     // this.router.navigate([newUrl], { queryParams: { job: job } });
   }
 

@@ -31,14 +31,14 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     const $this = this;
     $this.jobId = $this.route.snapshot.paramMap.get('id');
     console.log('$this.jobId = ', $this.jobId);
-    if ($this.router.url.endsWith('homework')) {
+    if ($this.router.url.split('?')[0].endsWith('homework')) {
       $this.mode = 'stage2';
       $this.titleMode = 'Home work';
-    } else if ($this.router.url.endsWith('interview')) {
+    } else if ($this.router.url.split('?')[0].endsWith('interview')) {
       console.log('end with interview');
       $this.mode = 'stage3';
       $this.titleMode = 'Interview';
-    } else if ($this.router.url.endsWith('qualified')) {
+    } else if ($this.router.url.split('?')[0].endsWith('qualified')) {
       $this.mode = 'qualified';
       $this.titleMode = 'Qualified';
     }
@@ -51,6 +51,8 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
       .subscribe((queryParams) => {
         console.log('queryParams = ', queryParams);
         if (queryParams['id']) {
+          this.jobId = queryParams['id'];
+          this.getData();
           // getdata
           console.log('id =============', queryParams['id']);
         }

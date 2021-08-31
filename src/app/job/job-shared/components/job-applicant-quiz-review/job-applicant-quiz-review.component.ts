@@ -257,6 +257,10 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       subscription.unsubscribe();
     });
   }
+  public ionViewWillEnter() {
+    console.log('ionViewWillEnter job-applicant-quiz-review');
+    this.getCurrentApplication();
+  }
 
   public nextApplicant() {
     if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
@@ -356,7 +360,6 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
         console.log('review applicant done.');
         const newUrl = '/tabs/home';
         $this.navCtrl.navigateForward(newUrl);
-        $this.broadcastService.broadcast('reload-home-list');
       });
     }
   }

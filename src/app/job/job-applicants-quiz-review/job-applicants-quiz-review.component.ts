@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { BroadcastService } from '../../shared/services';
+import { BroadcastService, OrganizationService } from '../../shared/services';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IJobUserStats } from '../job-shared/interfaces/job.interface';
@@ -25,20 +25,21 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     private broadcastService: BroadcastService,
     private navCtrl: NavController,
     public jobApiService: JobApiService,
+    private organizationService: OrganizationService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
     const $this = this;
     $this.jobId = $this.route.snapshot.paramMap.get('id');
     console.log('$this.jobId = ', $this.jobId);
-    if ($this.router.url.endsWith('homework')) {
+    if ($this.router.url.split('?')[0].endsWith('homework')) {
       $this.mode = 'stage2';
       $this.titleMode = 'Home work';
-    } else if ($this.router.url.endsWith('interview')) {
+    } else if ($this.router.url.split('?')[0].endsWith('interview')) {
       console.log('end with interview');
       $this.mode = 'stage3';
       $this.titleMode = 'Interview';
-    } else if ($this.router.url.endsWith('qualified')) {
+    } else if ($this.router.url.split('?')[0].endsWith('qualified')) {
       $this.mode = 'qualified';
       $this.titleMode = 'Qualified';
     }
@@ -51,6 +52,8 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
       .subscribe((queryParams) => {
         console.log('queryParams = ', queryParams);
         if (queryParams['id']) {
+          this.jobId = queryParams['id'];
+          this.getData();
           // getdata
           console.log('id =============', queryParams['id']);
         }
@@ -67,10 +70,20 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   public getData() {
     const $this = this;
     $this.isLoading = true;
-    $this.jobApiService.getJob($this.jobId).subscribe((res) => {
-      $this.isLoading = false;
-      console.log('res = ', res);
-    });
+    if (!$this.organizationService.organization) {
+      $this.organizationService.getCurrentOrganization().subscribe(() => {
+        $this.jobApiService.getJob($this.jobId).subscribe((res) => {
+          $this.isLoading = false;
+          console.log('res = ', res);
+        });
+      });
+    } else {
+      $this.jobApiService.getJob($this.jobId).subscribe((res) => {
+        $this.isLoading = false;
+        console.log('res = ', res);
+      });
+    }
+    
   }
 
   public ngAfterViewInit(): void {
@@ -79,7 +92,10 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   }
 
   public backButton() {
-    this.navCtrl.back();
+    console.log('review applicant done.');
+    const newUrl = '/tabs/home';
+    this.navCtrl.navigateForward(newUrl);
+    // this.navCtrl.back();
   }
   private updateData() {
     const $this = this;

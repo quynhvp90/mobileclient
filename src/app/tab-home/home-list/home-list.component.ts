@@ -61,6 +61,9 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     const $this = this;
+    if (!$this.organizationService.organization) {
+      $this.organizationService.getCurrentOrganization().subscribe(() => {});
+    }
     $this.organizationId = this.userService.user.defaultOrganizationId;
     if ($this.organizationService.organization) {
       $this.organizationId = $this.organizationService.organization._id;
@@ -72,9 +75,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
         if ($this.organizationService.organization) {
           $this.organizationId = $this.organizationService.organization._id;
         }
-        $this.getData();
-      }
-      if (msg.name === 'reload-home-list' && $this.organizationId) {
         $this.getData();
       }
       // if (msg.name === 'reload-org') {
@@ -90,7 +90,10 @@ export class HomeListComponent implements OnInit, OnDestroy {
       .subscribe((queryParams) => {
         if (queryParams['mode'] && queryParams['mode'] === 'reload') {
           // reload data
-          // this.getActivities();
+          // if (!$this.organizationService.organization) {
+          //   $this.organizationService.getCurrentOrganization().subscribe(() => {});
+          // }
+          // $this.getData();
         }
       });
     this.subscriptions.push(subscription);
@@ -106,15 +109,22 @@ export class HomeListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    console.log('ngOnDestroy home-list');
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
   }
 
   public ionViewWillEnter() {
+    console.log('ionViewWillEnter home-list');
+    if (!this.organizationService.organization) {
+      this.organizationService.getCurrentOrganization().subscribe(() => {});
+    }
+    this.getData();
   }
 
   public ionViewWillLeave() {
+    console.log('ionViewWillLeave home-list');
   }
 
   private getData() {
@@ -129,14 +139,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
           || (stats.jobCountInterview && stats.jobCountInterview > 0)) {
             $this.jobsToReview.push(stats);
           }
-        // this.jobsToReview.push({
-        //   jobId: stats.jobId,
-        //   title: stats.title,
-        //   countHomework: stats.applicationStats.applicantsInHomeworkRequiringAction,
-        //   countInterview: stats.applicationStats.applicantsInInterviewRequiringAction,
-        //   countQualifield: stats.applicationStats.applicantsInQualifiedRequiringAction,
-        //   // reviewType: 'homework'
-        // });
       });
     });
   }
@@ -144,7 +146,12 @@ export class HomeListComponent implements OnInit, OnDestroy {
   public reviewJobApplicants(jobToReview: IJobToReview, type) {
     const $this = this;
     const newUrl = '/tabs/jobs/' + jobToReview.jobId + '/' + type;
-    $this.navCtrl.navigateForward(newUrl);
+    $this.navCtrl.navigateForward(newUrl, {
+      queryParams: {
+        id: jobToReview.jobId,
+      },
+    });
+    // $this.navCtrl.navigateForward(newUrl);
     // this.router.navigate([newUrl], { queryParams: { job: job } });
   }
 

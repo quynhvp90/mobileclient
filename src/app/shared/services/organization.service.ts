@@ -14,6 +14,7 @@ const jsFilename = 'organizationService: ';
 @Injectable()
 export class OrganizationService {
   public organization: IOrganizationDocument;
+  public organizationUserId: string;
   public organizations: IOrganizationDocument[];
   public list: {
     count?: number,
@@ -93,7 +94,14 @@ export class OrganizationService {
                 $this.organizations.forEach((org) => {
                   if ($this.userService.user && $this.userService.user.defaultOrganizationId === org._id) {
                     $this.organization = org;
-                    this.broadcastService.broadcast('reload-data');
+                    if ($this.organization && $this.userService.user) {
+                      $this.organization.users.forEach((user) => {
+                        if (user.userId === $this.userService.user._id) {
+                          $this.organizationUserId = user._id;
+                        }
+                      })
+                    }
+                    $this.broadcastService.broadcast('reload-data');
                   }
                 });
               }
@@ -106,5 +114,34 @@ export class OrganizationService {
       );
   }
 
+  public getCurrentOrganization() {
+    const $this = this;
+    const msgHdr = jsFilename + 'getOrganizations: ';
 
+    // query += '&stats-from=' + fromDate + '&stats-to=' + toDate;
+
+    const setting: ISetting = {
+      resource: 'organizations',
+      id: $this.userService.user.defaultOrganizationId,
+    };
+    return $this.apiService
+      .get(setting).pipe(
+        map((res) => {
+          console.log(msgHdr, res);
+          if (res) {
+            $this.organization = <IOrganizationDocument>res;
+            if ($this.organization && $this.userService.user) {
+              $this.organization.users.forEach((user) => {
+                if (user.userId === $this.userService.user._id) {
+                  $this.organizationUserId = user._id;
+                }
+              })
+            }
+          }
+          return res;
+        })
+        , catchError(this.exceptionService.catchBadResponse)
+        , share(),
+      );
+  }
 }

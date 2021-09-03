@@ -22,16 +22,17 @@
       <ion-col>
         <ion-label *ngIf="question" class="item-label" (click)="viewHomework(question, i)">
           <h2>Question #{{ (i + 1) }}</h2>
-          <h3>{{ question.question }}</h3>
+          <!-- <h3>{{ question.question }}</h3>
           <p *ngIf="quizType === 'homework' || quizType === 'interview'" class="question-answer">Answer: </p>
-          <p class="answer" *ngIf="(quizType === 'homework' || quizType === 'interview') && questions[(currentApplication._id + '-' + question._id)]">{{ questions[(currentApplication._id + '-' + question._id)].response }}</p>
+          <p class="answer" *ngIf="(quizType === 'homework' || quizType === 'interview') && questions[(currentApplication._id + '-' + question._id)]">{{ questions[(currentApplication._id + '-' + question._id)].response }}</p> -->
         </ion-label>
         <!-- {{ question._id }} -->
-        <ion-label class="item-label" style="margin-top: 5px;">
-          <h4 style="font-weight: bold;">You Rated</h4>
+        <ion-label class="item-label" style="margin-top: 5px;" *ngIf="question && questions[(currentApplication._id + '-' + question._id)]">
+          <h4 *ngIf="!questions[(currentApplication._id + '-' + question._id)].rate || questions[(currentApplication._id + '-' + question._id)].rate <= 0" style="font-weight: bold;">Not Yet Rated</h4>
+          <h4 *ngIf="questions[(currentApplication._id + '-' + question._id)].rate > 0" style="font-weight: bold;">You Rated</h4>
           <!-- {{ currentApplication._id }} -->
           
-          <ng-container *ngIf="question && questions[(currentApplication._id + '-' + question._id)]">
+          <ng-container>
             <star-rating [rate]="questions[(currentApplication._id + '-' + question._id)].rate" [questionId]="question._id"></star-rating>
           </ng-container>
         </ion-label>

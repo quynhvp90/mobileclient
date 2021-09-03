@@ -66,9 +66,13 @@ export class ApplicationApiService {
     if (!queryObj.where) {
       queryObj.where = {};
     }
+    const organizationUserId = this.organizationService.organizationUserId;
     queryObj.where.organizationId = $this.userService.user.defaultOrganizationId;
     queryObj.where.jobId = jobId;
     queryObj.where.status = status;
+    if (organizationUserId) {
+      queryObj.where['actionRequired.' + organizationUserId] = 'review';
+    }
 
     console.log('$this.organizationService.organization = ', $this.organizationService.organization);
 

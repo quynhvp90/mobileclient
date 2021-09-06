@@ -18,9 +18,9 @@
   <ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
 
   <ion-list *ngIf="currentApplication">
-    <ion-item *ngFor="let question of jobQuestions; index as i" detail="true">
+    <ion-item *ngFor="let question of jobQuestions; index as i" detail="true" (click)="viewHomework(question, i)">
       <ion-col>
-        <ion-label *ngIf="question" class="item-label" (click)="viewHomework(question, i)">
+        <ion-label *ngIf="question" class="item-label">
           <h2>Question #{{ (i + 1) }}</h2>
           <!-- <h3>{{ question.question }}</h3>
           <p *ngIf="quizType === 'homework' || quizType === 'interview'" class="question-answer">Answer: </p>

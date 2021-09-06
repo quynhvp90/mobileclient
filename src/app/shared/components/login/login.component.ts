@@ -153,8 +153,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   public passwordReset() {
     const $this = this;
     $this.loader.present();
+    if (!$this.user.email) {
+      $this.ionicAlertService.presentAlert('Email incorect. Please check again your email.');
+      $this.loader.dismiss();
+      return;
+    }
 
-    this.userService.passwordReset(this.user.email).subscribe((res) => {
+    this.userService.passwordReset(this.user.email, $this.apiEndpoint).subscribe((res) => {
       if (res) {
         this.errorMessage = 'reset password done';
         $this.ionicAlertService.presentAlert('Please check your email for reset instructions');

@@ -17,14 +17,14 @@ import { ExportDataModal } from '../shared/modal/export-data/export-data-modal';
 import { FeatureSuggestionsComponent } from '../shared/components/feature-suggestions/feature-suggestions.component';
 // import { Deploy } from 'cordova-plugin-ionic';
 
-const jsFilename = 'tab3.page: ';
+const jsFilename = 'SettingsPage: ';
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss'],
+  selector: 'app-settings',
+  templateUrl: 'settings.page.html',
+  styleUrls: ['settings.page.scss'],
 })
-export class Tab3Page implements OnInit, OnDestroy {
+export class SettingsPage implements OnInit, OnDestroy {
   public version = CONFIG.version;
   public apiVersion = 'tbd';
   public apiEndpoint = environment.api;

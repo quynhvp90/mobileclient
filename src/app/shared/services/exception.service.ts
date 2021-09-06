@@ -43,7 +43,7 @@ export class ExceptionService {
       localStorage.removeItem('token');
       this.storage.remove('token');
       this.storage.clear();
-      this.router.navigate(['/intro']);
+      this.router.navigate(['/login']);
       return of(false);
     }
 

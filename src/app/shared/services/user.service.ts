@@ -136,10 +136,11 @@ export class UserService {
     }
   }
 
-  public passwordReset(email: string) {
+  public passwordReset(email: string, clientUrl: string) {
     const $this = this;
     const payload = {
       email,
+      clientUrl,
     };
 
     return this.apiService

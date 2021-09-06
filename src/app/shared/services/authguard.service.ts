@@ -34,7 +34,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
     }
 
     if (!this.userService.hasStoredToken()) {
-      this.router.navigate(['/intro'], { queryParams: { redirectTo: state.url } });
+      this.router.navigate(['/login'], { queryParams: { redirectTo: state.url } });
       return false;
     }
 
@@ -49,7 +49,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
         observer.complete();
 
         if (!isLoggedIn) {
-          this.router.navigate(['/intro'], { queryParams: { redirectTo: state.url } });
+          this.router.navigate(['/login'], { queryParams: { redirectTo: state.url } });
           return false;
         }
 

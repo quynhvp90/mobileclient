@@ -58,13 +58,14 @@ export class AppComponent {
     try {
       this.userLoggedIn = this.userService.hasStoredToken();
       this.pushNotificationService.registerListeners();
-
       const $this = this;
+
       this.broadcastService.subjectUniversal.subscribe((msg) => {
         if (msg.name === 'login') {
           $this.userLoggedIn = true;
         } else if (msg.name === 'logout') {
           $this.userLoggedIn = false;
+          $this.navCtrl.navigateForward('/login');
         }
       });
     } catch (e) {

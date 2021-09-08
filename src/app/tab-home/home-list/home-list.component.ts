@@ -118,9 +118,10 @@ export class HomeListComponent implements OnInit, OnDestroy {
   public ionViewWillEnter() {
     console.log('ionViewWillEnter home-list');
     if (!this.organizationService.organization) {
-      this.organizationService.getCurrentOrganization().subscribe(() => {});
+      this.organizationService.getCurrentOrganization().subscribe(() => {
+        this.getData();
+      });
     }
-    this.getData();
   }
 
   public ionViewWillLeave() {
@@ -130,12 +131,12 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private getData() {
     const $this = this;
     $this.isLoading = true;
+    // console.log('res job stats: ===== ', (new Date()).toTimeString());
     $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
       $this.isLoading = false;
-      console.log('res job stats: ===== ', new Date());
+
       res.userStats.forEach((stats) => {
         stats.countQualifield = stats.applicationStats.applicantsInQualifiedRequiringAction;
-        console.log('stats: ===== ', stats);
         let jobStats = $this.jobsToReview.find((job) => { return job.jobId === stats.jobId; });
         if ((stats.jobCountHomework && stats.jobCountHomework > 0)
           || (stats.jobCountInterview && stats.jobCountInterview > 0)) {
@@ -147,7 +148,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
             }
           }
       });
-      $this.jobsToReview.sort((a: IJobUserStats, b: IJobUserStats) => {
+      $this.jobsToReview = $this.jobsToReview.sort((a: IJobUserStats, b: IJobUserStats) => {
         if (a.employerStats && a.employerStats.modified
           && b.employerStats && b.employerStats.modified) {
           if (a.employerStats.modified > b.employerStats.modified) {
@@ -158,7 +159,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
         }
         return 0;
       });
-      console.log('res job jobsToReview: ===== ', $this.jobsToReview);
+      // console.log('res job stats: ===== 1', (new Date()).toTimeString());
     });
   }
 

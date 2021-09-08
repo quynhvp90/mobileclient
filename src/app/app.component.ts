@@ -65,7 +65,7 @@ export class AppComponent {
           $this.userLoggedIn = true;
         } else if (msg.name === 'logout') {
           $this.userLoggedIn = false;
-          $this.navCtrl.navigateForward('/login');
+          $this.navCtrl.navigateRoot('/login');
         }
       });
     } catch (e) {

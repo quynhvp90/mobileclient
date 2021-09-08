@@ -330,10 +330,11 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     if (!options) {
       return;
     }
+
     if (options.nextApplicant) {
-      let title = 'You complete rating this applicant';
+      let title = 'You have completed rating this applicant';
       if (!options.nextApplicant.ratingComplete) {
-        title = 'You don\'t complete rating';
+        title = 'You have not yet completed rating this applicant';
       }
       const message = 'Do you want to go to the next applicant?';
       $this.ionicAlertService.presentAlertConfirmPrompt(title, message, null, (res) => {

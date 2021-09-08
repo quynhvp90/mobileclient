@@ -64,11 +64,20 @@ export class OrganizationService {
 
     // query += '&stats-from=' + fromDate + '&stats-to=' + toDate;
 
+    if (!filter) {
+      filter = {};
+    }
+    if (!filter.where) {
+      filter.where = {};
+    }
+    filter.where = {
+      postingEnabled: true,
+    };
     const setting: ISetting = {
       resource: 'organizations',
     };
     if (filter) {
-      setting.queryString = 'filter=' + encodeURIComponent(filter);
+      setting.queryString = 'filter=' + encodeURIComponent(JSON.stringify(filter));
     }
     return $this.apiService
       .get(setting).pipe(

@@ -103,6 +103,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // this.authenticationService.logout();
     const $this = this;
 
+    console.log('login init');
     $this.loadingController.create({
       translucent: true,
     }).then((loader) => {

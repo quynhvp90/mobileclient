@@ -41,6 +41,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
   public organizationId = null;
 
   public isLoading = true;
+  public isInit = false;
 
   constructor(
     private broadcastService: BroadcastService,
@@ -61,21 +62,15 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     const $this = this;
-    if (!$this.organizationService.organization) {
-      $this.organizationService.getCurrentOrganization().subscribe(() => {});
-    }
-    $this.organizationId = this.userService.user.defaultOrganizationId;
-    if ($this.organizationService.organization) {
-      $this.organizationId = $this.organizationService.organization._id;
-    }
-
+    console.log('ngOnInit init-list');
+    $this.jobsToReview = [];
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'reload-data' && $this.organizationId) {
         // respond to broadcast here
-        if ($this.organizationService.organization) {
-          $this.organizationId = $this.organizationService.organization._id;
-        }
-        $this.getData();
+        // if ($this.organizationService.organization) {
+        //   $this.organizationId = $this.organizationService.organization._id;
+        // }
+        // $this.getData();
       }
       // if (msg.name === 'reload-org') {
       //   // respond to broadcast here
@@ -88,6 +83,10 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
     subscription = this.route.queryParams
       .subscribe((queryParams) => {
+        // this.jobsToReview = [];
+        // this.organizationId = this.organizationService.organization ? this.organizationService.organization._id : this.userService.user.defaultOrganizationId;
+        // this.isLoading = false;
+        // this.getData();
         if (queryParams['mode'] && queryParams['mode'] === 'reload') {
           // reload data
           // if (!$this.organizationService.organization) {
@@ -104,8 +103,6 @@ export class HomeListComponent implements OnInit, OnDestroy {
       $this.loader = loader;
       // this.getActivities();
     });
-
-    $this.getData();
   }
 
   public ngOnDestroy() {
@@ -116,25 +113,30 @@ export class HomeListComponent implements OnInit, OnDestroy {
   }
 
   public ionViewWillEnter() {
-    console.log('ionViewWillEnter home-list');
+    console.log('ionViewWillEnter Will-list');
+    this.jobsToReview = [];
     if (!this.organizationService.organization) {
-      this.organizationService.getCurrentOrganization().subscribe(() => {
-        this.getData();
-      });
+      this.organizationService.getCurrentOrganization().subscribe(() => {});
     }
+    this.organizationId = this.organizationService.organization ? this.organizationService.organization._id : this.userService.user.defaultOrganizationId;
+    this.isLoading = false;
+    this.getData();
   }
 
   public ionViewWillLeave() {
     console.log('ionViewWillLeave home-list');
+    this.ngOnDestroy();
   }
 
   private getData() {
     const $this = this;
+    if ($this.isLoading) {
+      return;
+    }
     $this.isLoading = true;
     // console.log('res job stats: ===== ', (new Date()).toTimeString());
-    $this.jobApiService.getStatsByOrganization($this.organizationId).subscribe((res) => {
+    $this.jobApiService.getStatsByOrganization(this.organizationId).subscribe((res) => {
       $this.isLoading = false;
-
       res.userStats.forEach((stats) => {
         stats.countQualifield = stats.applicationStats.applicantsInQualifiedRequiringAction;
         let jobStats = $this.jobsToReview.find((job) => { return job.jobId === stats.jobId; });

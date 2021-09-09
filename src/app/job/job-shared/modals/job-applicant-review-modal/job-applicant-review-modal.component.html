@@ -22,6 +22,11 @@
   </div>
   <div *ngIf="!saving && question" class="content-modal">
     <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
+      <div *ngIf="question && question.videoId">
+        <ziggeo-player #ziggeoplayer
+          [options]="{video: question.videoId, width: 340, height: 240}"
+        ></ziggeo-player>
+      </div>
       <ion-card-header>
         <!-- <ion-card-title>Question #{{ (index + 1) }} of {{ total }}</ion-card-title> -->
         <ion-card-title>Question</ion-card-title>

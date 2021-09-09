@@ -65,9 +65,14 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    console.log('ngOnDestroy home-list');
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  public ionViewWillLeave() {
+    console.log('ionViewWillLeave home-list');
   }
 
   public selectOrg(organization) {

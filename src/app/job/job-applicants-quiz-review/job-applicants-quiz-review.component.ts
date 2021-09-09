@@ -83,7 +83,6 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
         console.log('res = ', res);
       });
     }
-    
   }
 
   public ngAfterViewInit(): void {
@@ -94,7 +93,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   public backButton() {
     console.log('review applicant done.');
     const newUrl = '/tabs/home';
-    this.navCtrl.navigateForward(newUrl);
+    this.navCtrl.navigateForward(newUrl, { queryParams: { mode: 'reload' } });
     // this.navCtrl.back();
   }
   private updateData() {

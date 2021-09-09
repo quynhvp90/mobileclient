@@ -33,7 +33,7 @@ export class OrganizationService {
     const $this = this;
   }
 
-  public changeOrganization(organization) {
+  public changeOrganization(organization, reload?) {
     const $this = this;
     const msgHdr = jsFilename + 'changeOrganization: ';
     $this.organization = organization;
@@ -48,7 +48,9 @@ export class OrganizationService {
           console.log(msgHdr + 'res = ', res);
           const user = res;
           $this.userService.updateToken(user);
-          this.broadcastService.broadcast('reload-data');
+          if (reload) {
+            this.broadcastService.broadcast('reload-data');
+          }
           return user;
         }), catchError((err) => {
           console.log('err = ', err);

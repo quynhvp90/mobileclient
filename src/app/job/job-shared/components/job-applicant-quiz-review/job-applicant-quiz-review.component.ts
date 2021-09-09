@@ -359,7 +359,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       }, () => {
         console.log('review applicant done.');
         const newUrl = '/tabs/home';
-        $this.navCtrl.navigateForward(newUrl);
+        $this.navCtrl.navigateForward(newUrl, { queryParams: { mode: 'reload' } });
       });
     }
   }

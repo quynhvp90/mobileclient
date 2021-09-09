@@ -75,6 +75,7 @@ export class OrganizationService {
     filter.where = {
       postingEnabled: true,
     };
+    filter.limit = 100;
     const setting: ISetting = {
       resource: 'organizations',
     };

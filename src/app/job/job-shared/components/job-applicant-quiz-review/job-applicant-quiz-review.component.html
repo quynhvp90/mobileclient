@@ -27,6 +27,12 @@
           <p class="answer" *ngIf="(quizType === 'homework' || quizType === 'interview') && questions[(currentApplication._id + '-' + question._id)]">{{ questions[(currentApplication._id + '-' + question._id)].response }}</p> -->
         </ion-label>
         <!-- {{ question._id }} -->
+        <ion-label *ngIf="!questions[(currentApplication._id + '-' + question._id)]">
+          <h4>Not Yet Rated</h4>
+          <ng-container>
+            <star-rating [rate]="0" [questionId]="question._id"></star-rating>
+          </ng-container>
+        </ion-label>
         <ion-label class="item-label" style="margin-top: 5px;" *ngIf="question && questions[(currentApplication._id + '-' + question._id)]">
           <h4 *ngIf="!questions[(currentApplication._id + '-' + question._id)].rate || questions[(currentApplication._id + '-' + question._id)].rate <= 0" style="font-weight: bold;">Not Yet Rated</h4>
           <h4 *ngIf="questions[(currentApplication._id + '-' + question._id)].rate > 0" style="font-weight: bold;">You Rated</h4>

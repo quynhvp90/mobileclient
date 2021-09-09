@@ -19,12 +19,12 @@
   <script src="//assets-cdn.ziggeo.com/v1-stable/ziggeo.js"></script>
 
 
-  <script>
+  <!-- <script>
     var ziggeoApp = new ZiggeoApi.V2.Application({
         token: "51f804c5adeb1c720e8d4838c38813f5",
         webrtc_on_mobile: true,
       });
-  </script>
+  </script> -->
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.7.0/introjs.min.css">
 
@@ -47,8 +47,18 @@
         // Success!
         data = JSON.parse(request.responseText);
         window.appkeys = data;
-        console.log('window.appkeys.ziggeo.applicationkey = ', window.appkeys.ziggeo.applicationkey);
-        console.log('window.keys = ', window.appkeys);
+        // console.log('window.appkeys.ziggeo.applicationkey = ', window.appkeys.ziggeo.applicationkey);
+        // console.log('window.keys = ', window.appkeys);
+        if (!ZiggeoApi) {
+          if (DEBUG_MODE) console.log('ziggeo did not load correctly');
+          return;
+        }
+        ZiggeoApi.token = window.appkeys.ziggeo.applicationkey;
+
+        var ziggeoApplication = new ZiggeoApi.V2.Application({
+          token: window.appkeys.ziggeo.applicationkey,
+          webrtc_on_mobile: true,
+        });
         // ZiggeoApi.token = window.appkeys.ziggeo.applicationkey;
 
         // var ziggeoApplication = new ZiggeoApi.V2.Application({

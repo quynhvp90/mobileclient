@@ -11,7 +11,9 @@ import { SpinnerService } from './spinner.service';
 import { UserService } from './user.service';
 const jsFilename = 'organizationService: ';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class OrganizationService {
   public organization: IOrganizationDocument;
   public organizationUserId: string;

@@ -13,17 +13,8 @@ const jsFilename = 'JobDataService: ';
 export class JobDataService {
   public job = null;
   public jobs: IJobUserStats[];
-  public isLoading = false;
 
   constructor(
-    // private http: HttpClient,
-    // private exceptionService: ExceptionService,
-    // private apiService: ApiService,
-    // private globalService: GlobalService,
-    // private spinnerService: SpinnerService,
-    // private broadcastService: BroadcastService,
-    // private userService: UserService,
-    // private organizationService: OrganizationService,
   ) {
   }
 

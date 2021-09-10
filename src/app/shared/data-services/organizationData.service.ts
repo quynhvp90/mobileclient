@@ -13,22 +13,9 @@ export class OrganizationDataService {
   public organization = null;
   public organizationUserId: string;
   public organizations: IOrganizationDocument[];
-  public isLoading = false;
 
   constructor(
-    // private http: HttpClient,
-    // private exceptionService: ExceptionService,
-    // private apiService: ApiService,
-    // private globalService: GlobalService,
-    // private spinnerService: SpinnerService,
-    // private broadcastService: BroadcastService,
-    // private userService: UserService,
-    // private organizationService: OrganizationService,
   ) {
-  }
-  //////// Loading ////////////////////
-  public loading(value: boolean) {
-    this.isLoading = value;
   }
 
   //////// Organization /////////////////

@@ -11,8 +11,8 @@ import {
 } from '@angular/router';
 
 import { UserService } from './user.service';
-import { OrganizationService } from '.';
 import { OrganizationDataService } from '../data-services/organizationData.service';
+import { OrganizationService } from './organization.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad {

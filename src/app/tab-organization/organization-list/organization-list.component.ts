@@ -91,11 +91,9 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   }
 
   private getData() {
-    const $this = this;
-    $this.isLoading = true;
-    $this.organizationService.getOrganizations(null).subscribe((res) => {
-      $this.isLoading = false;
-      console.log('login set organiztaions =', res);
+    this.isLoading = true;
+    this.organizationService.getOrganizations(null).subscribe((res) => {
+      this.isLoading = false;
     });
 
   }

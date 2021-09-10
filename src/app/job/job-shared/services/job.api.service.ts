@@ -80,10 +80,10 @@ export class JobApiService {
     // const orgId = this.organizationDataService.organization ? this.organizationDataService.organization._id : 'none';
 
     // @Quynh - you can remove this code.  This should never happen
-    if (!this.organizationDataService.organization || !this.organizationDataService.organization._id) {
-      of(false);
-      throw(new Error('critical error.  Code should never be reached.  Query for Job should have the user logged in'));
-    }
+    // if (!this.organizationDataService.organization || !this.organizationDataService.organization._id) {
+    //   of(false);
+    //   throw(new Error('critical error.  Code should never be reached.  Query for Job should have the user logged in'));
+    // }
 
     const setting: ISetting = {
       resource: 'jobs/job-stats',

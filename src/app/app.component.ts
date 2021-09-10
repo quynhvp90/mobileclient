@@ -67,9 +67,6 @@ export class AppComponent {
         } else if (msg.name === 'logout') {
           $this.userLoggedIn = false;
           window.location.reload();
-        } else if (msg.name === 'check-org-loading') {
-          // @Quynh - this will NOT work because you are getting organizations ASYNC.  You need to block the user until organizations are retrieved
-          $this.organizationService.checkOrganization();
         }
       });
     } catch (e) {

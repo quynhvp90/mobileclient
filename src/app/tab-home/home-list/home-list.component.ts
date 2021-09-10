@@ -37,7 +37,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
   private loader: HTMLIonLoadingElement = null;
   private subscriptions = [];
 
-  public jobsToReview: IJobUserStats[] = [];
+  // public jobsToReview: IJobUserStats[] = [];
 
   // public organizationId = null;
 
@@ -61,11 +61,9 @@ export class HomeListComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     const $this = this;
     console.log('ngOnInit init-list');
-    $this.jobsToReview = [];
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       if (msg.name === 'org-reload') {
-        this.jobsToReview = [];
-        this.organizationDataService.loading(false);
+        // this.jobsToReview = [];
         this.getData();
       }
     });
@@ -96,8 +94,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public ionViewDidEnter() {
     console.log('ionViewWillEnter Will-list');
-    this.jobsToReview = [];
-    this.organizationDataService.loading(false);
+    // this.jobsToReview = [];
     this.getData();
   }
 
@@ -108,13 +105,11 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   private getData() {
     const $this = this;
-    if ($this.organizationDataService.isLoading) {
-      return;
-    }
-    $this.organizationDataService.loading(true);
+    this.isLoading = true;
     console.log('res job stats: ===== ', (new Date()).toTimeString());
     $this.jobApiService.getStatsByOrganization().subscribe((res) => {
-      $this.organizationDataService.loading(false);
+      this.isLoading = false;
+      console.log('res job stats: ===== 1', (new Date()).toTimeString());
       console.log('res job stats: ===== 1', (new Date()).toTimeString());
     });
   }

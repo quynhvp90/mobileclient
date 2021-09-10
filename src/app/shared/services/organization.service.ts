@@ -47,13 +47,13 @@ export class OrganizationService {
       resource: 'token',
       queryString: 'organizationId=' + organization._id,
     };
+    $this.organizationDataService.setOrganization(organization);
     $this.spinnerService.show();
     return $this.apiService.get(setting)
       .pipe(
         map((res) => {
           console.log(msgHdr + 'res = ', res);
           const user = res;
-          $this.organizationDataService.setOrganization(organization);
           $this.userService.updateToken(user);
           if (reload) {
             this.broadcastService.broadcast('reload-data');

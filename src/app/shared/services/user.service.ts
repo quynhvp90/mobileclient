@@ -45,11 +45,6 @@ export class UserService {
 
   public auth(): Observable<IUserDocument> {
     const msgHdr = jsFilename + 'auth: ';
-    console.info(msgHdr);
-    console.info(msgHdr);
-    console.info(msgHdr);
-    console.info(msgHdr);
-    console.info(msgHdr);
 
     const $this = this;
 
@@ -321,13 +316,6 @@ export class UserService {
     const timezoneOffset = (new Date()).getTimezoneOffset();
 
     console.log(msgHdr);
-    console.log(msgHdr);
-    console.log(msgHdr);
-    console.log(msgHdr);
-    console.log(msgHdr);
-    console.log(msgHdr);
-    console.log(msgHdr);
-    console.log(msgHdr);
 
     return $this.apiService
       .get({
@@ -336,9 +324,6 @@ export class UserService {
         map((res) => {
           $this.user = <IUserPublic> res;
           this.broadcastService.broadcast('current-user-retrieved');
-          // @Quynh - this will NOT work because you are getting organizations ASYNC.  You need to block the user until organizations are retrieved
-          // Move to authguard
-          // this.broadcastService.broadcast('check-org-loading');
           this.intercomService.trackEvent('current-user-retrieved', {});
           return $this.user;
         })

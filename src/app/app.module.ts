@@ -64,7 +64,7 @@ import {
 } from './shared/services';
 import { JobModule } from './job/job.module';
 import { OrganizationDataService } from './shared/data-services/organizationData.service';
-import { JobDataService } from './shared/data-services/jobData.service';
+// import { JobDataService } from './shared/data-services/jobData.service';
 
 @NgModule({
   declarations: [
@@ -95,7 +95,7 @@ import { JobDataService } from './shared/data-services/jobData.service';
     StatusBar,
     SplashScreen,
     OrganizationDataService,
-    JobDataService,
+    // JobDataService,
     ActivityService,
     ContactService,
     ChatroomService,

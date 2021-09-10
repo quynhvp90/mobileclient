@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, NgZone } from '@angular/core';
 import {
   BroadcastService,
   UserService,
@@ -53,7 +53,8 @@ export class HomeListComponent implements OnInit, OnDestroy {
     public organizationDataService: OrganizationDataService,
     private navCtrl: NavController,
     private route: ActivatedRoute,
-    private jobDataService: JobDataService,
+    public jobDataService: JobDataService,
+    private zone: NgZone,
     private router: Router,
   ) {
   }
@@ -109,8 +110,12 @@ export class HomeListComponent implements OnInit, OnDestroy {
     console.log('res job stats: ===== ', (new Date()).toTimeString());
     $this.jobApiService.getStatsByOrganization().subscribe((res) => {
       this.isLoading = false;
+      console.log('res = ', res);
       console.log('res job stats: ===== 1', (new Date()).toTimeString());
       console.log('res job stats: ===== 1', (new Date()).toTimeString());
+      this.zone.run(() => {
+        console.log('force update the screen');
+      });
     });
   }
 

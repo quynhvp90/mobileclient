@@ -1,10 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { catchError, finalize, map, share } from 'rxjs/operators';
 import { IJobUserStats } from 'src/app/job/job-shared/interfaces/job.interface';
-import { isNullOrUndefined } from 'util';
-import { IOrganizationDocument } from '../models/organization/organization.interface';
 const jsFilename = 'JobDataService: ';
 
 @Injectable({
@@ -12,26 +7,23 @@ const jsFilename = 'JobDataService: ';
 })
 export class JobDataService {
   public job = null;
-  public jobs: IJobUserStats[];
+  public jobs: IJobUserStats[] = [];
 
   constructor(
   ) {
   }
 
-  //////// Organization /////////////////
   public setJob(objJob) {
     this.job = objJob;
   }
   public getJob() {
-    if (isNullOrUndefined(this.job)) {
-      return null;
-    }
     return this.job;
   }
-  //////// List Organization /////////////////
+
   public setJobs(objJobs) {
     this.jobs = objJobs;
   }
+
   public setJobsByData(res) {
     if (!res) {
       this.setJobs([]);
@@ -48,9 +40,6 @@ export class JobDataService {
     this.setJobs(jobsToReview);
   }
   public getJobs() {
-    if (isNullOrUndefined(this.jobs)) {
-      return null;
-    }
     return this.jobs;
   }
 }

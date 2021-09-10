@@ -97,6 +97,7 @@ export class JobApiService {
       .get(setting).pipe(
         map((res) => {
           const result: any = res;
+          console.log('setting jobDataService with = ', res);
           this.jobDataService.setJobsByData(res);
           return res;
         })

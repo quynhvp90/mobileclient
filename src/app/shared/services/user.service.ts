@@ -96,13 +96,14 @@ export class UserService {
     try {
       localStorage.removeItem('token');
       this.storage.remove('token');
-      this.storage.clear();
-      this.globalService.token = null;
+      this.storage.clear().then((res) => {
+        this.globalService.token = null;
+        this.broadcastService.broadcast('logout');  
+      });
     } catch (e) {
       console.error(msgHdr + 'error trying to remove token, I may be in incognito mode');
+      this.globalService.token = null;
     }
-    this.globalService.token = null;
-    this.broadcastService.broadcast('logout');
   }
 
   public login(user: any): void {

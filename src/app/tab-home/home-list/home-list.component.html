@@ -12,24 +12,27 @@
   <div *ngIf="isLoading">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>
-  <div *ngIf="!isLoading && jobDataService.jobs && jobDataService.jobs.length > 0">
-    <ion-card  *ngFor="let item of jobDataService.jobs" style="--background: #ffffff;">
+  <ng-container *ngIf="!isLoading">
+    <div *ngIf="jobDataService.jobs.length > 0">
+      <ion-card *ngFor="let item of jobDataService.jobs" style="--background: #ffffff;">
+        <ion-card-header>
+          <ion-card-title>{{ item.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="padding-top: 0px;">
+          <ion-list detail>
+            <ion-item detail (click)="reviewJobApplicants(item, 'homework')" *ngIf="item.jobCountHomework" style="color: #57a230;">Review Homework ({{ item.jobCountHomework }})</ion-item>
+            <ion-item detail (click)="reviewJobApplicants(item, 'interview')" *ngIf="item.jobCountInterview" style="color: #068fee;">Review Interview ({{ item.jobCountInterview }})</ion-item>
+            <!-- <ion-item detail (click)="reviewJobApplicants(item, 'qualified')" *ngIf="item.countQualifield" style="color: #7e53c3;">Review Qualified ({{ item.countQualifield }})</ion-item> -->
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ion-card style="--background: #ffffff;" *ngIf="jobDataService.jobs.length === 0">
       <ion-card-header>
-        <ion-card-title>{{ item.title }}</ion-card-title>
+        <ion-card-title>You're all done</ion-card-title>
+        <ion-card-subtitle>No outstanding reviews</ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content style="padding-top: 0px;">
-        <ion-list detail>
-          <ion-item detail (click)="reviewJobApplicants(item, 'homework')" *ngIf="item.jobCountHomework" style="color: #57a230;">Review Homework ({{ item.jobCountHomework }})</ion-item>
-          <ion-item detail (click)="reviewJobApplicants(item, 'interview')" *ngIf="item.jobCountInterview" style="color: #068fee;">Review Interview ({{ item.jobCountInterview }})</ion-item>
-          <!-- <ion-item detail (click)="reviewJobApplicants(item, 'qualified')" *ngIf="item.countQualifield" style="color: #7e53c3;">Review Qualified ({{ item.countQualifield }})</ion-item> -->
-        </ion-list>
-      </ion-card-content>
     </ion-card>
-  </div>
-  <ion-card *ngIf="!isLoading && (!jobDataService.jobs || jobDataService.jobs.length === 0)">
-    <ion-card-header>
-      <ion-card-title>You're all done</ion-card-title>
-      <ion-card-subtitle>No outstanding reviews</ion-card-subtitle>
-    </ion-card-header>
-  </ion-card>
+  </ng-container>
+
 </ion-content>

@@ -41,11 +41,6 @@
     <!-- Answers -->
     <ion-card *ngIf="mode === 'homework' || mode === 'interview'">
       <!-- {{ currentAnswer.videoId }} -->
-      <div *ngIf="currentAnswer.videoId">
-        <ziggeo-player #ziggeoplayer
-          [options]="{video: currentAnswer.videoId, width: 340, height: 240}"
-        ></ziggeo-player>
-      </div>
       <ion-card-header>
         <ion-card-title>Answer</ion-card-title>
         <ion-card-subtitle>
@@ -69,6 +64,11 @@
       </ion-card-header>
 
       <ion-card-content>
+        <div *ngIf="currentAnswer.videoId">
+          <ziggeo-player #ziggeoplayer
+            [options]="{video: currentAnswer.videoId, width: 340, height: 240}"
+          ></ziggeo-player>
+        </div>
         <ion-row class="answer-content">
           <div *ngIf="answers.length > 1 && (currentAnswerIndex === answers.length - 1)" class="alert alert-danger">
               Applicant was reset, this is the latest submission

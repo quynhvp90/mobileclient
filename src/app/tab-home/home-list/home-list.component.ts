@@ -38,7 +38,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public jobsToReview: IJobUserStats[] = [];
 
-  public organizationId = null;
+  // public organizationId = null;
 
   public isLoading = true;
   public isInit = false;
@@ -65,13 +65,13 @@ export class HomeListComponent implements OnInit, OnDestroy {
     console.log('ngOnInit init-list');
     $this.jobsToReview = [];
     let subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
-      if (msg.name === 'reload-data' && $this.organizationId) {
-        // respond to broadcast here
-        // if ($this.organizationService.organization) {
-        //   $this.organizationId = $this.organizationService.organization._id;
-        // }
-        // $this.getData();
-      }
+      // if (msg.name === 'reload-data' && $this.organizationId) {
+      //   // respond to broadcast here
+      //   // if ($this.organizationService.organization) {
+      //   //   $this.organizationId = $this.organizationService.organization._id;
+      //   // }
+      //   // $this.getData();
+      // }
       // if (msg.name === 'reload-org') {
       //   // respond to broadcast here
       //   console.log('set organiztion 1');
@@ -118,7 +118,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
     if (!this.organizationService.organization) {
       this.organizationService.getCurrentOrganization().subscribe(() => {});
     }
-    this.organizationId = this.organizationService.organization ? this.organizationService.organization._id : this.userService.user.defaultOrganizationId;
+    // this.organizationId = this.organizationService.organization ? this.organizationService.organization._id : this.userService.user.defaultOrganizationId;
     this.isLoading = false;
     this.getData();
   }
@@ -135,7 +135,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
     }
     $this.isLoading = true;
     // console.log('res job stats: ===== ', (new Date()).toTimeString());
-    $this.jobApiService.getStatsByOrganization(this.organizationId).subscribe((res) => {
+    $this.jobApiService.getStatsByOrganization(this.organizationService.organization._id).subscribe((res) => {
       $this.isLoading = false;
       res.userStats.forEach((stats) => {
         stats.countQualifield = stats.applicationStats.applicantsInQualifiedRequiringAction;

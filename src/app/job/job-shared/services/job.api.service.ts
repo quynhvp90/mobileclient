@@ -29,6 +29,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { IJobUserStats } from '../interfaces/job.interface';
 import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 import { JobDataService } from 'src/app/shared/data-services/jobData.service';
+import { of } from 'rxjs';
 
 const jsFilename = 'ChallengeService: ';
 
@@ -76,10 +77,17 @@ export class JobApiService {
       });
     }
     // const organizationUserId = this.getOrganizationUserId();
-    const orgId = this.organizationDataService.organization ? this.organizationDataService.organization._id : 'none';
+    // const orgId = this.organizationDataService.organization ? this.organizationDataService.organization._id : 'none';
+
+    // @Quynh - you can remove this code.  This should never happen
+    if (!this.organizationDataService.organization || !this.organizationDataService.organization._id) {
+      of(false);
+      throw(new Error('critical error.  Code should never be reached.  Query for Job should have the user logged in'));
+    }
+
     const setting: ISetting = {
       resource: 'jobs/job-stats',
-      queryString: 'organization-id=' + orgId,
+      queryString: 'organization-id=' + this.organizationDataService.organization._id,
     };
     // if (organizationUserId) {
     //   setting.queryString += '&organization-user-id=' + organizationUserId;

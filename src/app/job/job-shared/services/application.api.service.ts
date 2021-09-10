@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 
 import { Observable } from 'rxjs/Observable';
-import { ApiService, ISetting, IFilter, OrganizationService, AlertService } from '../../../shared/services';
+import { ApiService, ISetting, IFilter, AlertService } from '../../../shared/services';
 import { ExceptionService } from '../../../shared/services/exception.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
 import { BroadcastService } from '../../../shared/services/broadcast.service';
@@ -13,6 +13,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { IJobUserStats } from '../interfaces/job.interface';
 import { of } from 'rxjs';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
+import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 
 const jsFilename = 'ChallengeService: ';
 
@@ -27,7 +28,7 @@ export class ApplicationApiService {
     private broadcastService: BroadcastService,
     private globalService: GlobalService,
     private userService: UserService,
-    private organizationService: OrganizationService,
+    private organizationDataService: OrganizationDataService,
     private storage: Storage,
     private alertService: AlertService,
     private apiService: ApiService) {
@@ -66,7 +67,7 @@ export class ApplicationApiService {
     if (!queryObj.where) {
       queryObj.where = {};
     }
-    const organizationUserId = this.organizationService.organizationUserId;
+    const organizationUserId = this.organizationDataService.organizationUserId;
     queryObj.where.organizationId = $this.userService.user.defaultOrganizationId;
     queryObj.where.jobId = jobId;
     queryObj.where.status = status;
@@ -74,7 +75,7 @@ export class ApplicationApiService {
       queryObj.where['actionRequired.' + organizationUserId] = 'review';
     }
 
-    console.log('$this.organizationService.organization = ', $this.organizationService.organization);
+    console.log('$this.organizationDataService.organization = ', $this.organizationDataService.organization);
 
     const setting: ISetting = {
       resource: 'applications',

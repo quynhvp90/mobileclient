@@ -11,13 +11,11 @@ import {
 } from '@angular/router';
 
 import { UserService } from './user.service';
-import { OrganizationService } from './organization.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad {
   constructor(
     private userService: UserService,
-    private organizationService: OrganizationService,
     private router: Router) { }
 
   public canLoad(route: Route) {
@@ -54,15 +52,6 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
         }
 
         return true;
-
-        // console.log('calling organizationService.getOrganizations');
-        // this.organizationService.getOrganizations(null).subscribe((res) => {
-        //   observer.next(isLoggedIn);
-        //   observer.complete();
-        //   if (!isLoggedIn) {
-        //     this.router.navigate(['/intro'], { queryParams: { redirectTo: state.url } });
-        //   }
-        // });
       });
     });
   }

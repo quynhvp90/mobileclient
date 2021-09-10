@@ -324,6 +324,7 @@ export class UserService {
         map((res) => {
           $this.user = <IUserPublic> res;
           this.broadcastService.broadcast('current-user-retrieved');
+          this.broadcastService.broadcast('check-org-loading');
           this.intercomService.trackEvent('current-user-retrieved', {});
           return $this.user;
         })

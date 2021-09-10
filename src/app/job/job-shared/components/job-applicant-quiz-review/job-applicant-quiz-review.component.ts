@@ -195,6 +195,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
               }
               $this.questions[foundApplication._id + '-' + int.questionId].response = int.response;
               $this.questions[foundApplication._id + '-' + int.questionId].dateSubmitted = int.dateSubmitted;
+              $this.questions[foundApplication._id + '-' + int.questionId].rate = 0;
             });
             if (foundApplication.results.ratings && foundApplication.results.ratings.interview
               && foundApplication.results.ratings.interview.questions) {
@@ -298,7 +299,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
                     if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
                       ratingComplete += 1;
                     }
-                  });    
+                  });
                 });
                 if (ratingComplete === $this.jobQuestions.length) {
                   countAppRating += 1;

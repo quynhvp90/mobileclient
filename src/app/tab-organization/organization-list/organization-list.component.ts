@@ -16,6 +16,7 @@ import {
 import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
 import { IJobUserStats } from 'src/app/job/job-shared/interfaces/job.interface';
 import { IOrganizationDocument } from 'src/app/shared/models/organization/organization.interface';
+import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 
 @Component({
   selector: 'organization-list',
@@ -29,11 +30,12 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
 
   public organizations: IOrganizationDocument[] = [];
   public userOrg: IOrganizationDocument = null;
-  public isLoading = true;
+  public isLoading = false;
 
   constructor(
     private broadcastService: BroadcastService,
     public organizationService: OrganizationService,
+    public organizationDataService: OrganizationDataService,
     private loadingController: LoadingController,
     public globalService: GlobalService,
     private jobApiService: JobApiService,
@@ -61,7 +63,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         }
       });
     this.subscriptions.push(subscription);
-    $this.getData();
   }
 
   public ngOnDestroy() {
@@ -70,7 +71,10 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     });
   }
-
+  public ionViewWillEnter() {
+    console.log('ionViewWillEnter Will-list');
+    this.getData();
+  }
   public ionViewWillLeave() {
     console.log('ionViewWillLeave home-list');
   }
@@ -89,21 +93,10 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   private getData() {
     const $this = this;
     $this.isLoading = true;
-    if ($this.organizationService.organizations && $this.organizationService.organizations.length > 0) {
-      $this.organizationService.organizations.forEach((org) => {
-        if (org.users && org.users.length > 0) {
-          org.users.forEach((user) => {
-            if (user.userId === $this.userService.user._id) {
-              $this.organizations.push(org);
-            }
-          });
-        }
-      });
-    } else {
-      $this.organizationService.getOrganizations(null).subscribe((res) => {
-
-      });
-    }
+    $this.organizationService.getOrganizations(null).subscribe((res) => {
+      $this.isLoading = false;
+      console.log('login set organiztaions =', res);
+    });
 
   }
 }

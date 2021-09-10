@@ -12,6 +12,7 @@ import { CONFIG } from '../../../config';
 import { environment } from '../../../../environments/environment';
 import { Subscription } from 'rxjs/Subscription';
 import { Platform, LoadingController } from '@ionic/angular';
+import { OrganizationDataService } from '../../data-services/organizationData.service';
 // import { Deploy } from 'cordova-plugin-ionic';
 @Component({
   selector: 'login-component',
@@ -61,6 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private loginService: LoginService,
     private organizationService: OrganizationService,
+    private organizationDataService: OrganizationDataService,
     private broadcastService: BroadcastService,
     private loadingController: LoadingController,
     private userService: UserService,
@@ -72,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (msg.name === 'login') {
         console.log('received broadcast login');
         this.organizationService.getOrganizations(null).subscribe((res) => {
-          if (this.organizationService.organization && this.organizationService.organizations && this.organizationService.organizations.length > 1) {
+          if (this.organizationDataService.organization && this.organizationDataService.organizations && this.organizationDataService.organizations.length > 1) {
             this.router.navigate(['list-org-screen']);
             return;
           }

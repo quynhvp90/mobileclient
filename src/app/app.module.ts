@@ -36,7 +36,7 @@ import {
   SpinnerService,
   ToastService,
   UserService,
-  // OrganizationService,
+  OrganizationService,
   UtilityService,
   WindowService,
   WorkoutService,
@@ -63,6 +63,8 @@ import {
   InviteService,
 } from './shared/services';
 import { JobModule } from './job/job.module';
+import { OrganizationDataService } from './shared/data-services/organizationData.service';
+import { JobDataService } from './shared/data-services/jobData.service';
 
 @NgModule({
   declarations: [
@@ -92,7 +94,8 @@ import { JobModule } from './job/job.module';
     { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true },
     StatusBar,
     SplashScreen,
-
+    OrganizationDataService,
+    JobDataService,
     ActivityService,
     ContactService,
     ChatroomService,
@@ -124,7 +127,7 @@ import { JobModule } from './job/job.module';
     SpinnerService,
     ToastService,
     UserService,
-    // OrganizationService,
+    OrganizationService,
     UtilityService,
     WindowService,
     WorkoutService,

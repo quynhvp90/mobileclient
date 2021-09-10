@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { BroadcastService, OrganizationService } from '../../shared/services';
+import { BroadcastService } from '../../shared/services';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IJobUserStats } from '../job-shared/interfaces/job.interface';
 import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
 import { ApplicationApiService } from '../job-shared/services/application.api.service';
+import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 
 const jsFilename = 'job-applicant-quiz-review: ';
 
@@ -25,7 +26,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     private broadcastService: BroadcastService,
     private navCtrl: NavController,
     public jobApiService: JobApiService,
-    private organizationService: OrganizationService,
+    private organizationDataService: OrganizationDataService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
@@ -70,12 +71,10 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   public getData() {
     const $this = this;
     $this.isLoading = true;
-    if (!$this.organizationService.organization) {
-      $this.organizationService.getCurrentOrganization().subscribe(() => {
-        $this.jobApiService.getJob($this.jobId).subscribe((res) => {
-          $this.isLoading = false;
-          console.log('res = ', res);
-        });
+    if (!$this.organizationDataService.organization) {
+      $this.jobApiService.getJob($this.jobId).subscribe((res) => {
+        $this.isLoading = false;
+        console.log('res = ', res);
       });
     } else {
       $this.jobApiService.getJob($this.jobId).subscribe((res) => {

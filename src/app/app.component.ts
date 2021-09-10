@@ -9,7 +9,7 @@ import { UserService } from './shared/services/user.service';
 import { Storage } from '@ionic/storage';
 // import { FCM } from '@ionic-native/fcm/ngx';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-import { GlobalService, DeepLinkService, NotificationService } from './shared/services';
+import { GlobalService, DeepLinkService, NotificationService, OrganizationService } from './shared/services';
 
 import {
   Plugins,
@@ -50,6 +50,7 @@ export class AppComponent {
     private pushNotificationService: PushNotificationService,
     // private fcm: FCM,
     private firebaseDynamicLinks: FirebaseDynamicLinks,
+    private organizationService: OrganizationService,
   ) {
     const msgHdr = jsFilename + 'constructor: ';
 
@@ -66,6 +67,8 @@ export class AppComponent {
         } else if (msg.name === 'logout') {
           $this.userLoggedIn = false;
           window.location.reload();
+        } else if (msg.name === 'check-org-loading') {
+          $this.organizationService.checkOrganization();
         }
       });
     } catch (e) {

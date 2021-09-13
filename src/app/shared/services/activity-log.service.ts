@@ -175,7 +175,7 @@ export class ActivityLogService {
       } else {
         durationMinutes = Math.round(count * 10 * 100) / 100;
       }
-      console.info(msgHdr + 'durationMinutes = ', durationMinutes);
+      console.log(msgHdr + 'durationMinutes = ', durationMinutes);
     } else if (foundActivity.measurement === 'time') {
       if (foundActivity.unit === 'sec') {
         durationMinutes = count * 60;

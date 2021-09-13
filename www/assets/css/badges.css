@@ -1,0 +1,101 @@
+@font-face {
+    font-family: 'lobster';
+    src: url('fonts/lobster.eot');
+    src: url('fonts/lobster.eot') format('embedded-opentype'),
+         url('fonts/lobster.woff2') format('woff2'),
+         url('fonts/lobster.woff') format('woff'),
+         url('fonts/lobster.ttf') format('truetype'),
+         url('fonts/lobster.svg#lobster') format('svg');
+}
+
+
+/* line 17, ../sass/screen.scss */
+#wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+/* line 22, ../sass/screen.scss */
+.cool_btn1 {
+  width: 190px;
+  height: 190px;
+  margin: 15px 15px 15px 15px;
+  position: relative;
+  -webkit-border-radius: 200px;
+  -moz-border-radius: 200px;
+  -ms-border-radius: 200px;
+  -o-border-radius: 200px;
+  border-radius: 200px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(50%, #e3e3e3), color-stop(50%, #888888), color-stop(100%, #666666));
+  background-image: -webkit-linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  background-image: -moz-linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  background-image: -o-linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  background-image: linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+}
+
+.cool_btn1 h1 {
+  text-align: center;
+  font-size: 50px;
+  margin: 20px 0 0 0;
+  font-family: 'Lobster', cursive;
+  font-weight: normal;
+  line-height: 1;
+  color: #007090;
+}
+
+.shadow {
+  text-shadow: 0 1px 0 white, 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.activity {
+  text-align: center;
+  margin-top: 15px; 
+  color:#fafafa;
+  font-size: 20px;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: helvetica, arial, sans-serif !important;  
+}
+
+.message {
+  font-size: 16px !important; 
+  margin-top: 0px !important;
+  display: block !important;
+}
+
+.activityIcon {
+  width: 60px;
+  height: 65px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0px;
+}
+
+.cool_btn1.blue {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.4s;
+  -moz-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5d5d5), color-stop(50%, #ffffff), color-stop(50%, #577fbd), color-stop(100%, #007090));
+  background-image: -webkit-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+  background-image: -moz-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+  background-image: -o-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+  background-image: linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #007090);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+}
+

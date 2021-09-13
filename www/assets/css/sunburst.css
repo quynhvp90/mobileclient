@@ -1,0 +1,41 @@
+.sunrise {
+  width: 100%;
+  height: 100%;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#FFAD00), to(#fd540e));
+  background-image: -webkit-linear-gradient(top, #FFAD00 0%, #fd540e 100%);
+  background-image: -moz-linear-gradient(top, #FFAD00 0%, #fd540e 100%);
+  background-image: linear-gradient(to bottom, #FFAD00 0%, #fd540e 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFAD00', endColorstr='#FFFD540E', GradientType=0);
+}
+
+.sunrise svg {
+  -webkit-transform-origin: center 50%;
+  -moz-transform-origin: center 50%;
+  -o-transform-origin: center 50%;
+  transform-origin: center 50%;
+
+  -webkit-animation: rotateWebkit 10s infinite linear;  
+  -moz-animation: rotateNormal 10s infinite linear;
+  -o-animation: rotateNormal 10s infinite linear;
+  animation: rotateNormal 10s infinite linear;
+}
+
+
+@keyframes rotateNormal {
+  0% {
+    transform: rotate(0deg) scale(2.0);
+  }
+  100% {
+    transform: rotate(360deg) scale(2.0);
+  }
+}
+
+@-webkit-keyframes rotateWebkit {
+  0% {
+    -webkit-transform: rotate(0deg) scale(2.0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg) scale(2.0);
+  }
+}

@@ -26,7 +26,7 @@ import { JobDataService } from 'src/app/shared/data-services/jobData.service';
 //   countQualifield?: number;
 //   // reviewType: string;
 // };
-
+const jsFilename = 'home-list: ';
 @Component({
   selector: 'home-list',
   templateUrl: './home-list.component.html',
@@ -93,30 +93,28 @@ export class HomeListComponent implements OnInit, OnDestroy {
     });
   }
 
-  public ionViewDidEnter() {
-    console.log('ionViewWillEnter Will-list');
+  public ionViewWillEnter() {
+    console.log(jsFilename + ' ionViewDidEnter');
     // this.jobsToReview = [];
     this.getData();
   }
 
   public ionViewWillLeave() {
-    console.log('ionViewWillLeave home-list');
+    console.log(jsFilename + ' ionViewWillLeave');
     this.ngOnDestroy();
   }
 
   private getData() {
     const $this = this;
-    this.isLoading = true;
-    console.log('res job stats: ===== ', (new Date()).toTimeString());
-    $this.jobApiService.getStatsByOrganization().subscribe((res) => {
-      this.isLoading = false;
-      console.log('res = ', res);
-      console.log('res job stats: ===== 1', (new Date()).toTimeString());
-      console.log('res job stats: ===== 1', (new Date()).toTimeString());
-      this.zone.run(() => {
-        console.log('force update the screen');
+    this.zone.run(() => {
+      this.isLoading = true;
+      console.log('getData start: ===== ', (new Date()).toTimeString());
+      $this.jobApiService.getStatsByOrganization().subscribe((res) => {
+        this.isLoading = false;
+        console.log('getData() res = ', res);
       });
     });
+    console.log(jsFilename + 'getData: force update the screen');
   }
 
   public reviewJobApplicants(jobToReview: IJobUserStats, type) {

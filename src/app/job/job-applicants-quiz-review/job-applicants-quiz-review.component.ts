@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BroadcastService } from '../../shared/services';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { JobApiService } from 'src/app/job/job-shared/services/job.api.service';
 import { ApplicationApiService } from '../job-shared/services/application.api.service';
 import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 
-const jsFilename = 'job-applicant-quiz-review: ';
+const jsFilename = 'job-applicants-quiz-review: ';
 
 @Component({
   selector: 'job-applicants-quiz-review',
@@ -28,6 +28,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     public jobApiService: JobApiService,
     private organizationDataService: OrganizationDataService,
     private route: ActivatedRoute,
+    private zone: NgZone,
     private router: Router,
   ) {
     const $this = this;
@@ -65,34 +66,31 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   public ngOnInit(): void {
     const $this = this;
     const msgHdr = jsFilename + 'onInit: ';
+    console.log(msgHdr);
     $this.getData();
   }
 
   public getData() {
     const $this = this;
-    $this.isLoading = true;
-    if (!$this.organizationDataService.organization) {
+    this.zone.run(() => {
+      $this.isLoading = true;
       $this.jobApiService.getJob($this.jobId).subscribe((res) => {
         $this.isLoading = false;
         console.log('res = ', res);
       });
-    } else {
-      $this.jobApiService.getJob($this.jobId).subscribe((res) => {
-        $this.isLoading = false;
-        console.log('res = ', res);
-      });
-    }
+    });
   }
 
   public ngAfterViewInit(): void {
     const $this = this;
-    const msgHdr = 'ngAfterViewInit: ';
+    const msgHdr = jsFilename + 'ngAfterViewInit: ';
+    console.log(msgHdr);
   }
 
   public backButton() {
     console.log('review applicant done.');
     const newUrl = '/tabs/home';
-    this.navCtrl.navigateForward(newUrl, { queryParams: { mode: 'reload' } });
+    this.navCtrl.navigateForward(newUrl);
     // this.navCtrl.back();
   }
   private updateData() {
@@ -101,6 +99,8 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   }
 
   public ngOnDestroy() {
+    const msgHdr = jsFilename + 'ngOnDestroy: ';
+    console.log(msgHdr);
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });

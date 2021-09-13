@@ -36,7 +36,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public ionViewDidEnter() {
     const $this = this;
     const msgHdr = jsFilename + 'ionViewDidEnter: ';
-    console.info(msgHdr + 'ionViewDidEnter');
+    console.log(msgHdr + 'ionViewDidEnter');
     $this.notificationService.reset({
       showLoading: true,
       isReload: true,

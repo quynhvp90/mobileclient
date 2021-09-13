@@ -14,6 +14,7 @@ import { SpinnerService } from './spinner.service';
 // import { UserService } from '../../shared/services';
 // import { CONFIG, ExceptionService, SpinnerService  } from '../../../app/core';
 import { ApiService, ISetting } from './api.service';
+import { IonicAlertService } from '.';
 const jsFilename = 'LoginService: ';
 
 @Injectable()
@@ -24,7 +25,8 @@ export class LoginService {
     private exceptionService: ExceptionService,
     private spinnerService: SpinnerService,
     private apiService: ApiService,
-    private userService: UserService
+    private userService: UserService,
+    // private ionicAlertService: IonicAlertService,
   ) { }
 
   public login(loginModel: any) {
@@ -47,6 +49,12 @@ export class LoginService {
           return user;
         }), catchError((err) => {
           console.log('err = ', err);
+          // if (err.status === 404) {
+          //   this.ionicAlertService.presentAlert('Login Fail', null, 'Invalid email or password');
+          //   return null;
+          // }
+          // this.ionicAlertService.presentAlert('Login Fail', null, err.message);
+          // return null;
           return $this.exceptionService.catchBadResponse(err);
         }), finalize(() =>
           $this.spinnerService.hide(),

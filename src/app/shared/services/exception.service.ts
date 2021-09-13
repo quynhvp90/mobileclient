@@ -46,6 +46,12 @@ export class ExceptionService {
       this.router.navigate(['/login']);
       return of(false);
     }
+    if (res && res.status === 404 && res.url.indexOf('api/token') > -1)  {
+      const message: any = res;
+      console.log(msgHdr + ' message.error.message');
+      this.toastService.activate('Email or password invalid.', 'error');
+      return of(false);
+    }
 
     if (res && res.customMessage && res.customMessage.length) {
       this.toastService.activate(res.customMessage, 'error');

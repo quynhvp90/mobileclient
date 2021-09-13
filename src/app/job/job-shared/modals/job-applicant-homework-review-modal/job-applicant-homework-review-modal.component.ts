@@ -37,7 +37,7 @@ export class JobApplicantHomeworkReviewModalComponent implements OnInit, OnDestr
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       const msgHdr = jsFilename + 'broadcastService: ';
 
-      // console.info(msgHdr + '$this.foundActivities = ', $this.foundActivities);
+      // console.log(msgHdr + '$this.foundActivities = ', $this.foundActivities);
 
       if (msg.name === 'activity-created') {
       }

@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import IApplicationDocument from 'src/app/shared/models/application/application.interface';
-import { BroadcastService, IonicAlertService, MessageService } from '../../../../shared/services';
+import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
+import { IApplicationDocument } from 'src/app/shared/models/application/application.interface';
+import { BroadcastService, IonicAlertService, MessageService, UserService } from '../../../../shared/services';
 import { JobApplicantHomeworkReviewModalComponent } from '../../modals/job-applicant-homework-review-modal/job-applicant-homework-review-modal.component';
 import { JobApplicantReviewModalComponent } from '../../modals/job-applicant-review-modal/job-applicant-review-modal.component';
 import { ApplicationApiService } from '../../services/application.api.service';
@@ -30,9 +31,9 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public questions: any = {};
   public quizType = 'homework';
   public queryObj = {
-    sortField: "stageXsubmitted",
-    sortFieldTable: "stageXsubmitted",
-    sortOrder: "asc",
+    sortField: 'stageXsubmitted',
+    sortFieldTable: 'stageXsubmitted',
+    sortOrder: 'asc',
     limit: 20,
     page: 1,
     skip: 0,
@@ -48,6 +49,8 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     private ionicAlertService: IonicAlertService,
     private applicationApiService: ApplicationApiService,
     private navCtrl: NavController,
+    private zone: NgZone,
+    private orgData: OrganizationDataService,
   ) {
     const $this = this;
 
@@ -57,38 +60,41 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           $this.foundApplications.forEach((app) => {
             if (app._id === msg.message.applicationId) {
               if (app.results && app.results.ratings && app.results.ratings[$this.quizType]) {
+
+                if (!$this.questions[app._id]) {
+                  $this.questions[app._id] = {};
+                }
+                if (!$this.questions[app._id][$this.orgData.organizationUserId + '-' + msg.message.questionId]) {
+                  $this.questions[app._id][$this.orgData.organizationUserId + '-' + msg.message.questionId] = { rate: 0 };
+                }
+                $this.questions[app._id][$this.orgData.organizationUserId + '-' + msg.message.questionId].rate = msg.message.rate;
+
                 if ($this.quizType === 'homework' || $this.quizType === 'interview') {
-                  let appQuestions = app.results.ratings[$this.quizType].questions;
+                  const appQuestions = app.results.ratings[$this.quizType].questions;
                   if (appQuestions) {
+                    // check question rating is empty
                     const validateQ = appQuestions.filter((result) => {
-                      return result.questionId === msg.message.questionId;
+                      return result.questionId === msg.message.questionId && result.userId === $this.orgData.organizationUserId;
                     });
                     if (!validateQ || validateQ.length === 0) {
                       appQuestions.push({
                         archived: false,
                         questionId: msg.message.questionId,
                         rating: msg.message.rate,
-                        userId: '',
+                        userId: $this.orgData.organizationUserId,
                       });
                     }
+                    // update app rating
                     appQuestions.forEach((question) => {
-                      if (question.questionId === msg.message.questionId) {
+                      if (question.questionId === msg.message.questionId && question.userId === $this.orgData.organizationUserId) {
                         question.rating = msg.message.rate;
-                        if (!$this.questions[app._id + '-' + question.questionId]) {
-                          $this.questions[app._id + '-' + question.questionId] = {};
-                        }
-                        $this.questions[app._id + '-' + question.questionId].rate = msg.message.rate;
                       }
                     });
                   }
                 } else if (app.results.ratings.applicant.ratings && msg.message.applicationId === app._id) {
                   app.results.ratings.applicant.ratings.forEach((rating) => {
-                    if (rating._id === msg.message.questionId) {
+                    if (rating._id === msg.message.questionId && $this.orgData.organizationUserId === rating.userId) {
                       rating.rating = msg.message.rate;
-                      if (!$this.questions[app._id + '-' + rating._id]) {
-                        $this.questions[app._id + '-' + rating._id] = {};
-                      }
-                      $this.questions[app._id + '-' + rating._id].rate = msg.message.rate;
                     }
                   });
                   $this.jobQuestions = app.results.ratings.applicant.ratings;
@@ -118,6 +124,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   public ngOnInit(): void {
     const $this = this;
     const msgHdr = jsFilename + 'onInit: ';
+    console.log(msgHdr);
     if ($this.mode === 'stage2') {
       $this.quizType = 'homework';
       $this.jobQuestions = $this.jobApiService.foundJob.tests.homework.questions;
@@ -134,7 +141,8 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
   public ngAfterViewInit(): void {
     const $this = this;
-    const msgHdr = 'ngAfterViewInit: ';
+    const msgHdr = jsFilename + 'ngAfterViewInit: ';
+    console.log(msgHdr);
   }
 
   private getData() {
@@ -152,7 +160,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
 
       $this.getCurrentApplication();
     });
-    // get comments 
+    // get comments
   }
 
   private getCurrentApplication() {
@@ -169,41 +177,63 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
         if (foundApplication && foundApplication.results) {
           // home work
           if (foundApplication.results.homework && foundApplication.results.homework.length > 0) {
+            // set response
             foundApplication.results.homework.forEach((hw) => {
-              if (!$this.questions[foundApplication._id + '-' + hw.questionId]) {
-                $this.questions[foundApplication._id + '-' + hw.questionId] = {}
+              if (!$this.questions[foundApplication._id]) {
+                $this.questions[foundApplication._id] = {};
               }
-              $this.questions[foundApplication._id + '-' + hw.questionId].response = hw.response;
-              $this.questions[foundApplication._id + '-' + hw.questionId].dateSubmitted = hw.dateSubmitted;
+              if (!$this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + hw.questionId]) {
+                $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + hw.questionId] = {};
+              }
+              $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + hw.questionId].response = hw.response;
+              $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + hw.questionId].dateSubmitted = hw.dateSubmitted;
             });
+            // set rating
             if (foundApplication.results.ratings && foundApplication.results.ratings.homework
               && foundApplication.results.ratings.homework.questions) {
               foundApplication.results.ratings.homework.questions.forEach((question) => {
-                if (!$this.questions[foundApplication._id + '-' + question.questionId]) {
-                  $this.questions[foundApplication._id + '-' + question.questionId] = {}
+                if (!$this.questions[foundApplication._id]) {
+                  $this.questions[foundApplication._id] = {};
                 }
-                $this.questions[foundApplication._id + '-' + question.questionId].rate = question.rating;
+                if (!$this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + question.questionId]) {
+                  $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + question.questionId] = {
+                    rate: 0,
+                  };
+                }
+                if (question.userId === $this.orgData.organizationUserId) {
+                  $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + question.questionId].rate = question.rating;
+                }
               });
             }
           }
 
           // interview
           if (foundApplication.results.interview && foundApplication.results.interview.length > 0) {
+            // set response
             foundApplication.results.interview.forEach((int) => {
-              if (!$this.questions[foundApplication._id + '-' + int.questionId]) {
-                $this.questions[foundApplication._id + '-' + int.questionId] = {}
+              if (!$this.questions[foundApplication._id]) {
+                $this.questions[foundApplication._id] = {};
               }
-              $this.questions[foundApplication._id + '-' + int.questionId].response = int.response;
-              $this.questions[foundApplication._id + '-' + int.questionId].dateSubmitted = int.dateSubmitted;
-              $this.questions[foundApplication._id + '-' + int.questionId].rate = 0;
+              if (!$this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + int.questionId]) {
+                $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + int.questionId] = {};
+              }
+              $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + int.questionId].response = int.response;
+              $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + int.questionId].dateSubmitted = int.dateSubmitted;
+              $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + int.questionId].rate = 0;
             });
+            // set rating
             if (foundApplication.results.ratings && foundApplication.results.ratings.interview
               && foundApplication.results.ratings.interview.questions) {
               foundApplication.results.ratings.interview.questions.forEach((question) => {
-                if (!$this.questions[foundApplication._id + '-' + question.questionId]) {
-                  $this.questions[foundApplication._id + '-' + question.questionId] = {}
+                if (!$this.questions[foundApplication._id]) {
+                  $this.questions[foundApplication._id] = {};
                 }
-                $this.questions[foundApplication._id + '-' + question.questionId].rate = question.rating;
+                if (!$this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + question.questionId]) {
+                  $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + question.questionId] = { rate: 0 };
+                }
+                if (question.userId === $this.orgData.organizationUserId) {
+                  $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + question.questionId].rate = question.rating;
+                }
               });
             }
           }
@@ -211,10 +241,16 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
           if (foundApplication.results.ratings && foundApplication.results.ratings.applicant
             && foundApplication.results.ratings.applicant.ratings && foundApplication.results.ratings.applicant.ratings.length > 0) {
             foundApplication.results.ratings.applicant.ratings.forEach((rating) => {
-              if (!$this.questions[foundApplication._id + '-' + rating._id]) {
-                $this.questions[foundApplication._id + '-' + rating._id] = {};
+              if (!$this.questions[foundApplication._id]) {
+                $this.questions[foundApplication._id] = {};
               }
-              $this.questions[foundApplication._id + '-' + rating._id].rate = rating.rating;
+              if (!$this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + rating._id]) {
+                $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + rating._id] = { rate: 0 };
+              }
+              if (rating.userId === $this.orgData.organizationUserId) {
+                $this.questions[foundApplication._id][$this.orgData.organizationUserId + '-' + rating._id].rate = rating.rating;
+              }
+
             });
           }
         }
@@ -226,14 +262,15 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
             console.log('reload star question = ', jobQ._id);
             this.broadcastService.broadcast('update-rating', {
               questionId: jobQ._id,
-              rate: $this.questions[$this.currentApplication._id + '-' + jobQ._id] ? $this.questions[$this.currentApplication._id + '-' + jobQ._id].rate : 0,
+              rate: $this.questions[$this.currentApplication._id][$this.orgData.organizationUserId + '-' + jobQ._id] ? $this.questions[$this.currentApplication._id][$this.orgData.organizationUserId + '-' + jobQ._id].rate : 0,
             });
           });
         }
+        console.log('$this.jobQuestions = ', $this.jobQuestions);
         // check done all question
         if ($this.checkDoneAllQuestion()) {
           if ($this.currentApplicationNumber < $this.totalApplicationNumber) {
-            $this.showConfirmModel({ nextApplicant: { ratingComplete: true }});
+            $this.showConfirmModel({ nextApplicant: { ratingComplete: true } });
           } else if ($this.currentApplicationNumber === $this.totalApplicationNumber) {
             $this.checkAllApplicationRating().then((resp) => {
               if (resp) {
@@ -259,26 +296,31 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     });
   }
   public ionViewWillEnter() {
-    console.log('ionViewWillEnter job-applicant-quiz-review');
-    this.getCurrentApplication();
+    const $this = this;
+    const msgHdr = jsFilename + 'ionViewWillEnter: ';
+    console.log(msgHdr);
   }
 
   public nextApplicant() {
-    if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
-      this.currentApplicationNumber += 1;
-      if (this.currentApplicationNumber > this.foundApplications.length) {
-        this.queryObj.page += 1;
-        this.getData();
+    this.zone.run(() => {
+      if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
+        this.currentApplicationNumber += 1;
+        if (this.currentApplicationNumber > this.foundApplications.length) {
+          this.queryObj.page += 1;
+          this.getData();
+          return;
+        }
+        this.getCurrentApplication();
         return;
       }
-      this.getCurrentApplication();
-      return;
-    }
+    });
   }
 
   public previousApplicant() {
-    this.currentApplicationNumber -= 1;
-    this.getCurrentApplication();
+    this.zone.run(() => {
+      this.currentApplicationNumber -= 1;
+      this.getCurrentApplication();
+    });
   }
 
   public checkAllApplicationRating() {
@@ -317,13 +359,11 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       }
       resolve(ratingAllApplications);
     });
-    
-
   }
 
   public showConfirmModel(options?: {
     nextApplicant?: {
-      ratingComplete?: boolean
+      ratingComplete?: boolean,
     },
     doneApplications?: boolean,
   }) {
@@ -357,7 +397,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
       const title = 'Congratulations';
       const message = 'You have completed rating all applicants in this section.';
       $this.ionicAlertService.presentAlertConfirmPrompt(title, message, {
-        labelConfirm: 'Done'
+        labelConfirm: 'Done',
       }, () => {
         console.log('review applicant done.');
         const newUrl = '/tabs/home';
@@ -372,7 +412,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     }
     let ratingComplete = true;
     $this.jobQuestions.forEach((jQuestion) => {
-      const questionRate = $this.questions[$this.currentApplication._id + '-' + jQuestion._id];
+      const questionRate = $this.questions[$this.currentApplication._id][$this.orgData.organizationUserId + '-' + jQuestion._id];
       if (questionRate && (!questionRate.rate || (questionRate.rate && questionRate.rate === 0))) {
         ratingComplete = false;
       }

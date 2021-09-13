@@ -7,6 +7,7 @@ import { ApplicationApiService } from '../../services/application.api.service';
 import { JobApiService } from '../../services/job.api.service';
 import IApplicationDocument from 'src/app/shared/models/application/application.interface';
 import { IMessage, IMessageDocument } from 'src/app/shared/models/message.interface';
+import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 // import { ZiggeoPlayerDirective } from 'angular-ziggeo';
 
 const jsFilename = 'job-applicant-review: ';
@@ -52,6 +53,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     public userService: UserService,
     public messageService: MessageService,
     private modalController: ModalController,
+    private orgData: OrganizationDataService,
     private animationService: AnimationService,
   ) {
     //
@@ -75,7 +77,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     if ($this.application && $this.question && $this.application.results && $this.application.results.ratings
       && $this.application.results.ratings[$this.mode] && $this.application.results.ratings[$this.mode].questions) {
       $this.application.results.ratings[$this.mode].questions.forEach((question) => {
-        if (question.questionId === $this.question._id) {
+        if (question.questionId === $this.question._id && question.userId === $this.orgData.organizationUserId) {
           $this.question.rating = question.rating;
         }
       });
@@ -85,14 +87,14 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       const msgHdr = jsFilename + 'broadcastService: ';
 
-      // console.info(msgHdr + '$this.foundActivities = ', $this.foundActivities);
+      // console.log(msgHdr + '$this.foundActivities = ', $this.foundActivities);
 
       if (msg.name === 'update-rating') {
         if (msg.message && $this.application && msg.message.applicationId === $this.application._id) {
           if ($this.question && $this.application.results && $this.application.results.ratings
             && $this.application.results.ratings[$this.mode] && $this.application.results.ratings[$this.mode].questions) {
             $this.application.results.ratings[$this.mode].questions.forEach((question) => {
-              if (question.questionId === msg.message.questionId) {
+              if (question.questionId === msg.message.questionId && question.userId === $this.orgData.organizationUserId) {
                 question = msg.message.rate;
               }
             });
@@ -244,7 +246,6 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
         console.log(Date.now() + ':complete');
       });
     });
-    
   }
 
   public updateComment() {

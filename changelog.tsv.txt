@@ -1,3 +1,7 @@
+d7e755f	Nick Caruso	Mon Sep 13 10:51:51 2021	1.2.0
+ca9a491	Nick Caruso	Mon Sep 13 10:51:39 2021	build
+fd32cfe	Nick Caruso	Mon Sep 13 10:50:08 2021	staging build
+050ae05	Nick Caruso	Mon Sep 13 08:36:18 2021	build
 22c20fd	Nick Caruso	Mon Sep 13 08:36:17 2021	1.1.0
 7e0eecb	Nick Caruso	Mon Sep 13 08:30:26 2021	netlify build
 652778f	Nick Caruso	Mon Sep 13 08:14:43 2021	build

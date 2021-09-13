@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 import { IApplicationDocument } from 'src/app/shared/models/application/application.interface';
@@ -49,6 +49,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
     private ionicAlertService: IonicAlertService,
     private applicationApiService: ApplicationApiService,
     private navCtrl: NavController,
+    private zone: NgZone,
     private orgData: OrganizationDataService,
   ) {
     const $this = this;
@@ -301,21 +302,25 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
   }
 
   public nextApplicant() {
-    if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
-      this.currentApplicationNumber += 1;
-      if (this.currentApplicationNumber > this.foundApplications.length) {
-        this.queryObj.page += 1;
-        this.getData();
+    this.zone.run(() => {
+      if ((this.currentApplicationNumber + 1) <= this.totalApplicationNumber) {
+        this.currentApplicationNumber += 1;
+        if (this.currentApplicationNumber > this.foundApplications.length) {
+          this.queryObj.page += 1;
+          this.getData();
+          return;
+        }
+        this.getCurrentApplication();
         return;
       }
-      this.getCurrentApplication();
-      return;
-    }
+    });
   }
 
   public previousApplicant() {
-    this.currentApplicationNumber -= 1;
-    this.getCurrentApplication();
+    this.zone.run(() => {
+      this.currentApplicationNumber -= 1;
+      this.getCurrentApplication();
+    });
   }
 
   public checkAllApplicationRating() {

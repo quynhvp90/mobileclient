@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { log } from 'console';
 import { OrganizationDataService } from 'src/app/shared/data-services/organizationData.service';
 import { IApplicationDocument } from 'src/app/shared/models/application/application.interface';
 import { BroadcastService, IonicAlertService, MessageService, UserService } from '../../../../shared/services';

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   version: 'tbd',
-  api: 'https://production-api.logreps.com',
+  api: 'https://staging-api-aws.career.place',
   website: 'https://logreps.com'
 };

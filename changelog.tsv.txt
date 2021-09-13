@@ -1,0 +1,71 @@
+22c20fd	Nick Caruso	Mon Sep 13 08:36:17 2021	1.1.0
+7e0eecb	Nick Caruso	Mon Sep 13 08:30:26 2021	netlify build
+652778f	Nick Caruso	Mon Sep 13 08:14:43 2021	build
+4d00b99	Nick Caruso	Mon Sep 13 05:23:52 2021	Merge pull request #25 from quynhvp90/master
+400dd6e	quynhvp90	Mon Sep 13 04:39:22 2021	add ng Zone
+670a149	quynhvp90	Mon Sep 13 04:29:24 2021	set message login fail
+c1374dc	quynhvp90	Mon Sep 13 00:23:52 2021	fix review applicants
+d35870b	Nick Caruso	Fri Sep 10 14:05:00 2021	fix to support job loads
+e476012	Nick Caruso	Fri Sep 10 12:13:31 2021	Merge pull request #24 from quynhvp90/master
+25b87ef	quynhvp90	Fri Sep 10 08:11:13 2021	update Organization data service
+ad5ba5f	Nick Caruso	Fri Sep 10 06:19:08 2021	experimenting with organization load
+27cdc34	Nick Caruso	Fri Sep 10 05:59:23 2021	fix URLS for privacy and terms
+95ba534	Nick Caruso	Fri Sep 10 05:18:28 2021	Merge pull request #22 from quynhvp90/master
+df65dc5	quynhvp90	Fri Sep 10 04:35:35 2021	Merge branches 'master' and 'master' of https://github.com/quynhvp90/mobileclient
+51f4b73	quynhvp90	Fri Sep 10 04:35:19 2021	use singletons
+bcef9e5	quynhvp90	Fri Sep 10 04:22:39 2021	use singletons
+86d364d	quynhvp90	Thu Sep 9 23:47:21 2021	Merge branch 'master' of https://github.com/mdg2/mobileclient
+528bb08	Nick Caruso	Thu Sep 9 06:52:11 2021	example commit code on change service to singleton
+8152002	quynhvp90	Thu Sep 9 06:29:28 2021	set limit get organizations
+8ba0916	Nick Caruso	Thu Sep 9 06:27:19 2021	Merge branch 'master' of https://github.com/mdg2/mobileclient
+148e183	Nick Caruso	Thu Sep 9 06:26:46 2021	Merge pull request #21 from quynhvp90/master
+d84df29	quynhvp90	Thu Sep 9 04:39:02 2021	config token ziggeo
+184fc8b	quynhvp90	Thu Sep 9 04:05:51 2021	show question video
+b9180bc	quynhvp90	Thu Sep 9 03:44:16 2021	Update UI mobile
+0ef1199	Nick Caruso	Wed Sep 8 06:26:14 2021	misc changes
+374cd19	Nick Caruso	Wed Sep 8 06:07:52 2021	Merge pull request #20 from quynhvp90/master
+f22900d	quynhvp90	Wed Sep 8 05:59:09 2021	TAO-3997#Comment On Monday September 6th - when we tested, the Reviewer did not see any applicants. After refresh, it worked-Jira
+b7855a1	quynhvp90	Wed Sep 8 05:40:46 2021	TAO-3996#Comment We need to ensure applicants cannot log into Mobile-Jira
+642969a	quynhvp90	Wed Sep 8 05:40:13 2021	TAO-3997#Comment On Monday September 6th - when we tested, the Reviewer did not see any applicants. After refresh, it worked-Jira
+f0fe5f5	Nick Caruso	Mon Sep 6 06:14:36 2021	Merge pull request #19 from quynhvp90/master
+67d01ac	quynhvp90	Mon Sep 6 06:00:48 2021	 polishing UI mobile
+d815219	Nick Caruso	Fri Sep 3 13:39:19 2021	Merge pull request #17 from quynhvp90/master
+15924ad	quynhvp90	Wed Sep 1 07:04:47 2021	TAO-3988#Comment Update to mobile to Ionic 5 (and latest Angular)-Jira
+b868e31	quynhvp90	Tue Aug 31 05:35:55 2021	TAO-3975#Comment Mobile bugs-Jira
+653ad04	quynhvp90	Tue Aug 31 05:20:22 2021	TAO-3977#Comment Mobile: Numbers do not match-Jira
+bd919f1	quynhvp90	Mon Aug 30 07:17:09 2021	TAO-3950#Comment Mobile App UI-Jira
+cbf80c0	quynhvp90	Mon Aug 30 06:21:21 2021	TAO-3950#Comment Mobile App UI-Jira
+d0a375c	Nick Caruso	Mon Aug 23 16:54:51 2021	Merge pull request #16 from quynhvp90/master
+0fac017	quynhvp90	Mon Aug 23 07:26:35 2021	TAO-3950#Comment Mobile App UI-Jira
+9ef4b78	Nick Caruso	Mon Aug 23 06:25:27 2021	Merge pull request #15 from quynhvp90/master
+fc2dad0	quynhvp90	Mon Aug 23 02:58:22 2021	TAO-3950#Comment Mobile App UI-Jira
+6abbf41	quynhvp90	Thu Aug 19 06:17:35 2021	TAO-3950#Comment Mobile App UI-Jira
+f6ed8fc	quynhvp90	Wed Aug 18 23:58:42 2021	Merge branch 'master' of https://github.com/mdg2/mobileclient
+b0379e8	quynhvp90	Wed Aug 18 06:59:36 2021	TAO-3950#Comment Mobile App UI-Jira
+ec1323d	Nick Caruso	Wed Aug 18 06:12:18 2021	Merge pull request #13 from quynhvp90/master
+301ac78	quynhvp90	Tue Aug 17 08:16:54 2021	TAO-3950#comment Mobile App UI-Jira
+e97524e	quynhvp90	Mon Aug 16 07:04:27 2021	TAO-3950#Comment Mobile App UI-Jira
+3258cdf	Nick Caruso	Sun Aug 15 20:03:42 2021	misc
+241ac73	Nick Caruso	Sun Aug 15 20:00:19 2021	misc UI changes
+87b1f1a	Nick Caruso	Fri Aug 13 14:51:20 2021	Merge pull request #11 from quynhvp90/master
+beeba95	quynhvp90	Fri Aug 13 09:56:35 2021	TAO-3950#Comment Mobile App UI-Jira
+6049cf1	quynhvp90	Fri Aug 13 02:57:57 2021	TAO-3950#Comment Mobile App UI-Jira
+a330694	quynhvp90	Thu Aug 12 05:23:15 2021	TAO-3950#Comment Mobile App UI-Jira
+9d3738b	quynhvp90	Wed Aug 11 06:21:33 2021	TAO-3950#Comment Mobile App UI-Jira
+874e580	quynhvp90	Tue Aug 10 05:55:14 2021	TAO-3950#Comment Mobile App UI-jira
+219103c	quynhvp90	Tue Aug 10 05:46:29 2021	TAO-3950#Comment Mobile App UI-Jira
+96237ea	quynhvp90	Mon Aug 9 06:19:56 2021	TAO-3950#Comment Mobile App UI -jira
+27d29ad	Nick Caruso	Sun Aug 8 19:03:35 2021	fix ts issues
+6721b60	Nick Caruso	Sun Aug 8 19:02:09 2021	fix ts compile issues
+86c24ad	Nick Caruso	Sun Aug 8 18:59:47 2021	continued init work on mobile
+92f5a3e	Nick Caruso	Fri Aug 6 11:53:36 2021	Merge pull request #10 from quynhvp90/master
+303404c	quynhvp90	Fri Aug 6 07:02:33 2021	TAO-3950#Comment Mobile App UI-Jira
+571d9dd	quynhvp90	Thu Aug 5 06:15:29 2021	Merge branch 'master' of https://github.com/mdg2/mobileclient
+66ee0a8	quynhvp90	Thu Aug 5 05:37:17 2021	TAO-3950#Comment Mobile App UI-Jira
+7262f35	Nick Caruso	Wed Aug 4 19:13:46 2021	Merge pull request #8 from quynhvp90/master
+964d641	quynhvp90	Wed Aug 4 05:34:14 2021	TAO-3950#Comment Mobile App UI-Jira
+5ce9968	quynhvp90	Fri Jul 30 07:25:11 2021	change apiserver port
+09e3d74	tom-aht@arrowhitech.co	Fri Jul 30 07:08:49 2021	TAO-3950#Comment Mobile App UI - Jira
+2ee9aa1	Nick Caruso	Mon Jul 26 23:13:51 2021	init structure
+583ee78	Nick Caruso	Thu Jul 22 22:01:16 2021	fix ts issues
+af6929a	Nick Caruso	Thu Jul 22 21:55:48 2021	init commit

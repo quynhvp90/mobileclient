@@ -1,3 +1,3 @@
-/api/*  https://staging-api.logreps.com/api/:splat  200
+/api/*  https://staging-api-aws.career.place/api/:splat  200
 /*    /index.html   200
 

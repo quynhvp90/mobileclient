@@ -338,7 +338,7 @@ export class JobApplicantQuizReviewComponent implements OnInit, OnDestroy, After
                 let ratingComplete = 0;
                 $this.jobQuestions.forEach((jobQ) => {
                   app.results.ratings[$this.quizType].questions.forEach((question) => {
-                    if (question.rating && <number>question.rating > 0 && question.questionId === jobQ._id) {
+                    if (question.rating && <number>question.rating !== 0 && question.questionId === jobQ._id) {
                       ratingComplete += 1;
                     }
                   });

@@ -31,6 +31,17 @@ export class OrganizationDataService {
   //////// List Organization /////////////////
   public setOrganizations(objOrganizations) {
     this.organizations = objOrganizations;
+    if (this.organizations && this.organizations.length > 0) {
+      this.organizations.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1;
+        }
+        if (a.name < b.name) {
+          return -1;
+        }
+        return 0;
+      });
+    }
   }
   public getOrganizations() {
     if (isNullOrUndefined(this.organizations)) {

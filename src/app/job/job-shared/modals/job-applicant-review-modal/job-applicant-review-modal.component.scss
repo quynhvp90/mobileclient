@@ -8,7 +8,23 @@
     // padding: 10px;
     ion-card {
       background: #ffffff;
+      ion-card-content {
+        padding-top: 5px;
+      }
 
+      .answer-video {
+        margin-left: -20px;
+        margin-right: -20px;
+      }
+      .comment-content {
+        ion-textarea {
+          border: 1px solid #c6c6c6;
+          border-radius: 5px;
+          margin-bottom: 10px;
+          --padding-start: 5px;
+        }
+
+      }
     }
   }
 }

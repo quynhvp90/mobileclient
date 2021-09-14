@@ -269,6 +269,10 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   }
   async save () {
     const $this = this;
+    if ($this.question.rating === 0) {
+      $this.ionicAlertService.presentAlert('Please rate this applicant answer before saving your work');
+      return;
+    }
 
     // save rating
     const subject = 'Rated this question: ';

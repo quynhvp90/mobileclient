@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, NgZone } from '@angular/core';
 import {
   BroadcastService,
   OrganizationService,
@@ -41,6 +41,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     private jobApiService: JobApiService,
     public userService: UserService,
     private navCtrl: NavController,
+    private zone: NgZone,
     private route: ActivatedRoute,
   ) {
   }
@@ -91,10 +92,11 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   }
 
   private getData() {
-    this.isLoading = true;
-    this.organizationService.getOrganizations(null).subscribe((res) => {
-      this.isLoading = false;
+    this.zone.run(() => {
+      this.isLoading = true;
+      this.organizationService.getOrganizations(null).subscribe((res) => {
+        this.isLoading = false;
+      });
     });
-
   }
 }

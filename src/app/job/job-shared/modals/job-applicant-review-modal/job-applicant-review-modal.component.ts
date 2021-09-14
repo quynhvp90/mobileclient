@@ -1,5 +1,5 @@
 // declare const ziggeoplayer: any;
-import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService, BroadcastService, IonicAlertService, IUpdatePriority, ToastService, UserService, WorkoutService, AnimationService, MessageService } from '../../../../shared/services';
 import { ModalController  } from '@ionic/angular';
@@ -42,6 +42,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     messageText: '',
   };
   public star = null;
+  public eventFresh = null;
 
   constructor(
     private workoutService: WorkoutService,
@@ -54,6 +55,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
     public messageService: MessageService,
     private modalController: ModalController,
     private orgData: OrganizationDataService,
+    private zone: NgZone,
     private animationService: AnimationService,
   ) {
     //
@@ -61,29 +63,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     const $this = this;
-
-    console.log('application === ', $this.application);
-    if ($this.application && $this.question && $this.application.results && $this.application.results[$this.mode]) {
-      $this.application.results[$this.mode].forEach((answer) => {
-        if (answer.questionId === $this.question._id) {
-          $this.answers.push(answer);
-        }
-      });
-      $this.currentAnswerIndex = 0;
-      $this.getCurrentAnswer();
-    }
-    console.log('currentQuestion === ', $this.question);
-    $this.question.rating = 0;
-    if ($this.application && $this.question && $this.application.results && $this.application.results.ratings
-      && $this.application.results.ratings[$this.mode] && $this.application.results.ratings[$this.mode].questions) {
-      $this.application.results.ratings[$this.mode].questions.forEach((question) => {
-        if (question.questionId === $this.question._id && question.userId === $this.orgData.organizationUserId) {
-          $this.question.rating = question.rating;
-        }
-      });
-      $this.currentAnswerIndex = $this.answers.length - 1;
-      $this.getCurrentAnswer();
-    }
+    $this.initData();
     const subscription = this.broadcastService.subjectUniversal.subscribe((msg) => {
       const msgHdr = jsFilename + 'broadcastService: ';
 
@@ -106,9 +86,46 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.push(subscription);
-    this.getMessageComment();
   }
 
+  public initData() {
+    const $this = this;
+    this.zone.run(() => {
+      console.log('application === ', $this.application);
+      if ($this.application && $this.question && $this.application.results && $this.application.results[$this.mode]) {
+        $this.application.results[$this.mode].forEach((answer) => {
+          if (answer.questionId === $this.question._id) {
+            $this.answers.push(answer);
+          }
+        });
+        $this.currentAnswerIndex = 0;
+        $this.getCurrentAnswer();
+      }
+      console.log('currentQuestion === ', $this.question);
+      $this.question.rating = 0;
+      if ($this.application && $this.question && $this.application.results && $this.application.results.ratings
+        && $this.application.results.ratings[$this.mode] && $this.application.results.ratings[$this.mode].questions) {
+        $this.application.results.ratings[$this.mode].questions.forEach((question) => {
+          if (question.questionId === $this.question._id && question.userId === $this.orgData.organizationUserId) {
+            $this.question.rating = question.rating;
+          }
+        });
+        $this.currentAnswerIndex = $this.answers.length - 1;
+        $this.getCurrentAnswer();
+      }
+      this.getMessageComment();
+    });
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+    this.eventFresh = event;
+    this.initData();
+    // setTimeout(() => {
+    //   console.log('Async operation has ended');
+    //   event.target.complete();
+    // }, 2000);
+  }
   // ngAfterViewInit () {
   //   this.player = this.ziggeoplayer.playerInstance;
 
@@ -138,6 +155,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
           $in: ['application-comment'],
         },
         jobId: $this.application.jobId,
+        createdByOrgUserId: $this.orgData.organizationUserId,
         applicationId: $this.application._id,
         questionId: $this.question._id,
         organizationId: $this.application.organizationId,
@@ -147,6 +165,10 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
       },
     };
     $this.messageService.getMessages(query).subscribe((res) => {
+      if (this.eventFresh) {
+        this.eventFresh.target.complete();
+        this.eventFresh = null;
+      }
       console.log('data = ', res);
       if (res && res.items && res.items.length > 0) {
         $this.comments = [];

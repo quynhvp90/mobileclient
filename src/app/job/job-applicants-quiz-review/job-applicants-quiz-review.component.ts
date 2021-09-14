@@ -21,6 +21,7 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
   private jobId = null;
   public mode = 'stage2';
   public titleMode = '';
+  public eventFresh = null;
 
   constructor(
     private broadcastService: BroadcastService,
@@ -70,12 +71,26 @@ export class JobApplicantsQuizReviewComponent implements OnInit, OnDestroy, Afte
     $this.getData();
   }
 
+  doRefresh(event) {
+    console.log('Begin async operation');
+    this.eventFresh = event;
+    this.getData();
+    // setTimeout(() => {
+    //   console.log('Async operation has ended');
+    //   event.target.complete();
+    // }, 2000);
+  }
+
   public getData() {
     const $this = this;
     this.zone.run(() => {
       $this.isLoading = true;
       $this.jobApiService.getJob($this.jobId).subscribe((res) => {
         $this.isLoading = false;
+        if (this.eventFresh) {
+          this.eventFresh.target.complete();
+          this.eventFresh = null;
+        }
         console.log('res = ', res);
       });
     });

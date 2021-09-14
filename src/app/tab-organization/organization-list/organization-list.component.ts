@@ -31,6 +31,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   public organizations: IOrganizationDocument[] = [];
   public userOrg: IOrganizationDocument = null;
   public isLoading = false;
+  public eventFresh = null;
 
   constructor(
     private broadcastService: BroadcastService,
@@ -65,7 +66,15 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
       });
     this.subscriptions.push(subscription);
   }
-
+  doRefresh(event) {
+    console.log('Begin async operation organization list');
+    this.eventFresh = event;
+    this.getData();
+    // setTimeout(() => {
+    //   console.log('Async operation has ended');
+    //   // event.target.complete();
+    // }, 2000);
+  }
   public ngOnDestroy() {
     console.log('ngOnDestroy home-list');
     this.subscriptions.forEach((subscription) => {
@@ -95,6 +104,10 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     this.zone.run(() => {
       this.isLoading = true;
       this.organizationService.getOrganizations(null).subscribe((res) => {
+        if (this.eventFresh) {
+          this.eventFresh.target.complete();
+          this.eventFresh = null;
+        }
         this.isLoading = false;
       });
     });

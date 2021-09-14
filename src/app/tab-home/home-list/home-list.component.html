@@ -9,6 +9,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content style="--background: #e6ebf1" class="home-list-content">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="">
+    </ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="isLoading">
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </div>

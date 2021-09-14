@@ -8,9 +8,17 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
+
 <ion-content style="--background: #e6ebf1" class="home-list-content">
-  <ion-list>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-progress-bar type="indeterminate" *ngIf="isLoading"></ion-progress-bar>
+
+  <ion-list style="border-top: 2px solid #ccc;">
     <ion-item style="cursor: pointer;" detail="true" *ngFor="let org of organizationDataService.organizations" (click)="selectOrg(org)">{{ org.name }}</ion-item>
   </ion-list>
 </ion-content>

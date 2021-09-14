@@ -43,6 +43,7 @@ export class HomeListComponent implements OnInit, OnDestroy {
 
   public isLoading = false;
   public isInit = false;
+  public eventFresh = null;
 
   constructor(
     private broadcastService: BroadcastService,
@@ -86,6 +87,16 @@ export class HomeListComponent implements OnInit, OnDestroy {
     });
   }
 
+  doRefresh(event) {
+    console.log('Begin async operation home list');
+    this.eventFresh = event;
+    this.getData();
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+  }
+
   public ngOnDestroy() {
     console.log('ngOnDestroy home-list');
     this.subscriptions.forEach((subscription) => {
@@ -111,6 +122,10 @@ export class HomeListComponent implements OnInit, OnDestroy {
       console.log('getData start: ===== ', (new Date()).toTimeString());
       $this.jobApiService.getStatsByOrganization().subscribe((res) => {
         this.isLoading = false;
+        if (this.eventFresh) {
+          this.eventFresh.target.complete();
+          this.eventFresh = null;
+        }
         console.log('getData() res = ', res);
       });
     });

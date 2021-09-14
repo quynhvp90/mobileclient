@@ -35,6 +35,12 @@ export class LoginService {
     const $this = this;
     // $this.spinnerService.show();
 
+    if (loginModel.email) {
+      loginModel.email = loginModel.email.trim();
+    }
+    if (loginModel.password) {
+      loginModel.password = loginModel.password.trim();
+    }
     const setting: ISetting = {
       resource: 'token',
       payload: loginModel,

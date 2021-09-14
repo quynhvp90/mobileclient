@@ -1,3 +1,7 @@
+418d295	Nick Caruso	Mon Sep 13 20:26:10 2021	1.3.0
+6ffa2cb	Nick Caruso	Mon Sep 13 20:25:59 2021	misc
+fd3e579	Nick Caruso	Mon Sep 13 14:47:08 2021	change settings
+94b2e9a	Nick Caruso	Mon Sep 13 10:51:52 2021	build
 d7e755f	Nick Caruso	Mon Sep 13 10:51:51 2021	1.2.0
 ca9a491	Nick Caruso	Mon Sep 13 10:51:39 2021	build
 fd32cfe	Nick Caruso	Mon Sep 13 10:50:08 2021	staging build

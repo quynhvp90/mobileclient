@@ -34,22 +34,25 @@ export class ExceptionService {
       err = res.json();
     }
     console.log(msgHdr + ', err = ', err);
-
+    if (res && (res.status === 401 || res.status === 403 || res.status === 404) && res.url.indexOf('api/token') > -1)  {
+      const message: any = res;
+      console.log(msgHdr + ' message.error.message');
+      this.toastService.activate('Email or password invalid.', 'error');
+      return of(false);
+    }
     if (res && (res.status === 401 || res.status === 403))  {
       const message: any = res;
-      this.toastService.activate(`${message.error.message}`, 'error');
+      let messageErrorText = message.error.message;
+      if (message.error && !message.error.message) {
+        messageErrorText = message.message;
+      }
+      this.toastService.activate(`${messageErrorText}`, 'error');
       console.log(msgHdr + 'exception go to login');
       this.modalController.dismiss('close');
       localStorage.removeItem('token');
       this.storage.remove('token');
       this.storage.clear();
       this.router.navigate(['/login']);
-      return of(false);
-    }
-    if (res && res.status === 404 && res.url.indexOf('api/token') > -1)  {
-      const message: any = res;
-      console.log(msgHdr + ' message.error.message');
-      this.toastService.activate('Email or password invalid.', 'error');
       return of(false);
     }
 

@@ -43,9 +43,11 @@
     request.open('GET', window.apiServer + '/api/settings/keys', true);
     request.setRequestHeader('Accept', 'application/json');
     request.onload = function () {
+      console.log('request with status = ', request.status);
       if (request.status >= 200 && request.status < 400) {
         // Success!
         data = JSON.parse(request.responseText);
+        console.log('data = ', data);
         window.appkeys = data;
         // console.log('window.appkeys.ziggeo.applicationkey = ', window.appkeys.ziggeo.applicationkey);
         // console.log('window.keys = ', window.appkeys);
@@ -54,6 +56,7 @@
           return;
         }
         ZiggeoApi.token = window.appkeys.ziggeo.applicationkey;
+        console.log('settings ziggeoApi - ', ZiggeoApi.token);
 
         var ziggeoApplication = new ZiggeoApi.V2.Application({
           token: window.appkeys.ziggeo.applicationkey,

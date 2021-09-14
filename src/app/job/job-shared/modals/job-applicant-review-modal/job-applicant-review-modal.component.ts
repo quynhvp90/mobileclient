@@ -217,7 +217,7 @@ export class JobApplicantReviewModalComponent implements OnInit, OnDestroy {
   }
 
   async cancel() {
-    this.broadcastService.broadcast('applicant-done-review');
+    // this.broadcastService.broadcast('applicant-done-review');
     await this.modalController.dismiss();
   }
   public saveComment(messageType?: string) {

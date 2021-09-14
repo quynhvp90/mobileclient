@@ -33,10 +33,10 @@ export class OrganizationDataService {
     this.organizations = objOrganizations;
     if (this.organizations && this.organizations.length > 0) {
       this.organizations.sort((a, b) => {
-        if (a.name > b.name) {
+        if (a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase()) {
           return 1;
         }
-        if (a.name < b.name) {
+        if (a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase()) {
           return -1;
         }
         return 0;
